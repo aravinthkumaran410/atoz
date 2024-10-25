@@ -1,0 +1,190 @@
+.home-booking-form-container {
+  display: flex;
+  background-color: #fff;
+  /* border: 2px solid #ccc; */
+  border-radius: 20px;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  position: relative;
+  margin-bottom: 50px;
+  margin-top: -150px;
+  z-index: 10;
+  /* overflow: hidden; */
+}
+.location-dropdown {
+  border: 1px solid #ccc;
+  position: absolute;
+  background: white;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 100%;
+  z-index: 1000;
+}
+
+.location-dropdown li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.location-dropdown li:hover {
+  background-color: #f0f0f0;
+}
+
+.home-booking-form-container .home-booking-left-container {
+  width: 30%;
+  background: linear-gradient(rgb(249, 168, 38, 0.9), rgb(249, 168, 38, 0.9)),
+    url("../../assets//heroCarousel/slider-1.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-booking-left-container-title {
+  font-size: clamp(1.25rem, 0.7813rem + 1.5vw, 2rem);
+  color: var(--color-white);
+}
+
+.home-booking-form-container .home-booking-right-container {
+  width: 75%;
+  padding: 20px;
+}
+
+.home-booking-form-container .home-booking-right-container .trip-type {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.home-booking-form-container .home-booking-right-container .form-group {
+  margin-bottom: 15px;
+}
+
+.home-booking-form-container .home-booking-right-container .form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.home-booking-form-container .home-booking-right-container .form-group input,
+.home-booking-form-container .home-booking-right-container .form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 13px !important;
+  box-shadow: rgba(255, 237, 190, 0.1) 0px 10px 10px -10px;
+}
+
+.home-booking-form-container .home-booking-right-container .form-check-input {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.home-booking-form-container .home-booking-right-container .form-control:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: var(--theme-color) !important;
+  outline: 0;
+  box-shadow: none !important;
+  transition: all 0.4s;
+}
+
+.home-booking-form-container
+  .home-booking-right-container
+  .form-check-input:hover {
+  background-color: rgba(249, 168, 38, 0.3);
+  border-color: var(--theme-color);
+}
+
+.home-booking-form-container
+  .home-booking-right-container
+  .form-check-input:focus {
+  outline: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+.home-booking-form-container
+  .home-booking-right-container
+  .form-check-input:checked {
+  outline: none;
+  border: none;
+  background-color: var(--color-red);
+  /* box-shadow: 0 0 0 2px rgba(249, 168, 38, 0.5); */
+}
+
+.home-booking-form-container .home-booking-right-container button {
+  font-size: 14px;
+  color: var(--color-white);
+  padding: 14px 25px;
+  transition: all 0.5s;
+  text-transform: uppercase;
+  position: relative;
+  letter-spacing: 1.5px;
+  /* border-radius: 50px; */
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  text-align: center;
+  overflow: hidden;
+  border: none;
+  background: var(--theme-color);
+  box-shadow: var(--box-shadow);
+  z-index: 1;
+}
+.home-booking-form-container .home-booking-right-container button::before {
+  content: "";
+  height: 300px;
+  width: 300px;
+  background: var(--color-red);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.5s;
+  z-index: -1;
+}
+
+.home-booking-form-container
+  .home-booking-right-container
+  button:hover::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+.home-booking-form-container .home-booking-right-container button :hover a {
+  color: #000 !important;
+  transition: all 0.3s;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.home-booking-form-container .home-booking-right-container .form-check-input {
+  width: 20px;
+  height: 20px;
+}
+
+.home-booking-form-container .home-booking-right-container .form-check-inline {
+  margin-right: 15px;
+}
+
+@media (max-width: 800px) {
+  .home-booking-form-container {
+    margin-top: 10px;
+    z-index: 10;
+  }
+}
+
+@media (max-width: 991px) {
+  .home-booking-form-container {
+    flex-direction: column;
+  }
+  .home-booking-form-container .home-booking-left-container,
+  .home-booking-right-container {
+    width: 100%;
+  }
+}
