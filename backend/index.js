@@ -5,6 +5,11 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const app = express();
 
+const loginRoute=require("./Route/loginRoute")
+const logoutRoute=require("./Route/logoutRoute")
+const oneWayTripRoute=require("./Route/oneWayTripRoute");
+const roundWayTripRoute=require("./Route/roundWayTripRoute");
+
 app.use(cookieParser());
 app.use(express.json());
 const corsOptions = {
@@ -18,6 +23,11 @@ app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
+
+app.use("/admin",loginRoute);
+app.use("/admins",logoutRoute);
+app.use("/onewaytrip",oneWayTripRoute);
+app.use("/roundtrip",roundWayTripRoute)
 
 const mongo_url =
   "mongodb+srv://karthickc726:Karthick@cluster0.04mzp.mongodb.net/AtoZ-drop-taxi?retryWrites=true&w=majority&appName=Cluster0";
