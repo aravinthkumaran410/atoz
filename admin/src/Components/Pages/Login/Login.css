@@ -1,0 +1,82 @@
+.full-height-background {
+  position: relative;
+  background-image: linear-gradient(#0000004d, #0000004d),
+    url(../../../Assets/Images/login.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.login-form {
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(6px) saturate(200%);
+  background-color: #ffffffb0;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px #0000004d;
+  width: 100%;
+  max-width: 350px;
+  padding: 10px 20px;
+}
+
+.form-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.form {
+  width: 90%;
+  color: #000;
+}
+.form-button {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .full-height-background {
+    padding: 20px;
+  }
+  .login-form {
+    padding: 20px;
+  }
+
+  .form-button button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form {
+    padding: 10px;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 320px) {
+  .login-form {
+    max-width: 250px;
+    padding: 10px;
+  }
+}
