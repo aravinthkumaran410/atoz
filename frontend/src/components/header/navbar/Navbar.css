@@ -1,0 +1,190 @@
+.navbar {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(209, 213, 219, 0.146);
+  padding-top: 0px !important ;
+  padding-bottom: 0px !important;
+  z-index: 999;
+}
+.header-nav-logo {
+  width: 100px;
+}
+.nav-contact-container {
+  display: flex;
+  align-items: center;
+  gap: 20px 10px;
+}
+.nav-contact-container .nav-contact-phone {
+  color: var(--color-red);
+  font-weight: 700;
+  font-size: clamp(1rem, 0.7813rem + 1.5vw, 1.3rem);
+}
+
+.navbar a {
+  color: #000 !important;
+  transition: all 0.3s;
+  letter-spacing: 1.5px;
+  font-size: 18px;
+  &:hover {
+    color: #ffa600 !important;
+    font-weight: bold;
+  }
+}
+
+.navbar .nav-link.active {
+  color: #e83333 !important;
+  font-weight: 500;
+}
+
+.navbar .navbar-nav .nav-link {
+  padding: 10px 20px;
+  margin: 0px 10px;
+  font-weight: 700;
+}
+
+.navbar .btn-lg-square {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-contact {
+  color: #ffcc00;
+  font-weight: 500;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.navbar-toggler,
+.navbar-toggler:focus {
+  border: none !important;
+  outline: none !important;
+}
+
+.nav-contact-button {
+  font-size: 14px;
+  color: var(--color-white);
+  padding: 14px 25px;
+  transition: all 0.5s;
+  text-transform: uppercase;
+  position: relative;
+  letter-spacing: 1.5px;
+  border-radius: 50px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  text-align: center;
+  overflow: hidden;
+  border: none;
+  background: var(--theme-color);
+  box-shadow: var(--box-shadow);
+  z-index: 1;
+}
+.nav-contact-button::before {
+  content: "";
+  height: 300px;
+  width: 300px;
+  background: var(--color-red);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.5s;
+  z-index: -1;
+}
+
+.nav-contact-button:hover::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+.nav-contact-button:hover a {
+  color: #000 !important;
+  transition: all 0.3s;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+@media (max-width: 1100px) {
+  .iata-container {
+    margin-right: 0px;
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 991.98px) {
+  .navbar .navbar-nav {
+    margin-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: var(--dark);
+  }
+
+  .navbar .navbar-nav .nav-link {
+    padding: 10px 0;
+    text-align: center;
+  }
+  .nav-contact-container {
+    flex-direction: column;
+  }
+
+  .call-us-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .navbar .d-flex {
+    display: block;
+  }
+
+  /* Ensure the navbar list items show at the bottom of the mobile dropdown */
+  .navbar-collapse {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: auto;
+  }
+
+  .navbar-collapse .navbar-nav {
+    flex-grow: 1;
+  }
+
+  .call-us-section {
+    opacity: 1;
+    visibility: visible;
+    transition: none;
+  }
+}
+
+/* Desktop-specific styles */
+@media (min-width: 992px) {
+  .navbar .nav-item .dropdown-menu {
+    display: block;
+    visibility: hidden;
+    top: 100%;
+    transform: rotateX(-75deg);
+    transform-origin: 0% 0%;
+    transition: transform 0.5s, visibility 0.5s, opacity 0.5s;
+    opacity: 0;
+  }
+
+  .navbar .nav-item:hover .dropdown-menu {
+    transform: rotateX(0deg);
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+/* @media (max-width: 768px) {
+  .header-nav-logo {
+    width: 150px;
+    height: 100px;
+  }
+} */

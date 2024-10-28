@@ -1,0 +1,40 @@
+.custom-select {
+  position: relative;
+  width: 100%;
+}
+
+.select-selected {
+  background-color: #fff;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.select-items {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 999;
+  display: none;
+  height: 100px;
+  overflow-y: auto;
+  width: 250px;
+}
+
+.custom-select.open .select-items {
+  display: block;
+}
+
+.select-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Hover effect */
+.select-item:hover {
+  background-color: var(--main-color);
+}

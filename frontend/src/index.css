@@ -1,13 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "Source Sans 3", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: "Source Sans 3", sans-serif;
+}
+:root {
+  --main-color: #ffa600;
+  --pane-padding: 5px 42px;
+  --body-font: "Roboto", sans-serif;
+  --heading-font: "Inter", sans-serif;
+  --theme-color: #ffb300;
+  --theme-bg-light: #f9f9f9;
+  --body-text-color: #757f95;
+  --color-white: #ffffff;
+  --color-dark: #111111;
+  --color-green: #11b76b;
+  --color-blue: #0049d0;
+  --color-red: #e83333;
+  --color-yellow: #fba707;
+  --hero-overlay-color: #01060f;
+  --slider-arrow-bg: rgba(255, 255, 255, 0.2);
+  --box-shadow: 0 0 40px 5px rgb(0 0 0 / 5%);
+  --box-shadow2: 0 0 15px rgba(0, 0, 0, 0.17);
+  --transition: all 0.5s ease-in-out;
+  --transition2: all 0.3s ease-in-out;
+  --border-info-color: rgba(0, 0, 0, 0.08);
+  --border-info-color2: rgba(0, 0, 0, 0.05);
+  --border-white-color: rgba(255, 255, 255, 0.08);
+  --border-white-color2: rgba(255, 255, 255, 0.05);
+  --footer-bg: #111111;
+  --footer-bg2: #181818;
+  --footer-text-color: #f5faff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  transition: 0.3s;
+}
+a,
+a:hover,
+a:active,
+a:focus {
+  outline: none;
+  text-decoration: none;
 }

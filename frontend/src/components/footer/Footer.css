@@ -1,0 +1,183 @@
+.footer {
+  position: relative;
+  padding-top: 100px;
+  background: #121518;
+}
+
+.footer .footer-about,
+.footer .footer-contact,
+.footer .footer-links,
+.footer .footer-project {
+  position: relative;
+  margin-bottom: 45px;
+  color: #ffffff;
+}
+
+.footer .footer-about h3,
+.footer .footer-contact h3,
+.footer .footer-links h3,
+.footer .footer-project h3 {
+  position: relative;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--theme-color);
+}
+
+.footer .footer-about h3::after,
+.footer .footer-contact h3::after,
+.footer .footer-links h3::after,
+.footer .footer-project h3::after {
+  position: absolute;
+  content: "";
+  width: 50px;
+  height: 2px;
+  left: 0;
+  bottom: 0;
+  background: var(--color-red);
+}
+
+.footer .footer-social {
+  position: relative;
+  margin-top: 20px;
+}
+
+.footer .footer-social a {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  padding: 6px 0;
+  text-align: center;
+  color: #ffffff;
+  font-size: 14px;
+  border: 1px solid #ffffff;
+  border-radius: 35px;
+}
+
+.footer .footer-social a:hover {
+  color: #ffffff;
+  background-color: var(--color-red);
+  border-color: var(--color-red);
+  cursor: pointer;
+}
+
+.footer .footer-contact p {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.footer .footer-contact i {
+  margin-right: 10px;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.footer .footer-contact a:last-child i {
+  margin: 0;
+}
+
+.footer .footer-contact a:hover i {
+  color: var(--color-red);
+  cursor: pointer;
+}
+
+.footer .footer-links a {
+  display: block;
+  margin-bottom: 6px;
+  padding-left: 15px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.footer .footer-links a:last-child {
+  margin: 0;
+}
+
+.footer .footer-links a:hover {
+  color: var(--color-red);
+  cursor: pointer;
+}
+
+.footer .footer-links a::before {
+  position: absolute;
+  content: "\f105";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  left: 0;
+}
+
+.footer .footer-project {
+  float: left;
+  font-size: 0;
+}
+
+.footer .footer-project a {
+  padding: 0 8px 8px 0;
+  display: block;
+  width: 33.33%;
+  float: left;
+}
+
+.footer .footer-project a img {
+  width: 100%;
+}
+
+.footer .copyright {
+  position: relative;
+  padding: 25px 0;
+  background: #000000;
+}
+
+.footer .copyright .copy-text p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: #999999;
+}
+
+.footer .copyright .copy-text p a {
+  color: #999999;
+  text-decoration: underline;
+}
+
+.footer .copyright .copy-text p a:hover {
+  color: #0085ff;
+}
+
+.footer .copyright .copy-menu {
+  position: relative;
+  font-size: 0;
+  text-align: right;
+}
+
+.footer .copyright .copy-menu a {
+  color: #999999;
+  font-size: 16px;
+  font-weight: 400;
+  margin-right: 15px;
+  padding-right: 15px;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.footer .copyright .copy-menu a:hover {
+  color: #0085ff;
+}
+
+.footer .copyright .copy-menu a:last-child {
+  margin-right: 0;
+  padding-right: 0;
+  border-right: none;
+}
+
+@media (max-width: 767.98px) {
+  .footer .copyright .copy-text,
+  .footer .copyright .copy-menu {
+    text-align: center;
+  }
+
+  .footer .copyright .copy-text p {
+    margin-bottom: 5px;
+  }
+}

@@ -1,0 +1,224 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import { IoArrowForward } from "react-icons/io5";
+import { Carousel } from "react-bootstrap";
+import "./heroCarousel.css";
+
+import { FaArrowRight } from "react-icons/fa6";
+
+// Image imports
+import banner_1 from "../../../assets/heroCarousel/slider-1.jpg";
+import banner_2 from "../../../assets/heroCarousel/slider-2.jpg";
+import banner_3 from "../../../assets/heroCarousel/slider-3.jpg";
+
+import { motion } from "framer-motion";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa6";
+
+const HeroCarousel = () => {
+  return (
+    <div className="home-container-carousel">
+      <Carousel
+        fade
+        interval={3000}
+        prevIcon={
+          <div className="carousel-control-icon">
+            <FaArrowLeft />
+          </div>
+        }
+        nextIcon={
+          <div className="carousel-control-icon">
+            <FaArrowRight />
+          </div>
+        }
+      >
+        <Carousel.Item>
+          <div className="image-container">
+            <img className="d-block w-100" src={banner_1} alt="First slide" />
+            <div className="gradient-overlay"></div>
+          </div>
+          <Carousel.Caption>
+            <motion.div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: "20px",
+              }}
+              initial={{ y: -50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+            >
+              <span
+                className="hero-carousel-highlight text-center"
+                style={{ fontSize: "20px" }}
+              >
+                <span style={{ color: "#fff" }}>WELCOME TO </span>A TO Z DROP
+                TAXI
+              </span>
+            </motion.div>
+
+            <motion.h3
+              className="hero-carousel-title "
+              initial={{ x: 200, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+            >
+              BOOK
+              <span> TAXI</span> FOR YOUR RIDE
+            </motion.h3>
+            {/* <p>Explore our curated collection of the season's must-haves.</p> */}
+            <motion.p
+              className="mt-3"
+              initial={{ x: 200, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              style={{ fontSize: "14px", textAlign: "center" }}
+            >
+              There are many variations of passages available the majority have
+              suffered alteration in some form generators on the Internet tend
+              to repeat predefined chunks injected humour randomised words look
+              even slightly believable.
+            </motion.p>
+            <div className="d-flex justify-content-center">
+              <motion.button
+                className="btn btn-dark text-light mt-4"
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.2, delay: 0.2 }}
+              >
+                <Link to="/package" className="text-light">
+                  Explore <IoArrowForward />
+                </Link>
+              </motion.button>
+            </div>
+          </Carousel.Caption>
+        </Carousel.Item>
+
+        <Carousel.Item>
+          <div className="image-container">
+            <img className="d-block w-100" src={banner_2} alt="First slide" />
+            <div className="gradient-overlay"></div>
+          </div>
+          <Carousel.Caption>
+            <motion.div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: "20px",
+              }}
+              initial={{ y: -50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+            >
+              <span
+                className="hero-carousel-highlight text-center"
+                style={{ fontSize: "20px" }}
+              >
+                <span style={{ color: "#fff" }}>WELCOME TO </span>A TO Z DROP
+                TAXI
+              </span>
+            </motion.div>
+
+            <motion.h3
+              className="hero-carousel-title "
+              initial={{ x: 200, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+            >
+              BOOK
+              <span> TAXI</span> FOR YOUR RIDE
+            </motion.h3>
+            {/* <p>Explore our curated collection of the season's must-haves.</p> */}
+            <motion.p
+              className="mt-3"
+              initial={{ x: 200, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              style={{ fontSize: "14px", textAlign: "center" }}
+            >
+              There are many variations of passages available the majority have
+              suffered alteration in some form generators on the Internet tend
+              to repeat predefined chunks injected humour randomised words look
+              even slightly believable.
+            </motion.p>
+            <div className="d-flex justify-content-center">
+              <motion.button
+                className="btn btn-dark text-light mt-4"
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.2, delay: 0.2 }}
+              >
+                <Link to="/package" className="text-light">
+                  Explore <IoArrowForward />
+                </Link>
+              </motion.button>
+            </div>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <div className="image-container">
+            <img className="d-block w-100" src={banner_3} alt="First slide" />
+            <div className="gradient-overlay"></div>
+          </div>
+          <Carousel.Caption>
+            <motion.div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: "20px",
+              }}
+              initial={{ y: -50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+            >
+              <span
+                className="hero-carousel-highlight text-center"
+                style={{ fontSize: "20px" }}
+              >
+                <span style={{ color: "#fff" }}>WELCOME TO </span>A TO Z DROP
+                TAXI
+              </span>
+            </motion.div>
+
+            <motion.h3
+              className="hero-carousel-title "
+              initial={{ x: 200, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+            >
+              BOOK
+              <span> TAXI</span> FOR YOUR RIDE
+            </motion.h3>
+            {/* <p>Explore our curated collection of the season's must-haves.</p> */}
+            <motion.p
+              className="mt-3"
+              initial={{ x: 200, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              style={{ fontSize: "14px", textAlign: "center" }}
+            >
+              There are many variations of passages available the majority have
+              suffered alteration in some form generators on the Internet tend
+              to repeat predefined chunks injected humour randomised words look
+              even slightly believable.
+            </motion.p>
+            <div className="d-flex justify-content-center">
+              <motion.button
+                className="btn btn-dark text-light mt-4"
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.2, delay: 0.2 }}
+              >
+                <Link to="/package" className="text-light">
+                  Explore <IoArrowForward />
+                </Link>
+              </motion.button>
+            </div>
+          </Carousel.Caption>
+        </Carousel.Item>
+      </Carousel>
+    </div>
+  );
+};
+
+export default HeroCarousel;

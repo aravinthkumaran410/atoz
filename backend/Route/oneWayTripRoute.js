@@ -11,7 +11,11 @@ router.get("/get-one-way-trip",oneway.getOneWay);
 
 router.post("/update-oneway-trip",upload.fields([{name:'image',maxCount:1}]),oneway.updateOneWay);
 
-router.post("/delete-oneway-trip",oneway.deleteOneWay)
+router.post("/delete-oneway-trip",oneway.deleteOneWay);
+
+//Arvind nagaraj
+
+router.get("/getAllVechicles",oneway.getAllVehicles);
 
 
 
