@@ -10,6 +10,16 @@
 .header-nav-logo {
   width: 100px;
 }
+.nav-contact-container {
+  display: flex;
+  align-items: center;
+  gap: 20px 10px;
+}
+.nav-contact-container .nav-contact-phone {
+  color: var(--color-red);
+  font-weight: 700;
+  font-size: clamp(1rem, 0.7813rem + 1.5vw, 1.3rem);
+}
 
 .navbar a {
   color: #000 !important;
@@ -118,6 +128,9 @@
   .navbar .navbar-nav .nav-link {
     padding: 10px 0;
     text-align: center;
+  }
+  .nav-contact-container {
+    flex-direction: column;
   }
 
   .call-us-section {

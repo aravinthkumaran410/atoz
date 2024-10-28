@@ -10,6 +10,8 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 
 import carImage from "../../assets/gif/Off road.gif";
 
+import { Button, message, Space } from "antd";
+
 import { motion } from "framer-motion";
 
 const BookingForm = () => {
@@ -20,7 +22,7 @@ const BookingForm = () => {
   const [distance, setDistance] = useState(null);
   const [pickupCoords, setPickupCoords] = useState({});
   const [dropCoords, setDropCoords] = useState({});
-  const carTypes = ["Sedan", "SUV", "Van"];
+
   const [oneWayCars, setOneWayCars] = useState([]);
   const [roundTripCars, setRoundTripCars] = useState([]);
   const [estimatedFare, setEstimatedFare] = useState();
@@ -29,6 +31,24 @@ const BookingForm = () => {
 
   const [pickupInputError, setPickupInputError] = useState(false);
   const [dropInputError, setDropInputError] = useState(false);
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "Booking confirmed successfully!",
+      duration: 1,
+    });
+  };
+
+  const error = () => {
+    messageApi.open({
+      type: "error",
+      content: "Failed to confirm booking.",
+      duration: 1,
+    });
+  };
 
   useEffect(() => {
     const fetchCarTypes = async () => {
@@ -90,7 +110,7 @@ const BookingForm = () => {
         ? roundTripCars.find((car) => car.carname === values.selectedCar.value)
         : oneWayCars.find((car) => car.carname === values.selectedCar.value);
 
-      setRate(selectedCar.rate);
+      setRate(selectedCar.oneWayRate || selectedCar.roundWayRate);
       setdriverFare(selectedCar.driverfare);
 
       resetForm();
@@ -231,74 +251,92 @@ const BookingForm = () => {
   };
 
   const handleConfirmBooking = async (data) => {
-    // Calculate the total fare
+    const tripType = isRoundTrip ? "Round-trip" : "One-trip";
     const totalFare = (
       Number(distance) * Number(rate) +
       Number(driverFare)
     ).toFixed(2);
 
-    // Show alert with booking details
-    alert(`
-      Booking Confirmed!
-      Full Name: ${data.fullName}
-      Phone: ${data.phone}
-      Pickup Location: ${data.pickupLocation}
-      Drop Location: ${data.dropLocation}
-      Pickup Date: ${data.pickupDate}
-      Pickup Time: ${data.pickupTime}
-      ${
-        isRoundTrip
-          ? `
-        Trip: Round Trip
-        Return Date: ${data.returnDate}
-        Return Time: ${data.returnTime}`
-          : "Trip: One Trip"
-      }
-      Car Type: ${data.selectedCar.label}
-      Distance: ${distance} km
-      Per km: Rs ${rate}
-      Driver Fare: Rs ${driverFare}
-      Total: Rs ${totalFare}
-    `);
-
-    const message = `
-      New Booking Confirmed!
-      Full Name: ${data.fullName}
-      Phone: ${data.phone}
-      Pickup Location: ${data.pickupLocation}
-      Drop Location: ${data.dropLocation}
-      Pickup Date: ${data.pickupDate}
-      Pickup Time: ${data.pickupTime}
-      ${
-        isRoundTrip
-          ? `
-        Trip: Round Trip
-        Return Date: ${data.returnDate}
-        Return Time: ${data.returnTime}`
-          : "Trip: One Trip"
-      }
-      Car Type: ${data.selectedCar.label}
-      Distance: ${distance} km
-      Per km: Rs ${rate}
-      Driver Fare: Rs ${driverFare}
-      Total: Rs ${totalFare}
-    `;
-
-    const token = "7833606942:AAE8Ayq11k37vLrK4dELa0yFGf8ZZVEQOMU";
-    const chatId = "-1002294686843";
-
     try {
-      // Send the message to Telegram
-      await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
-        chat_id: chatId,
-        text: message,
+      // Send the booking data to the server
+      const response = await AxiosInstance.post("/taxibook/createbookings", {
+        ...data,
+        distance,
+        tripType,
+        totalFare,
       });
-      console.log("Notification sent to Telegram");
-    } catch (error) {
-      console.error("Error sending notification:", error);
-    }
+      // alert("Booking confirmed successfully!");
+      success();
 
-    window.location.reload();
+      // Show alert with booking details
+      // alert(`
+      //   Booking Confirmed!
+      //   Full Name: ${data.fullName}
+      //   Phone: ${data.phone}
+      //   Pickup Location: ${data.pickupLocation}
+      //   Drop Location: ${data.dropLocation}
+      //   Pickup Date: ${data.pickupDate}
+      //   Pickup Time: ${data.pickupTime}
+      //   ${
+      //     isRoundTrip
+      //       ? `
+      //   Trip: Round Trip
+      //   Return Date: ${data.returnDate}
+      //   Return Time: ${data.returnTime}`
+      //       : "Trip: One Trip"
+      //   }
+      //   Car Type: ${data.selectedCar.label}
+      //   Distance: ${distance} km
+      //   Per km: Rs ${rate}
+      //   Driver Fare: Rs ${driverFare}
+      //   Total: Rs ${totalFare}
+      // `);
+
+      // Prepare the message for Telegram
+      const message = `
+        New Booking Confirmed!
+        Full Name: ${data.fullName}
+        Phone: ${data.phone}
+        Pickup Location: ${data.pickupLocation}
+        Drop Location: ${data.dropLocation}
+        Pickup Date: ${data.pickupDate}
+        Pickup Time: ${data.pickupTime}
+        ${
+          isRoundTrip
+            ? `
+        Trip: Round Trip
+        Return Date: ${data.returnDate}
+        Return Time: ${data.returnTime}`
+            : "Trip: One Trip"
+        }
+        Car Type: ${data.selectedCar.label}
+        Distance: ${distance} km
+        Per km: Rs ${rate}
+        Driver Fare: Rs ${driverFare}
+        Total: Rs ${totalFare}
+      `;
+
+      const token = "7833606942:AAE8Ayq11k37vLrK4dELa0yFGf8ZZVEQOMU";
+      const chatId = "-1002294686843";
+
+      try {
+        // Send the message to Telegram
+        await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+          chat_id: chatId,
+          text: message,
+        });
+        console.log("Notification sent to Telegram");
+      } catch (error) {
+        console.error("Error sending notification:", error);
+      }
+
+      // Reload the page after the confirmation
+      window.location.reload();
+    } catch (err) {
+      console.error("Error confirming booking:", err);
+      // alert("Failed to confirm booking.");
+      error();
+    }
   };
 
   // const testSendMessage = async () => {
@@ -324,6 +362,7 @@ const BookingForm = () => {
 
   return (
     <section className="container">
+      {contextHolder}
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
@@ -343,7 +382,7 @@ const BookingForm = () => {
                   <p className="h5">
                     <strong>Total:</strong>
                     <span className="fs-4 text-warning ms-2">
-                      Rs{" "}
+                      Rs
                       {(
                         Number(distance) * Number(rate) +
                         Number(driverFare)
@@ -366,8 +405,11 @@ const BookingForm = () => {
                   <p>
                     <strong>Pickup Time:</strong> {submittedData.pickupTime}
                   </p>
-                  {isRoundTrip && (
+                  {isRoundTrip ? (
                     <>
+                      <p>
+                        <strong>Trip</strong>Round Trip
+                      </p>
                       <p>
                         <strong>Return Date:</strong> {submittedData.returnDate}
                       </p>
@@ -375,6 +417,10 @@ const BookingForm = () => {
                         <strong>Return Time:</strong> {submittedData.returnTime}
                       </p>
                     </>
+                  ) : (
+                    <p>
+                      <strong>Trip : </strong> One Trip
+                    </p>
                   )}
                   <p>
                     <strong>Car Type:</strong>{" "}
@@ -642,11 +688,11 @@ const BookingForm = () => {
                       options={
                         isRoundTrip
                           ? roundTripCars.map((car) => ({
-                              label: `${car.carname} - ${car.acType} - ${car.rate}/km`,
+                              label: `${car.carname} - ${car.acType} - ${car.roundWayRate}/km`,
                               value: car.carname,
                             }))
                           : oneWayCars.map((car) => ({
-                              label: `${car.carname} - ${car.acType} - ${car.rate}/km`,
+                              label: `${car.carname} - ${car.acType} - ${car.oneWayRate}/km`,
                               value: car.carname,
                             }))
                       }

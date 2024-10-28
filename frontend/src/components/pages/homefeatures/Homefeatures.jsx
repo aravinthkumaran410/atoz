@@ -28,12 +28,19 @@ const Homefeatures = () => {
                 </div>
               </div>
             </div>
-            <div
+            <motion.div
               className="row "
               style={{ marginBottom: "100px" }}
-              data-aos="fade-up"
+              initial={{ opacity: 0, y: 200 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
             >
-              <div className="col-md-6 col-lg-3">
+              <motion.div
+                className="col-md-6 col-lg-3"
+                initial={{ opacity: 0, x: -200 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+              >
                 <div
                   className="feature-item wow fadeInUp"
                   data-wow-delay=".25s"
@@ -54,8 +61,13 @@ const Homefeatures = () => {
                     </p>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-lg-3">
+              </motion.div>
+              <motion.div
+                className="col-md-6 col-lg-3"
+                initial={{ opacity: 0, x: -200 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
                 <div
                   className="feature-item mt-lg-5 wow fadeInDown"
                   data-wow-delay=".25s"
@@ -76,8 +88,13 @@ const Homefeatures = () => {
                     </p>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-lg-3">
+              </motion.div>
+              <motion.div
+                className="col-md-6 col-lg-3"
+                initial={{ opacity: 0, x: -200 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+              >
                 <div
                   className="feature-item wow fadeInUp"
                   data-wow-delay=".25s"
@@ -98,8 +115,13 @@ const Homefeatures = () => {
                     </p>
                   </div>
                 </div>
-              </div>
-              <div className="col-md-6 col-lg-3">
+              </motion.div>
+              <motion.div
+                className="col-md-6 col-lg-3"
+                initial={{ opacity: 0, x: -200 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+              >
                 <div
                   className="feature-item mt-lg-5 wow fadeInDown"
                   data-wow-delay=".25s"
@@ -120,8 +142,8 @@ const Homefeatures = () => {
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>

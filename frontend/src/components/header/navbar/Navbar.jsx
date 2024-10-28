@@ -68,6 +68,14 @@ const Navbar = () => {
             >
               Tariff
             </Link>
+            <Link
+              to="/service"
+              // to="/package#package"
+              className={`nav-item nav-link ${isActive("/service")}`}
+              onClick={handleLinkClick}
+            >
+              Service
+            </Link>
             {/* <div className="nav-item dropdown">
               <Link
                 to="/packages"
@@ -107,7 +115,10 @@ const Navbar = () => {
           </div>
 
           <div>
-            <button className=" nav-contact-button">contact</button>
+            <div className="nav-contact-container">
+              <span className="nav-contact-phone">6382712627</span>
+              <button className="nav-contact-button">contact</button>
+            </div>
           </div>
         </div>
       </nav>
