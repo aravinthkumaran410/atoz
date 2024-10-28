@@ -5,7 +5,7 @@ const sharp = require("sharp");
 
 exports.roundwayTripAdded = async (req, res) => {
     try {
-      const { additionalcharge, rate, carname,driverfare } = req.body;
+      const { additionalcharge, rate, carname,driverfare,acType,passenger } = req.body;
       const image = req.files["image"][0];
   
       async function processImage(image, maxSizeKB) {
@@ -32,7 +32,7 @@ exports.roundwayTripAdded = async (req, res) => {
   
       const imageUrl = await processImage(image, 100);
       const roundWayTrip = new roundWayTripModel({
-        additionalcharge, rate, carname,driverfare,
+        additionalcharge, roundWayRate:rate, carname,driverfare,acType,passenger,
         image: imageUrl,
       });
       await roundWayTrip.save();
@@ -63,7 +63,7 @@ exports.roundwayTripAdded = async (req, res) => {
 exports.updateRoundWay=async(req,res)=>{
   try{
     let image;
-    const { id,additionalcharge, rate, carname,driverfare } = req.body;
+    const { id,additionalcharge, rate, carname,driverfare,acType,passenger } = req.body;
 
     const existingRoundWayTrip = await roundWayTripModel.findById(id);
 
@@ -105,7 +105,7 @@ exports.updateRoundWay=async(req,res)=>{
       id,
       {
       image,
-      additionalcharge, rate, carname,driverfare
+      additionalcharge, roundWayRate:rate, carname,driverfare,acType,passenger
       },
       {
         new: true,

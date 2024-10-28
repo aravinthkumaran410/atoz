@@ -5,7 +5,16 @@ const roundWayTripsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  rate: {
+  passenger:{
+    type: String,
+    required: true
+  },
+  acType:{
+    type:String,
+    required:true
+  },
+
+  roundWayRate: {
     type: String,
     required: true,
   },
@@ -14,7 +23,7 @@ const roundWayTripsSchema = new mongoose.Schema({
     required: true,
   },
   additionalcharge: {
-    type: String,
+    type: [String],
     required: true,
   },
  
