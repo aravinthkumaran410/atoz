@@ -13,6 +13,7 @@ import { Fragment } from "react";
 import "./Login.css";
 import client from "../../Common/Client/Client";
 import { useNavigate } from "react-router-dom";
+import logo from '../../../Assets/Images/back.png'
 
 
 const Login = (porps) => {
@@ -145,21 +146,22 @@ const {setAdmin}=porps
               marginTop:"10px",
               textAlign:"center            "
             }}>
+                <p style={{
+                fontSize: "27px",
+                color: "rgb(230 49 50)",
+                margin:"0px",
+                textTransform:"uppercase",
+                fontWeight:"bold"
+
+
+              }} className="mb-3">Weclome Admin Panel</p>
               <p style={{
                 fontSize: "27px",
                 color: "#000",
                 margin:"0px"
-              }}><MdLockOutline /></p>
-              <p style={{
-                fontSize: "23px",
-                color: "#000",
-                margin:"0px"
-
-              }}>Welcome Admin</p>
-              <p style={{
-                fontSize: "18px",
-                color: "#000",
-              }}>Login</p>
+              }}><img src={logo} alt="logo" width="130px" height="70px" className="mb-2"/></p>
+            
+           
 
             </div>
             <div>

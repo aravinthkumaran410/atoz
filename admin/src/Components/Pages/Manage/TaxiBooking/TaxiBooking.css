@@ -1,0 +1,71 @@
+.no-bookings {
+    color: black; /* Text color */
+  
+    text-align: center; /* Center align text */
+    margin: 20px auto; /* Margin on top and bottom, auto on left and right */
+    padding: 15%; /* Reduced padding for better spacing */
+    font-size: 20px; /* Font size */
+    position: relative; /* Enable positioning for background image */
+    
+  }
+  
+  .table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+  }
+  
+  .table-row {
+    transition: background-color 0.3s ease;
+  }
+  
+  .table-row:hover {
+    background-color: rgb(230, 227, 227); /* Dark gray hover effect for rows */
+  }
+  
+  /* Table styles */
+  .MuiTableCell-root {
+    color: black; /* Yellow text in table cells */
+  }
+  
+  .MuiTableRow-root {
+    border-bottom: 1px solid #444; /* Dark gray border for table rows */
+  }
+  
+  .booking-button {
+    background-color: #fbc02d; /* Yellow background for buttons */
+    color: #000; /* Black text for buttons */
+    margin: 5px;
+  }
+  
+  .booking-button:hover {
+    background-color: #f9c20c; /* Darker yellow on hover */
+  }
+  
+  /* Snackbar styles */
+  .MuiAlert-root {
+    background-color: #000; /* Black background for Snackbar */
+    color: #fbc02d; /* Yellow text for Snackbar */
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 600px) {
+    .main {
+      padding: 10px; /* Reduce padding for small screens */
+    }
+  
+    .table-container {
+      font-size: 12px; /* Reduce font size for table on small screens */
+    }
+  
+    .booking-button {
+      width: 100%; /* Full width buttons on small screens */
+    }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .no-bookings {
+      padding: 30px; /* Adjust padding for smaller screens */
+      font-size: 18px; /* Smaller font size */
+    }
+  }

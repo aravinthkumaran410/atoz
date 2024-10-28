@@ -1,0 +1,86 @@
+
+  
+  .contact-admin {
+   
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+ 
+  .breadcrumb-link {
+    display: flex;
+    align-items: center;
+    color: #f0a500; /* Bold yellow for breadcrumb links */
+    text-decoration: none;
+  }
+  
+  .breadcrumb-text {
+    color: #555555; /* Dark gray for breadcrumb text */
+  }
+  
+  .form-card {
+    background-color: #fdf6e3; /* Light yellow for form card */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+  }
+  
+  .form-title {
+    color: #000000; /* Black for form title */
+  }
+  
+  .input-field .MuiOutlinedInput-root {
+    border-color: #f0a500; /* Yellow border */
+  }
+  
+  .input-field .MuiOutlinedInput-root:hover fieldset,
+  .input-field .MuiOutlinedInput-root.Mui-focused fieldset {
+    border-color: #d61b23; /* Red for hover and focus */
+  }
+  
+  .details-card {
+    background-color: #f9f9f9; /* Light gray for details card */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+  }
+  
+  .update-button {
+    background-color: #f0a500; /* Bold yellow update button */
+    color: #000000; /* Black text */
+  }
+  
+  .update-button:hover {
+    background-color: #d61b23; /* Red on hover */
+    color: #ffffff; /* White text on hover */
+  }
+  
+  .edit-button {
+    border-color: #d61b23; /* Red outline for edit button */
+    color: #d61b23; /* Red text */
+  }
+  
+  .edit-button:hover {
+    background-color: #d61b23;
+    color: #ffffff; /* White text on hover */
+  }
+  
+  .details-title {
+    color: #000000; /* Black for details title */
+  }
+  
+  .admin-card {
+    background-color: #fdf6e3;
+    border: 1px solid #d61b23; /* Red border */
+    padding: 10px;
+  }
+  
+  .admin-name {
+    font-weight: bold;
+    color: #f0a500; /* Bold yellow for admin name */
+  }
+  
+  .admin-info {
+    color: #555555; /* Dark gray for admin information */
+  }
