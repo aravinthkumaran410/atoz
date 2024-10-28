@@ -11,6 +11,10 @@ const HeaderAllow = (props) => {
     '/trip/round',
     "/manage/trip/round",
     '/manage/trip/oneway',
+    '/statepermit',
+    '/manage/statepermit',
+    '/manage/taxibooking',
+    '/manage/contact',
 
    
   ];

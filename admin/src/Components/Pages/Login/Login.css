@@ -1,6 +1,6 @@
 .full-height-background {
   position: relative;
-  background-image: linear-gradient(#0000004d, #0000004d),
+  background: linear-gradient(#0000004d, #0000004d),
     url(../../../Assets/Images/login.jpg);
   background-repeat: no-repeat;
   background-position: center;
@@ -28,10 +28,10 @@
   z-index: 2;
   backdrop-filter: blur(6px) saturate(200%);
   background-color: #ffffffb0;
-  border-radius: 8px;
+  border-radius: 15px;
   box-shadow: 0 8px 16px #0000004d;
   width: 100%;
-  max-width: 350px;
+  max-width: 400px;
   padding: 10px 20px;
 }
 

@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { message, Popconfirm } from "antd";
-import { Button, styled, TextField } from "@mui/material";
+import { Popconfirm } from "antd";
+import { Button, styled, TextField, Box } from "@mui/material";
+import {
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@mui/material";
 import toast from "react-hot-toast";
 import client from "../../../../Common/Client/Client";
 import { Modal, Form, FormLabel } from "react-bootstrap";
@@ -20,13 +26,15 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 const ManageOneWay = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [oneWayTrip, setOneWayTrip] = useState([]);
   const [open, setOpen] = useState(false);
   const [carname, setCarName] = useState("");
   const [rate, setRate] = useState("");
   const [driverfare, setDriveFare] = useState("");
-  const [additionalcharge, setAdditionalCharge] = useState("");
+  const [additionalcharge, setAdditionalCharge] = useState([]);
+  const [passenger, setPassenger] = useState("");
+  const [acType, setAcType] = useState("");
   const [loading, setLoading] = useState(false);
   const [showAddImage, setShowAddImage] = useState(0);
   const [showImage, setShowImage] = useState(null);
@@ -35,7 +43,8 @@ const ManageOneWay = () => {
     carname: "",
     rate: "",
     driverfare: "",
-    additionalcharge: "",
+      passenger:"",
+      acType:"",
     image: "",
   });
   const [id, setId] = useState("");
@@ -59,7 +68,6 @@ const ManageOneWay = () => {
   const cancel = (e) => {
     toast.error("You Cancle delete");
   };
-
 
   const handleDelete = async (id) => {
     try {
@@ -90,9 +98,16 @@ const ManageOneWay = () => {
     setOpen(true);
     setCarName(value.carname);
     setImage(value.image);
-    setRate(value.rate);
-    setAdditionalCharge(value.additionalcharge);
+    setRate(value.oneWayRate);
+   
     setDriveFare(value.driverfare);
+    const additionalChargeValue = value.additionalcharge.map((value) => ({
+      value: value,
+      error: "",
+    }));
+    setAdditionalCharge(additionalChargeValue);
+    setPassenger(value.passenger);
+    setAcType(value.acType);
   };
 
   //Change and blur
@@ -127,9 +142,9 @@ const ManageOneWay = () => {
       }
     }
 
-    if (fieldName === "additionalcharge") {
-      if (fieldValue.length < 1) {
-        message = `Additional Charge fare is Invalid`;
+    if (fieldName === "passenger") {
+      if (fieldValue.length === 0) {
+        message = `Passenger is Invalid`;
       } else {
         message = "";
       }
@@ -153,8 +168,12 @@ const ManageOneWay = () => {
     } else if (name === "driverfare") {
       setDriveFare(value);
     } else {
-      setAdditionalCharge(value);
+      setPassenger(value);
     }
+  };
+
+  const handleRadioChange = (e) => {
+    setAcType(e.target.value);
   };
 
   const handleBlur = (e) => {
@@ -165,6 +184,64 @@ const ManageOneWay = () => {
         [name]: `${name} is required`,
       }));
     }
+  };
+
+  //Addition charge field
+  const handleAdditionChange = (index, e) => {
+    toast.dismiss();
+    const { value } = e.target;
+    const newAaddditionalCharge = [...additionalcharge];
+    newAaddditionalCharge[index].value = value;
+
+    if (value.length < 3) {
+      newAaddditionalCharge[index].error = "Additional charge is invalid";
+    } else {
+      newAaddditionalCharge[index].error = "";
+    }
+
+    setAdditionalCharge(newAaddditionalCharge);
+  };
+
+  // Handle additional field blur (to show errors when losing focus)
+  const handleAdditionalBlur = (index, e) => {
+    const { value } = e.target;
+    const newAaddditionalCharge = [...additionalcharge];
+    if (value === "") {
+      newAaddditionalCharge[index].error =
+        "Additional charge content is required.";
+    }
+    setAdditionalCharge(newAaddditionalCharge);
+  };
+
+  //Add Additional field
+  const addAdditionalField = () => {
+    toast.dismiss();
+    if (additionalcharge.length >= 5) {
+      toast.error("Maximum of 5 About fields can be added.");
+      return;
+    }
+
+    const lastField = additionalcharge[additionalcharge.length - 1];
+    if (lastField.value === "") {
+      toast.error("Complete the current field.");
+    } else if (lastField.error) {
+      toast.error("Fix the error in about field");
+    } else {
+      setAdditionalCharge([...additionalcharge, { value: "", error: "" }]);
+    }
+  };
+
+  // Delete additional content field
+  const deleteAdditionalField = (index) => {
+    toast.dismiss();
+    if (additionalcharge.length <= 1) {
+      toast.error("At least one Additionalcharge field must remain.");
+      return;
+    }
+
+    const newAdditionalcharge = [...additionalcharge];
+    newAdditionalcharge.splice(index, 1);
+    setAdditionalCharge(newAdditionalcharge);
   };
 
   const handleImageChange = (e) => {
@@ -194,60 +271,72 @@ const ManageOneWay = () => {
     }
   };
 
-
   //send update data one way
 
-  const updateDataOneWay=()=>{
+  const updateDataOneWay = () => {
     toast.dismiss();
     if (
       carname === "" ||
       rate === "" ||
       driverfare === "" ||
-      additionalcharge === ""
+      passenger === ""
     ) {
       toast.error("All fields are required.");
-    }else if (image === null ){
-
-        toast.error("Please select an image.");
-    } else if (error.carname !== "") {
+    } else if (acType === "") {
+     
+      toast.error("Please select an Ac Type.");
+    } else if (additionalcharge.some((value, index) => value.value === "")) {
+      toast.error("Additional charge fields are required.");
+    } else if (image === null) {
       
+      toast.error("Please select an image.");
+    } else if (error.carname !== "") {
       toast.error(error.carname);
+    } else if (error.passenger !== "") {
+      toast.error(error.passenger);
     } else if (error.rate !== "") {
       toast.error(error.rate);
     } else if (error.image !== "") {
       toast.error(error.image);
     } else if (error.driverfare !== "") {
       toast.error(error.driverfare);
-    } else if (error.additionalcharge !== "") {
-      toast.error(error.additionalcharge);
+    }  else if (additionalcharge.some((value, index) => value.error !== "")) {
+      toast.error("check the error in Additional charge .");
     } else {
       setLoading(true);
       sendData();
     }
-  }
+  };
 
-
-  const sendData=async()=>{
+  const sendData = async () => {
     try {
       const formData = new FormData();
-      formData.append("id",id)
+      formData.append("id", id);
       formData.append("image", image);
       formData.append("carname", carname);
       formData.append("rate", rate);
-      formData.append("additionalcharge", additionalcharge);
+      formData.append("passenger", passenger);
+      formData.append("acType", acType);
+      additionalcharge.forEach((field, index) => {
+        formData.append("additionalcharge", field.value);
+      });
       formData.append("driverfare", driverfare);
 
-      const response = await client.post("/onewaytrip/update-oneway-trip", formData, {
-        withCredentials: true,
-      });
+      const response = await client.post(
+        "/onewaytrip/update-oneway-trip",
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
       if (response.status === 200) {
         toast.success("One way Trip update Successfully");
-       
+
         setOpen(false);
         setLoading(false);
         setRate("");
         setId("");
-        setAdditionalCharge("");
+
         setDriveFare("");
         setImage(null);
         setShowAddImage(0);
@@ -259,11 +348,20 @@ const ManageOneWay = () => {
             carname: "",
             rate: "",
             driverfare: "",
-            additionalcharge: "",
+            passenger: "",
+            acType: "",
             image: "",
           };
         });
-        getOneWayTrip()
+        setAdditionalCharge([
+          {
+            value: "",
+            error: "",
+          },
+        ]);
+        setPassenger("");
+        setAcType("");
+        getOneWayTrip();
       }
     } catch (err) {
       setLoading(false);
@@ -273,8 +371,7 @@ const ManageOneWay = () => {
         toast.error("Failed to add quotes details");
       }
     }
-
-  }
+  };
 
   return (
     <main id="main" className="main">
@@ -303,25 +400,30 @@ const ManageOneWay = () => {
       >
         <h3>Manage One Way Trip</h3>
         <div className="table-responsive">
-          
-              {oneWayTrip.length > 0 ? (
-                oneWayTrip.map((item, index) => (
-                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr
-                style={{ borderBottom: "2px solid #ddd", textAlign: "center" }}
-              >
-                <th style={{ padding: "8px" }}>Image</th>
-                <th style={{ padding: "8px" }}>Car Name</th>
-                <th style={{ padding: "8px" }}>Rate/KM</th>
-                <th style={{ padding: "8px" }}>Driver Fare</th>
-                <th style={{ padding: "8px", width: "20%" }}>
-                  Additional charge{" "}
-                </th>
-                <th style={{ padding: "8px" }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+          {oneWayTrip.length > 0 ? (
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr
+                  style={{
+                    borderBottom: "2px solid #ddd",
+                    textAlign: "center",
+                  }}
+                >
+                  <th style={{ padding: "8px" }}>Image</th>
+                  <th style={{ padding: "8px" }}>Car Name</th>
+                  <th style={{ padding: "8px" }}>Rate/KM</th>
+                  <th style={{ padding: "8px" }}>Passenger</th>
+                  <th style={{ padding: "8px" }}>Ac Type</th>
+
+                  <th style={{ padding: "8px" }}>Driver Fare</th>
+                  <th style={{ padding: "8px", width: "20%" }}>
+                    Additional charge
+                  </th>
+                  <th style={{ padding: "8px" }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {oneWayTrip.map((item, index) => (
                   <tr key={index}>
                     <td>
                       <img
@@ -331,10 +433,20 @@ const ManageOneWay = () => {
                       />
                     </td>
                     <td>{item.carname}</td>
-                    <td>{item.rate}</td>
+                    <td>{item.oneWayRate}</td>
+                    <td>{item.passenger}</td>
+                    <td>{item.acType}</td>
                     <td>{item.driverfare}</td>
-                    <td>{item.additionalcharge}</td>
-                    <td style={{ padding: "8px" }} >
+                    <td>
+                      {item.additionalcharge.map((value, index) => {
+                        return (
+                          <p>
+                            {index + 1}) {value}
+                          </p>
+                        );
+                      })}
+                    </td>
+                    <td style={{ padding: "8px" }}>
                       <Button
                         variant="contained"
                         color="primary"
@@ -342,9 +454,8 @@ const ManageOneWay = () => {
                         className="table-button button-table"
                         style={{
                           marginRight: "5px",
-                          marginBottom:"5px"
+                          marginBottom: "5px",
                         }}
-                       
                       >
                         Update
                       </Button>
@@ -362,43 +473,44 @@ const ManageOneWay = () => {
                           color="error"
                           className="table-button"
                           style={{
-                            marginBottom:"5px"
-                        }}
+                            marginBottom: "5px",
+                          }}
                         >
                           Delete
                         </Button>
                       </Popconfirm>
                     </td>
                   </tr>
-                    </tbody>
-                    </table>
-                ))
-              ) : (
-                <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "16px",
-                  border: "1px solid #ddd",
-                  borderRadius: "8px"
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "16px",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+              }}
+            >
+              <span className="mb-2" style={{ marginBottom: "8px" }}>
+                No One Way Trip
+              </span>
+
+              <Button
+                color="success"
+                variant="contained"
+                onClick={() => {
+                  navigate("/trip/oneway");
                 }}
               >
-                <span className="mb-2" style={{ marginBottom: "8px" }}>No One Way Trip</span>
-                
-                <Button
-                color="success"
-                 variant="contained"
-                  onClick={() => {
-                    navigate("/trip/oneway");
-                  }}
-                >
-                  Add One Way Trip
-                </Button>
-              </div>
-              )}
-          
+                Add One Way Trip
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       <div>
@@ -409,7 +521,10 @@ const ManageOneWay = () => {
             setLoading(false);
             setRate("");
             setId("");
-            setAdditionalCharge("");
+            setAdditionalCharge([
+            ]);
+            setPassenger("");
+            setAcType("");
             setDriveFare("");
             setImage(null);
             setShowAddImage(0);
@@ -421,7 +536,8 @@ const ManageOneWay = () => {
                 carname: "",
                 rate: "",
                 driverfare: "",
-                additionalcharge: "",
+                passenger:"",
+                acType:"",
                 image: "",
               };
             });
@@ -434,122 +550,173 @@ const ManageOneWay = () => {
             <Form>
               <Form.Group>
                 <div className="mt-2">
-                <div>
-                        <FormLabel>
-                          <span>Car Name</span>
-                        </FormLabel>
-                      </div>
-                      <div className="mt-1 p-3">
-                  <TextField
-                    label="Car Name"
-                    slotProps={{
-                      htmlInput: {
-                        maxLength: 30,
-                      },
-                    }}
-                    fullWidth
-                    variant="outlined"
-                    required
-                    name="carname"
-                    value={carname}
-                    onChange={handleChange}
-                    error={!!error.carname}
-                    helperText={error.carname}
-                    onBlur={handleBlur}
-                    onKeyDown={(e) => {
-                      const allowedKeys = [
-                        "Backspace",
-                        "ArrowLeft",
-                        "ArrowRight",
-                        "Delete",
-                        "Tab",
-                        " ",
-                      ];
-                      const allowedCharPattern = /^[A-Za-z.,_-]$/;
-                      if (carname.length === 0 && e.key === " ") {
-                        e.preventDefault();
-                        return;
-                      }
+                  <div>
+                    <FormLabel>
+                      <span>Car Name</span>
+                    </FormLabel>
+                  </div>
+                  <div className="mt-1 p-3">
+                    <TextField
+                      label="Car Name"
+                      slotProps={{
+                        htmlInput: {
+                          maxLength: 30,
+                        },
+                      }}
+                      fullWidth
+                      variant="outlined"
+                      required
+                      name="carname"
+                      value={carname}
+                      onChange={handleChange}
+                      error={!!error.carname}
+                      helperText={error.carname}
+                      onBlur={handleBlur}
+                      onKeyDown={(e) => {
+                        const allowedKeys = [
+                          "Backspace",
+                          "ArrowLeft",
+                          "ArrowRight",
+                          "Delete",
+                          "Tab",
+                          " ",
+                        ];
+                        const allowedCharPattern = /^[A-Za-z.,_-]$/;
+                        if (carname.length === 0 && e.key === " ") {
+                          e.preventDefault();
+                          return;
+                        }
 
-                      if (
-                        !allowedKeys.includes(e.key) &&
-                        !allowedCharPattern.test(e.key)
-                      ) {
-                        e.preventDefault();
-                      }
-                    }}
-                  />
-                </div>
+                        if (
+                          !allowedKeys.includes(e.key) &&
+                          !allowedCharPattern.test(e.key)
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
               </Form.Group>
               <Form.Group>
                 {" "}
                 <div className="mt-2">
-                <div>
-                        <FormLabel>
-                          <span>Rate/KM</span>
-                        </FormLabel>
-                      </div>
-                      <div className="mt-1 p-3">
-                  <TextField
-                    label="Rate/KM"
-                    required
-                    name="rate"
-                    slotProps={{
-                      htmlInput: {
-                        maxLength: 4,
-                      },
-                    }}
-                    onKeyDown={(e) => {
-                      const allowedKeys = [
-                        "Backspace",
-                        "ArrowLeft",
-                        "ArrowRight",
-                        "Delete",
-                        "Tab",
-                        " ",
-                      ];
-                      const allowedCharPattern = /^[0-9-]$/;
+                  <div>
+                    <FormLabel>
+                      <span>Rate/KM</span>
+                    </FormLabel>
+                  </div>
+                  <div className="mt-1 p-3">
+                    <TextField
+                      label="Rate/KM"
+                      required
+                      name="rate"
+                      slotProps={{
+                        htmlInput: {
+                          maxLength: 4,
+                        },
+                      }}
+                      onKeyDown={(e) => {
+                        const allowedKeys = [
+                          "Backspace",
+                          "ArrowLeft",
+                          "ArrowRight",
+                          "Delete",
+                          "Tab",
+                          " ",
+                        ];
+                        const allowedCharPattern = /^[0-9-]$/;
 
-                      if (rate.length === 0 && e.key === " ") {
-                        e.preventDefault();
-                        return;
-                      }
+                        if (rate.length === 0 && e.key === " ") {
+                          e.preventDefault();
+                          return;
+                        }
 
-                      if (
-                        !allowedKeys.includes(e.key) &&
-                        !allowedCharPattern.test(e.key)
-                      ) {
-                        e.preventDefault();
-                      }
-                    }}
-                    fullWidth
-                    variant="outlined"
-                    value={rate}
-                    onChange={handleChange}
-                    error={!!error.rate}
-                    helperText={error.rate}
-                    onBlur={handleBlur}
-                  />
-                </div>
+                        if (
+                          !allowedKeys.includes(e.key) &&
+                          !allowedCharPattern.test(e.key)
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+                      fullWidth
+                      variant="outlined"
+                      value={rate}
+                      onChange={handleChange}
+                      error={!!error.rate}
+                      helperText={error.rate}
+                      onBlur={handleBlur}
+                    />
+                  </div>
                 </div>
               </Form.Group>
 
               <Form.Group>
                 <div className="mt-2">
-                <div>
-                        <FormLabel>
-                          <span>Car Name</span>
-                        </FormLabel>
-                      </div>
-                      <div className="mt-1 p-3">
+                  <div>
+                    <FormLabel>
+                      <span>Driver Fare</span>
+                    </FormLabel>
+                  </div>
+                  <div className="mt-1 p-3">
+                    <TextField
+                      required
+                      label="Driver Fare"
+                      name="driverfare"
+                      slotProps={{
+                        htmlInput: {
+                          maxLength: 4,
+                        },
+                      }}
+                      onKeyDown={(e) => {
+                        const allowedKeys = [
+                          "Backspace",
+                          "ArrowLeft",
+                          "ArrowRight",
+                          "Delete",
+                          "Tab",
+                          " ",
+                        ];
+                        const allowedCharPattern = /^[0-9-]$/;
+
+                        if (driverfare.length === 0 && e.key === " ") {
+                          e.preventDefault();
+                          return;
+                        }
+
+                        if (
+                          !allowedKeys.includes(e.key) &&
+                          !allowedCharPattern.test(e.key)
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+                      fullWidth
+                      variant="outlined"
+                      value={driverfare}
+                      onChange={handleChange}
+                      error={!!error.driverfare}
+                      helperText={error.driverfare}
+                      onBlur={handleBlur}
+                    />
+                  </div>
+                </div>
+              </Form.Group>
+              <Form.Group>
+              <div className="mt-2">
+                  <div>
+                    <FormLabel>
+                      <span>Passenger</span>
+                    </FormLabel>
+                  </div>
+                  <div className="mt-1 p-3">
                   <TextField
+                    label="Passenger"
                     required
-                    label="Driver Fare"
-                    name="driverfare"
+                    name="passenger"
                     slotProps={{
                       htmlInput: {
-                        maxLength: 4,
+                        maxLength: 2,
                       },
                     }}
                     onKeyDown={(e) => {
@@ -563,7 +730,7 @@ const ManageOneWay = () => {
                       ];
                       const allowedCharPattern = /^[0-9-]$/;
 
-                      if (driverfare.length === 0 && e.key === " ") {
+                      if (passenger.length === 0 && e.key === " ") {
                         e.preventDefault();
                         return;
                       }
@@ -577,48 +744,127 @@ const ManageOneWay = () => {
                     }}
                     fullWidth
                     variant="outlined"
-                    value={driverfare}
+                    value={passenger}
                     onChange={handleChange}
-                    error={!!error.driverfare}
-                    helperText={error.driverfare}
+                    error={!!error.passenger}
+                    helperText={error.passenger}
                     onBlur={handleBlur}
                   />
                 </div>
                 </div>
               </Form.Group>
-              <Form.Group></Form.Group>
-              <div className="mt-2">
-              <div>
-                        <FormLabel>
-                          <span>Car Name</span>
-                        </FormLabel>
+              <Form.Group>
+                <Box sx={{ marginBottom: "20px" }}>
+                  <FormControl
+                    component="fieldset"
+                    style={{
+                      width: "100%",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
+                      <div className="mt-2">
+                        <FormLabel component="legend">Select Option*</FormLabel>
                       </div>
-                      <div className="mt-1 p-3">
-                <TextField
-                  required
-                  label="Additional Charge"
-                  name="additionalcharge"
-                  slotProps={{
-                    htmlInput: {
-                      maxLength: 200,
-                    },
+                      <div>
+                        <RadioGroup
+                          row
+                          aria-label="ac-option"
+                          name="ac-option-group"
+                          value={acType}
+                          onChange={handleRadioChange}
+                        >
+                          <FormControlLabel
+                            value="AC"
+                            control={<Radio />}
+                            label="AC"
+                          />
+                          <FormControlLabel
+                            value="Non-AC"
+                            control={<Radio />}
+                            label="Non-AC"
+                          />
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  </FormControl>
+                </Box>
+              </Form.Group>
+              <Form.Group>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                   }}
-                  onKeyDown={(e) => {
-                    if (additionalcharge.length === 0 && e.key === " ") {
-                      e.preventDefault();
-                      return;
-                    }
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  value={additionalcharge}
-                  onChange={handleChange}
-                  error={!!error.additionalcharge}
-                  helperText={error.additionalcharge}
-                  onBlur={handleBlur}
-                />
-              </div>
-              </div>
+                >
+                  <h5 style={{ textAlign: "center" }}>Additional charge* </h5>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={addAdditionalField}
+                    >
+                      Add
+                    </Button>
+                  </Box>
+                </div>
+
+                {additionalcharge.map((field, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      marginBottom: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextField
+                      label={`Additional charge  ${index + 1}`}
+                      fullWidth
+                      variant="outlined"
+                      slotProps={{
+                        htmlInput: {
+                          maxLength: 25,
+                        },
+                      }}
+                      multiline
+                      value={field.value}
+                      onChange={(e) => handleAdditionChange(index, e)}
+                      onBlur={(e) => handleAdditionalBlur(index, e)}
+                      error={!!field.error}
+                      helperText={field.error}
+                      onKeyDown={(e) => {
+                        if (field.value.length === 0 && e.key === " ") {
+                          e.preventDefault();
+                          return;
+                        }
+                      }}
+                    />
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => deleteAdditionalField(index)}
+                      disabled={additionalcharge.length <= 1}
+                      sx={{ marginLeft: "10px" }}
+                    >
+                      Delete
+                    </Button>
+                  </Box>
+                ))}
+              </Form.Group>
+
               <Form.Group>
                 <div className="mb-2" style={{ width: "100%" }}>
                   <div>
@@ -713,49 +959,53 @@ const ManageOneWay = () => {
                 </div>
               </Form.Group>
               <Modal.Footer>
-                <Button  variant="contained" color="error" style={{
-                  marginRight: "10px",
-                }}
-                onClick={()=>{
-                  setOpen(false);
-                  setLoading(false);
-                  setRate("");
-                  setId("");
-                  setAdditionalCharge("");
-                  setDriveFare("");
-                  setImage(null);
-                  setShowAddImage(0);
-                  setShowImage(null);
-                  setCarName("");
-                  setError((pre) => {
-                    return {
-                      ...pre,
-                      carname: "",
-                      rate: "",
-                      driverfare: "",
-                      additionalcharge: "",
-                      image: "",
-                    };
-                  });
-                }}
+                <Button
+                  variant="contained"
+                  color="error"
+                  style={{
+                    marginRight: "10px",
+                  }}
+                  onClick={() => {
+                    setOpen(false);
+                    setLoading(false);
+                    setRate("");
+                    setId("");
+                    setAdditionalCharge([]);
+                    setPassenger("");
+                    setAcType("");
+                    setDriveFare("");
+                    setImage(null);
+                    setShowAddImage(0);
+                    setShowImage(null);
+                    setCarName("");
+                    setError((pre) => {
+                      return {
+                        ...pre,
+                        carname: "",
+                        rate: "",
+                        driverfare: "",
+                        passenger:"",
+                        acType:"",
+                        image: "",
+                      };
+                    });
+                  }}
                 >
                   Cancel
                 </Button>
-              <Button
-                variant="contained"
-                onClick={updateDataOneWay}
-                color="success"
-              >
-                Save changes
-              </Button>
-            </Modal.Footer>
+                <Button
+                  variant="contained"
+                  onClick={updateDataOneWay}
+                  color="success"
+                >
+                  Save changes
+                </Button>
+              </Modal.Footer>
             </Form>
           </Modal.Body>
-          {loading && <Loader/>}
+          {loading && <Loader />}
         </Modal>
-      
       </div>
-     
     </main>
   );
 };
