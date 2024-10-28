@@ -54,3 +54,15 @@
     cursor: pointer;
   }
 }
+
+.header-navbar-sticky-container {
+  position: sticky;
+  top: 0%;
+  z-index: 99 !important;
+}
+
+@media (max-width: 768px) {
+  .header-container .header-bg {
+    display: none;
+  }
+}

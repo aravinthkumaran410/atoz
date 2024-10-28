@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import AxiosInstance from "../../api/AxiosInstance";
 import "./BookingForm.css";
 import CustomSelect from "./CustomSelect";
+import CustomSelectForChooseCar from "./CustomSelectForChooseCar";
 import { FaMapMarkerAlt } from "react-icons/fa";
+
+import carImage from "../../assets/gif/Off road.gif";
+
+import { Button, message, Space } from "antd";
+
+import { motion } from "framer-motion";
 
 const BookingForm = () => {
   const [isRoundTrip, setIsRoundTrip] = useState(false);
@@ -14,7 +22,53 @@ const BookingForm = () => {
   const [distance, setDistance] = useState(null);
   const [pickupCoords, setPickupCoords] = useState({});
   const [dropCoords, setDropCoords] = useState({});
-  const carTypes = ["Sedan", "SUV", "Van"];
+
+  const [oneWayCars, setOneWayCars] = useState([]);
+  const [roundTripCars, setRoundTripCars] = useState([]);
+  const [estimatedFare, setEstimatedFare] = useState();
+  const [rate, setRate] = useState();
+  const [driverFare, setdriverFare] = useState();
+
+  const [pickupInputError, setPickupInputError] = useState(false);
+  const [dropInputError, setDropInputError] = useState(false);
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "Booking confirmed successfully!",
+      duration: 1,
+    });
+  };
+
+  const error = () => {
+    messageApi.open({
+      type: "error",
+      content: "Failed to confirm booking.",
+      duration: 1,
+    });
+  };
+
+  useEffect(() => {
+    const fetchCarTypes = async () => {
+      try {
+        const oneWayResponse = await AxiosInstance.get(
+          "/onewaytrip/get-one-way-trip"
+        );
+        const roundTripResponse = await AxiosInstance.get(
+          "/roundtrip/get-round-way-trip"
+        );
+
+        setOneWayCars(oneWayResponse.data);
+        setRoundTripCars(roundTripResponse.data);
+      } catch (error) {
+        console.error("Error fetching car types:", error);
+      }
+    };
+
+    fetchCarTypes();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -26,7 +80,7 @@ const BookingForm = () => {
       pickupTime: "",
       returnDate: "",
       returnTime: "",
-      selectedCar: "",
+      selectedCar: { label: "Select a car", value: "" },
     },
     validationSchema: Yup.object({
       fullName: Yup.string().required("Required"),
@@ -43,20 +97,42 @@ const BookingForm = () => {
       returnTime: isRoundTrip
         ? Yup.string().required("Required")
         : Yup.string(),
-      selectedCar: Yup.string().required("Required"),
+      selectedCar: Yup.object()
+        .shape({
+          value: Yup.string().required("Required"),
+          label: Yup.string().required("Required"),
+        })
+        .required("Required"),
     }),
     onSubmit: async (values, { resetForm }) => {
       setSubmittedData(values);
+      const selectedCar = isRoundTrip
+        ? roundTripCars.find((car) => car.carname === values.selectedCar.value)
+        : oneWayCars.find((car) => car.carname === values.selectedCar.value);
+
+      setRate(selectedCar.oneWayRate || selectedCar.roundWayRate);
+      setdriverFare(selectedCar.driverfare);
 
       resetForm();
       calculateDistance(pickupCoords, dropCoords);
+      const totalFare =
+        distance && rate && driverFare
+          ? (distance * rate + driverFare).toFixed(2)
+          : 0;
+      setEstimatedFare(totalFare);
+      console.log("total : ", totalFare);
     },
   });
 
   const fetchLocationSuggestions = async (query, isPickup) => {
     if (!query) {
-      if (isPickup) setPickupSuggestions([]);
-      else setDropSuggestions([]);
+      if (isPickup) {
+        setPickupSuggestions([]);
+        setPickupInputError(false); // Reset error
+      } else {
+        setDropSuggestions([]);
+        setDropInputError(false); // Reset error
+      }
       return;
     }
 
@@ -67,8 +143,10 @@ const BookingForm = () => {
       const suggestions = response.data;
       if (isPickup) {
         setPickupSuggestions(suggestions);
+        setPickupInputError(suggestions.length === 0); // Set error if no suggestions
       } else {
         setDropSuggestions(suggestions);
+        setDropInputError(suggestions.length === 0); // Set error if no suggestions
       }
     } catch (error) {
       console.error("Error fetching location suggestions", error);
@@ -123,7 +201,7 @@ const BookingForm = () => {
     if (pickup && drop) {
       const toRadians = (degree) => (degree * Math.PI) / 180;
 
-      const R = 6371; // Radius of the Earth in kilometers
+      const R = 6371;
       const lat1 = toRadians(pickup.lat);
       const lon1 = toRadians(pickup.lon);
       const lat2 = toRadians(drop.lat);
@@ -141,7 +219,7 @@ const BookingForm = () => {
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
       const distanceInKm = R * c;
 
-      setDistance(`${distanceInKm.toFixed(2)} km`);
+      setDistance(`${distanceInKm.toFixed(2)}`);
     }
   };
 
@@ -173,118 +251,220 @@ const BookingForm = () => {
   };
 
   const handleConfirmBooking = async (data) => {
-    // Show alert with booking details
-    alert(`
-      Booking Confirmed!
-      Full Name: ${data.fullName}
-      Phone: ${data.phone}
-      Pickup Location: ${data.pickupLocation}
-      Drop Location: ${data.dropLocation}
-      Pickup Date: ${data.pickupDate}
-      Pickup Time: ${data.pickupTime}
-      ${
-        isRoundTrip
-          ? `
-      Return Date: ${data.returnDate}
-      Return Time: ${data.returnTime}
-      `
-          : ""
+    const tripType = isRoundTrip ? "Round-trip" : "One-trip";
+    const totalFare = (
+      Number(distance) * Number(rate) +
+      Number(driverFare)
+    ).toFixed(2);
+
+    try {
+      // Send the booking data to the server
+      const response = await AxiosInstance.post("/taxibook/createbookings", {
+        ...data,
+        distance,
+        tripType,
+        totalFare,
+      });
+      // alert("Booking confirmed successfully!");
+      success();
+
+      // Show alert with booking details
+      // alert(`
+      //   Booking Confirmed!
+      //   Full Name: ${data.fullName}
+      //   Phone: ${data.phone}
+      //   Pickup Location: ${data.pickupLocation}
+      //   Drop Location: ${data.dropLocation}
+      //   Pickup Date: ${data.pickupDate}
+      //   Pickup Time: ${data.pickupTime}
+      //   ${
+      //     isRoundTrip
+      //       ? `
+      //   Trip: Round Trip
+      //   Return Date: ${data.returnDate}
+      //   Return Time: ${data.returnTime}`
+      //       : "Trip: One Trip"
+      //   }
+      //   Car Type: ${data.selectedCar.label}
+      //   Distance: ${distance} km
+      //   Per km: Rs ${rate}
+      //   Driver Fare: Rs ${driverFare}
+      //   Total: Rs ${totalFare}
+      // `);
+
+      // Prepare the message for Telegram
+      const message = `
+        New Booking Confirmed!
+        Full Name: ${data.fullName}
+        Phone: ${data.phone}
+        Pickup Location: ${data.pickupLocation}
+        Drop Location: ${data.dropLocation}
+        Pickup Date: ${data.pickupDate}
+        Pickup Time: ${data.pickupTime}
+        ${
+          isRoundTrip
+            ? `
+        Trip: Round Trip
+        Return Date: ${data.returnDate}
+        Return Time: ${data.returnTime}`
+            : "Trip: One Trip"
+        }
+        Car Type: ${data.selectedCar.label}
+        Distance: ${distance} km
+        Per km: Rs ${rate}
+        Driver Fare: Rs ${driverFare}
+        Total: Rs ${totalFare}
+      `;
+
+      const token = "7833606942:AAE8Ayq11k37vLrK4dELa0yFGf8ZZVEQOMU";
+      const chatId = "-1002294686843";
+
+      try {
+        // Send the message to Telegram
+        await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+          chat_id: chatId,
+          text: message,
+        });
+        console.log("Notification sent to Telegram");
+      } catch (error) {
+        console.error("Error sending notification:", error);
       }
-      Car Type: ${data.selectedCar}
-    `);
-    window.location.reload();
 
-    // Send notification to Telegram
-    // const message = `
-    //   New Booking Confirmed!
-    //   Full Name: ${data.fullName}
-    //   Phone: ${data.phone}
-    //   Pickup Location: ${data.pickupLocation}
-    //   Drop Location: ${data.dropLocation}
-    //   Pickup Date: ${data.pickupDate}
-    //   Pickup Time: ${data.pickupTime}
-    //   ${
-    //     isRoundTrip
-    //       ? `
-    //   Return Date: ${data.returnDate}
-    //   Return Time: ${data.returnTime}
-    //   `
-    //       : ""
-    //   }
-    //   Car Type: ${data.selectedCar}
-    // `;
-
-    // const token = "<YourBOTToken>";
-    // const chatId = "<YourChatID>";
-
-    // try {
-    //   await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
-    //     chat_id: chatId,
-    //     text: message,
-    //   });
-    //   console.log("Notification sent to Telegram");
-    // } catch (error) {
-    //   console.error("Error sending notification:", error);
-    // }
+      // Reload the page after the confirmation
+      window.location.reload();
+    } catch (err) {
+      console.error("Error confirming booking:", err);
+      // alert("Failed to confirm booking.");
+      error();
+    }
   };
+
+  // const testSendMessage = async () => {
+  //   const token = "7833606942:AAE8Ayq11k37vLrK4dELa0yFGf8ZZVEQOMU"; // Replace with your bot token
+  //   const chatId = "-1002294686843";
+
+  //   try {
+  //     const response = await axios.post(
+  //       `https://api.telegram.org/bot${token}/sendMessage`,
+  //       {
+  //         chat_id: chatId,
+  //         text: "Test message from my bot!",
+  //       }
+  //     );
+  //     console.log("Response from Telegram:", response.data);
+  //   } catch (error) {
+  //     console.error(
+  //       "Error sending notification:",
+  //       error.response ? error.response.data : error.message
+  //     );
+  //   }
+  // };
 
   return (
     <section className="container">
-      <div className="home-booking-form-container">
+      {contextHolder}
+      <motion.div
+        initial={{ y: 100, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+        className="home-booking-form-container"
+      >
         <div className="home-booking-left-container">
           <h3 className="home-booking-left-container-title">Book Your Ride</h3>
         </div>
         <div className="home-booking-right-container">
           {submittedData ? (
             <div className="summary">
-              <h4>Booking Summary</h4>
-              <p>
-                <strong>Full Name:</strong> {submittedData.fullName}
-              </p>
-              <p>
-                <strong>Phone:</strong> {submittedData.phone}
-              </p>
-              <p>
-                <strong>Pickup Location:</strong> {submittedData.pickupLocation}
-              </p>
-              <p>
-                <strong>Drop Location:</strong> {submittedData.dropLocation}
-              </p>
-              <p>
-                <strong>Pickup Date:</strong> {submittedData.pickupDate}
-              </p>
-              <p>
-                <strong>Pickup Time:</strong> {submittedData.pickupTime}
-              </p>
-              {isRoundTrip && (
-                <>
+              <div className="summery-left-content">
+                <h4 className="mb-4 summery-title">Estimates:</h4>
+
+                {distance && !isNaN(distance) && (
+                  <p className="h5">
+                    <strong>Total:</strong>
+                    <span className="fs-4 text-warning ms-2">
+                      Rs
+                      {(
+                        Number(distance) * Number(rate) +
+                        Number(driverFare)
+                      ).toFixed(2)}
+                    </span>
+                  </p>
+                )}
+
+                <div className="mb-3">
                   <p>
-                    <strong>Return Date:</strong> {submittedData.returnDate}
+                    <strong>Pickup Location:</strong>{" "}
+                    {submittedData.pickupLocation}
                   </p>
                   <p>
-                    <strong>Return Time:</strong> {submittedData.returnTime}
+                    <strong>Drop Location:</strong> {submittedData.dropLocation}
                   </p>
-                </>
-              )}
-              <p>
-                <strong>Car Type:</strong> {submittedData.selectedCar}
-              </p>
-              {distance && (
-                <p>
-                  <strong>Distance:</strong> {distance}
-                </p>
-              )}
-              <button
-                className="btn btn-primary"
-                onClick={() => handleConfirmBooking(submittedData)}
-              >
-                Confirm Booking
-              </button>
+                  <p>
+                    <strong>Pickup Date:</strong> {submittedData.pickupDate}
+                  </p>
+                  <p>
+                    <strong>Pickup Time:</strong> {submittedData.pickupTime}
+                  </p>
+                  {isRoundTrip ? (
+                    <>
+                      <p>
+                        <strong>Trip</strong>Round Trip
+                      </p>
+                      <p>
+                        <strong>Return Date:</strong> {submittedData.returnDate}
+                      </p>
+                      <p>
+                        <strong>Return Time:</strong> {submittedData.returnTime}
+                      </p>
+                    </>
+                  ) : (
+                    <p>
+                      <strong>Trip : </strong> One Trip
+                    </p>
+                  )}
+                  <p>
+                    <strong>Car Type:</strong>{" "}
+                    {submittedData.selectedCar
+                      ? submittedData.selectedCar.label
+                      : "Not selected"}
+                  </p>
+                  {distance && !isNaN(distance) && (
+                    <p>
+                      <strong>Distance:</strong> {distance} km
+                    </p>
+                  )}
+                </div>
+
+                <div className="mb-3">
+                  <p>
+                    <strong>Per km:</strong> Rs {rate}
+                  </p>
+                  <p>
+                    <strong>Driver Fare:</strong> Rs {driverFare}
+                  </p>
+                </div>
+
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleConfirmBooking(submittedData)}
+                >
+                  Confirm Booking
+                </button>
+              </div>
+
+              <div className="image-container">
+                <img
+                  src={carImage}
+                  alt="Car"
+                  className="img-fluid"
+                  style={{ maxWidth: "300px" }}
+                />
+              </div>
             </div>
           ) : (
             <>
               <h4
-                className="mb-4 fw-bold"
+                className="mb-4 fw-bold text-center"
                 style={{ color: "#ffb300", letterSpacing: "2px" }}
               >
                 BOOK A TAXI
@@ -360,8 +540,8 @@ const BookingForm = () => {
                       value={formik.values.pickupLocation}
                       onChange={handlePickupInputChange}
                     />
-                    {pickupSuggestions.length > 0 && (
-                      <ul className="suggestion-list">
+                    {pickupSuggestions.length > 0 ? (
+                      <ul className="suggestion-list" aria-live="polite">
                         {pickupSuggestions.map((suggestion) => (
                           <li
                             key={suggestion.place_id}
@@ -378,6 +558,12 @@ const BookingForm = () => {
                           </li>
                         ))}
                       </ul>
+                    ) : (
+                      pickupInputError && (
+                        <div className="text-danger">
+                          No suggestions available for this location.
+                        </div>
+                      )
                     )}
                     {formik.touched.pickupLocation &&
                       formik.errors.pickupLocation && (
@@ -386,6 +572,7 @@ const BookingForm = () => {
                         </div>
                       )}
                   </div>
+
                   <div className="col-md-6">
                     <label>Drop Location:</label>
                     <input
@@ -395,8 +582,8 @@ const BookingForm = () => {
                       value={formik.values.dropLocation}
                       onChange={handleDropInputChange}
                     />
-                    {dropSuggestions.length > 0 && (
-                      <ul className="suggestion-list">
+                    {dropSuggestions.length > 0 ? (
+                      <ul className="suggestion-list" aria-live="polite">
                         {dropSuggestions.map((suggestion) => (
                           <li
                             key={suggestion.place_id}
@@ -413,6 +600,12 @@ const BookingForm = () => {
                           </li>
                         ))}
                       </ul>
+                    ) : (
+                      dropInputError && (
+                        <div className="text-danger">
+                          No suggestions available for this location.
+                        </div>
+                      )
                     )}
                     {formik.touched.dropLocation &&
                       formik.errors.dropLocation && (
@@ -491,18 +684,36 @@ const BookingForm = () => {
 
                 <div className="form-group row">
                   <div className="col-md-6">
-                    <CustomSelect
-                      options={carTypes}
-                      value={formik.values.selectedCar}
-                      onChange={(value) =>
-                        formik.setFieldValue("selectedCar", value)
+                    <CustomSelectForChooseCar
+                      options={
+                        isRoundTrip
+                          ? roundTripCars.map((car) => ({
+                              label: `${car.carname} - ${car.acType} - ${car.roundWayRate}/km`,
+                              value: car.carname,
+                            }))
+                          : oneWayCars.map((car) => ({
+                              label: `${car.carname} - ${car.acType} - ${car.oneWayRate}/km`,
+                              value: car.carname,
+                            }))
                       }
+                      value={
+                        formik.values.selectedCar || {
+                          label: "Select a car",
+                          value: "",
+                        }
+                      } // Provide a default value
+                      onChange={(selectedOption) => {
+                        console.log("Selected car:", selectedOption);
+                        formik.setFieldValue("selectedCar", selectedOption); // Pass the entire option object
+                      }}
                       label="Choose a car"
                     />
+
                     {formik.touched.selectedCar &&
                       formik.errors.selectedCar && (
                         <div className="text-danger">
-                          {formik.errors.selectedCar}
+                          {formik.errors.selectedCar.value ||
+                            formik.errors.selectedCar.label}
                         </div>
                       )}
                   </div>
@@ -515,7 +726,7 @@ const BookingForm = () => {
             </>
           )}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

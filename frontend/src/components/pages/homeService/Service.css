@@ -1,0 +1,104 @@
+.service-container {
+  padding: 100px 0px;
+}
+.service-container .service-area {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+.service-container .site-heading {
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 1;
+}
+.service-container .site-title-tagline {
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--theme-color);
+}
+.service-container .site-title {
+  font-weight: 700;
+  text-transform: capitalize;
+  font-size: 45px;
+  color: var(--color-dark);
+  margin-bottom: 0;
+}
+.service-container .heading-divider {
+  display: inline-block;
+  position: relative;
+  border: 3px solid var(--theme-color);
+  width: 90px;
+  height: 10px;
+  border-radius: 50px;
+}
+.service-container .heading-divider:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  height: 7px;
+  width: 15px;
+  border-radius: 50px;
+  background: var(--theme-color);
+  -webkit-animation: heading-move 5s infinite linear;
+  animation: heading-move 5s infinite linear;
+}
+
+.service-container .service-item {
+  position: relative;
+  padding: 0 20px 20px 20px;
+  margin: 25px 10px;
+  transition: var(--transition);
+  z-index: 1;
+}
+.service-container .service-item::before {
+  content: "";
+  position: absolute;
+  background: var(--color-white);
+  box-shadow: var(--box-shadow);
+  border-radius: 20px;
+  width: 100%;
+  left: 0px;
+  top: 130px;
+  bottom: 0px;
+  z-index: -1;
+}
+.service-container .service-img {
+  overflow: hidden;
+}
+.service-container .service-img img {
+  width: 100%;
+  border-radius: 30px;
+  object-fit: cover;
+}
+.service-container .service-icon {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  line-height: 82px;
+  background: var(--theme-color);
+  font-size: 50px;
+  color: var(--color-white);
+  text-align: center;
+  border-radius: 50%;
+  margin-top: -50px;
+  right: 40px;
+  box-shadow: var(--box-shadow);
+  z-index: 1;
+}
+.service-container .service-icon img {
+  width: 50px;
+}
+.service-container .service-content {
+  position: relative;
+  margin-top: 5px;
+}
+.service-container .service-arrow {
+  margin-top: 25px;
+}
+.service-container .service-item:hover {
+  transform: translateY(-10px);
+}
