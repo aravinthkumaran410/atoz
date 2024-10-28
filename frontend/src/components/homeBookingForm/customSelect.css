@@ -3,9 +3,6 @@
   width: 100%;
 }
 
-.select-label {
-}
-
 .select-selected {
   background-color: #fff;
   padding: 12px;
@@ -24,7 +21,7 @@
   display: none;
   height: 100px;
   overflow-y: auto;
-  width: 150px;
+  width: 250px;
 }
 
 .custom-select.open .select-items {

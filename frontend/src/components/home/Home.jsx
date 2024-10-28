@@ -1,14 +1,21 @@
 import React from "react";
-import Header from "../header/Header";
+
 import HeroCarousel from "../pages/homeHeroSection/HeroCarousel";
 import BookingForm from "../homeBookingForm/BookingForm";
+import HomeAboutUs from "../pages/homeAboutus/HomeAboutUs";
+import Homefeatures from "../pages/homefeatures/Homefeatures";
+import Service from "../pages/homeService/Service";
+import ContactRef from "../pages/homeContactRef/ContactRef";
 
 const Home = () => {
   return (
     <section>
-      <Header />
       <HeroCarousel />
       <BookingForm />
+      <HomeAboutUs />
+      <Homefeatures />
+      <Service />
+      <ContactRef />
     </section>
   );
 };

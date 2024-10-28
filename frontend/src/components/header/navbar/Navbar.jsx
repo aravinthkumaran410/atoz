@@ -5,6 +5,7 @@ import { RiMenu5Fill } from "react-icons/ri";
 import { IoCallOutline } from "react-icons/io5";
 import logo from "../../../assets/logo_1 2.svg";
 // import ScrollBar from "../farmorMotion/ScrollBar";
+import { HiMenu } from "react-icons/hi";
 
 const Navbar = () => {
   const location = useLocation();
@@ -39,7 +40,7 @@ const Navbar = () => {
           data-bs-toggle="collapse"
           data-bs-target="#navbarCollapse"
         >
-          <RiMenu5Fill className="fs-1 fw-bold" style={{ color: "#ffcc00" }} />
+          <HiMenu className="fs-1 fw-bold" style={{ color: "#ffcc00" }} />
         </button>
         <div className="collapse navbar-collapse" id="navbarCollapse">
           <div className="navbar-nav mx-auto p-lg-0">

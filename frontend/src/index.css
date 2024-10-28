@@ -51,5 +51,12 @@ p {
 }
 
 a {
+  transition: 0.3s;
+}
+a,
+a:hover,
+a:active,
+a:focus {
+  outline: none;
   text-decoration: none;
 }

@@ -37,7 +37,9 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <Navbar />
+      <section className="header-navbar-sticky-container">
+        <Navbar />
+      </section>
     </section>
   );
 };

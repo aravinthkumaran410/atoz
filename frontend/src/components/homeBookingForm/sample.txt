@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 import "./BookingForm.css";
 import CustomSelect from "./CustomSelect";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 const BookingForm = () => {
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
-
-  const locations = ["Location A", "Location B", "Location C"];
+  const [pickupSuggestions, setPickupSuggestions] = useState([]);
+  const [dropSuggestions, setDropSuggestions] = useState([]);
+  const [distance, setDistance] = useState(null);
+  const [pickupCoords, setPickupCoords] = useState({});
+  const [dropCoords, setDropCoords] = useState({});
   const carTypes = ["Sedan", "SUV", "Van"];
 
   const formik = useFormik({
@@ -28,12 +33,9 @@ const BookingForm = () => {
       phone: Yup.string()
         .required("Required")
         .matches(/^\d{10}$/, "Must be a valid phone number"),
-      pickupLocation: Yup.string()
-        .required("Required")
-        .oneOf(locations, "Invalid pickup location"),
+      pickupLocation: Yup.string().required("Required"),
       dropLocation: Yup.string()
         .required("Required")
-        .oneOf(locations, "Invalid drop location")
         .notOneOf([Yup.ref("pickupLocation")], "Cannot be the same as pickup"),
       pickupDate: Yup.date().required("Required"),
       pickupTime: Yup.string().required("Required"),
@@ -43,11 +45,105 @@ const BookingForm = () => {
         : Yup.string(),
       selectedCar: Yup.string().required("Required"),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm }) => {
       setSubmittedData(values);
-      resetForm(); // Reset the form after submission
+
+      resetForm();
+      calculateDistance(pickupCoords, dropCoords);
     },
   });
+
+  const fetchLocationSuggestions = async (query, isPickup) => {
+    if (!query) {
+      if (isPickup) setPickupSuggestions([]);
+      else setDropSuggestions([]);
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=5`
+      );
+      const suggestions = response.data;
+      if (isPickup) {
+        setPickupSuggestions(suggestions);
+      } else {
+        setDropSuggestions(suggestions);
+      }
+    } catch (error) {
+      console.error("Error fetching location suggestions", error);
+    }
+  };
+
+  const handlePickupChange = (value) => {
+    formik.setFieldValue("pickupLocation", value);
+    setPickupSuggestions([]);
+  };
+
+  const handleDropChange = (value) => {
+    formik.setFieldValue("dropLocation", value);
+    setDropSuggestions([]);
+  };
+
+  const handlePickupInputChange = (e) => {
+    const { value } = e.target;
+    formik.setFieldValue("pickupLocation", value);
+    fetchLocationSuggestions(value, true);
+  };
+
+  const handleDropInputChange = (e) => {
+    const { value } = e.target;
+    formik.setFieldValue("dropLocation", value);
+    fetchLocationSuggestions(value, false);
+  };
+
+  const fetchCoordinates = async (location, isPickup) => {
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?q=${location}&format=json&limit=1`
+      );
+      const data = response.data[0];
+      if (data) {
+        const coords = {
+          lat: parseFloat(data.lat),
+          lon: parseFloat(data.lon),
+        };
+        if (isPickup) {
+          setPickupCoords(coords);
+        } else {
+          setDropCoords(coords);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching coordinates", error);
+    }
+  };
+
+  const calculateDistance = (pickup, drop) => {
+    if (pickup && drop) {
+      const toRadians = (degree) => (degree * Math.PI) / 180;
+
+      const R = 6371; // Radius of the Earth in kilometers
+      const lat1 = toRadians(pickup.lat);
+      const lon1 = toRadians(pickup.lon);
+      const lat2 = toRadians(drop.lat);
+      const lon2 = toRadians(drop.lon);
+
+      const dLat = lat2 - lat1;
+      const dLon = lon2 - lon1;
+
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1) *
+          Math.cos(lat2) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const distanceInKm = R * c;
+
+      setDistance(`${distanceInKm.toFixed(2)} km`);
+    }
+  };
 
   const generateTimeOptions = () => {
     const options = [];
@@ -69,6 +165,70 @@ const BookingForm = () => {
 
   const handleReset = () => {
     setSubmittedData(null);
+    setDistance(null); // Reset distance
+    setPickupCoords({});
+    setDropCoords({});
+    setPickupSuggestions([]);
+    setDropSuggestions([]);
+  };
+
+  const handleConfirmBooking = async (data) => {
+    // Show alert with booking details
+    alert(`
+      Booking Confirmed!
+      Full Name: ${data.fullName}
+      Phone: ${data.phone}
+      Pickup Location: ${data.pickupLocation}
+      Drop Location: ${data.dropLocation}
+      Pickup Date: ${data.pickupDate}
+      Pickup Time: ${data.pickupTime}
+      ${
+        isRoundTrip
+          ? `
+      Return Date: ${data.returnDate}
+      Return Time: ${data.returnTime}
+      `
+          : ""
+      }
+      Car Type: ${data.selectedCar}
+    `);
+
+    // Prepare the message for Telegram
+    const message = `
+      New Booking Confirmed!
+      Full Name: ${data.fullName}
+      Phone: ${data.phone}
+      Pickup Location: ${data.pickupLocation}
+      Drop Location: ${data.dropLocation}
+      Pickup Date: ${data.pickupDate}
+      Pickup Time: ${data.pickupTime}
+      ${
+        isRoundTrip
+          ? `
+      Return Date: ${data.returnDate}
+      Return Time: ${data.returnTime}
+      `
+          : ""
+      }
+      Car Type: ${data.selectedCar}
+    `;
+
+    const token = "7833606942:AAE8Ayq11k37vLrK4dELa0yFGf8ZZVEQOMU"; // Use your bot token
+    const chatId = "4585471181"; // Use your chat ID
+
+    try {
+      // Send the message to Telegram
+      await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+        chat_id: chatId,
+        text: message,
+      });
+      console.log("Notification sent to Telegram");
+    } catch (error) {
+      console.error("Error sending notification:", error);
+    }
+
+    // Optionally, reload the page or redirect after the notification is sent
+    // window.location.reload();
   };
 
   return (
@@ -112,7 +272,15 @@ const BookingForm = () => {
               <p>
                 <strong>Car Type:</strong> {submittedData.selectedCar}
               </p>
-              <button className="btn btn-primary" onClick={handleReset}>
+              {distance && (
+                <p>
+                  <strong>Distance:</strong> {distance}
+                </p>
+              )}
+              <button
+                className="btn btn-primary"
+                onClick={() => handleConfirmBooking(submittedData)}
+              >
                 Confirm Booking
               </button>
             </div>
@@ -192,8 +360,28 @@ const BookingForm = () => {
                       type="text"
                       className="form-control"
                       placeholder="Pickup Location"
-                      {...formik.getFieldProps("pickupLocation")}
+                      value={formik.values.pickupLocation}
+                      onChange={handlePickupInputChange}
                     />
+                    {pickupSuggestions.length > 0 && (
+                      <ul className="suggestion-list">
+                        {pickupSuggestions.map((suggestion) => (
+                          <li
+                            key={suggestion.place_id}
+                            onClick={() => {
+                              handlePickupChange(suggestion.display_name);
+                              fetchCoordinates(suggestion.display_name, true);
+                            }}
+                            className="suggestion-item"
+                          >
+                            <FaMapMarkerAlt
+                              style={{ marginRight: "10px", color: "#ffb300" }}
+                            />
+                            {suggestion.display_name}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                     {formik.touched.pickupLocation &&
                       formik.errors.pickupLocation && (
                         <div className="text-danger">
@@ -207,8 +395,28 @@ const BookingForm = () => {
                       type="text"
                       className="form-control"
                       placeholder="Drop Off Location"
-                      {...formik.getFieldProps("dropLocation")}
+                      value={formik.values.dropLocation}
+                      onChange={handleDropInputChange}
                     />
+                    {dropSuggestions.length > 0 && (
+                      <ul className="suggestion-list">
+                        {dropSuggestions.map((suggestion) => (
+                          <li
+                            key={suggestion.place_id}
+                            onClick={() => {
+                              handleDropChange(suggestion.display_name);
+                              fetchCoordinates(suggestion.display_name, false);
+                            }}
+                            className="suggestion-item"
+                          >
+                            <FaMapMarkerAlt
+                              style={{ marginRight: "10px", color: "#ffb300" }}
+                            />
+                            {suggestion.display_name}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                     {formik.touched.dropLocation &&
                       formik.errors.dropLocation && (
                         <div className="text-danger">
