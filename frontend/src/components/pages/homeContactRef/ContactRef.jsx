@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./ContactRef.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa6";
+import { FaWhatsapp } from "react-icons/fa";
 import { FaHeadset } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { AppContext } from "../../../context/AppContext";
 
-const ContactRef = () => {
+const ContactRef = ({ bookingFormRef }) => {
+  const navigate = useNavigate();
+  const { AtozInfo } = useContext(AppContext);
+
+  const handleFormButton = () => {
+    console.log("check");
+    if (bookingFormRef.current) {
+      bookingFormRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section className="home-contact-ref-container">
       <div className="cta-area">
@@ -29,10 +41,31 @@ const ContactRef = () => {
             </div>
             <div className="col-lg-5 text-center text-lg-end">
               <div className="mb-5">
-                <Link to="#" className="cta-number ">
-                  <FaHeadset className="me-4" />
-                  +2 123 654 7898
-                </Link>
+                {AtozInfo && AtozInfo.length > 0 && (
+                  <>
+                    <a
+                      className="para me-3 fw-bold fs-3"
+                      href={`https://wa.me/91${AtozInfo[0]?.phone}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: "none", color: "white" }}
+                    >
+                      <FaWhatsapp className="me-4" />
+                      +91 {AtozInfo[0]?.phone}
+                    </a>
+                    <br />
+                    <a
+                      className="para me-3 fw-bold fs-3"
+                      href={`https://wa.me/91${AtozInfo[0]?.phone1}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: "none", color: "white" }}
+                    >
+                      <FaHeadset className="me-4" />
+                      +91 {AtozInfo[0]?.phone1}
+                    </a>
+                  </>
+                )}
               </div>
               <motion.div
                 className="cta-btn"
@@ -40,7 +73,10 @@ const ContactRef = () => {
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
               >
-                <button className=" home-ref--contact-button">
+                <button
+                  className=" home-ref--contact-button"
+                  onClick={handleFormButton}
+                >
                   Book Your Cab <FaArrowRight className="ms-2" />
                 </button>
               </motion.div>

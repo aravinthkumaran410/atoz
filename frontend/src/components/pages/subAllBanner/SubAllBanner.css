@@ -1,0 +1,36 @@
+.SubAllbanners-hero-image-container {
+  overflow: hidden !important;
+}
+.SubAllbanners-hero-image {
+  display: inline-block;
+  width: 100% !important;
+  height: 400px;
+  background: url("../../../assets/subbanner/subBanner.jpg") no-repeat center
+    center;
+  background-size: cover;
+  /* background-attachment: fixed; */
+  animation: zoom 10s infinite ease-in-out;
+}
+.SubAllbanners-hero-image:before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: var(--hero-overlay-color);
+  opacity: 0.75;
+  z-index: -1;
+}
+
+@keyframes zoom {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
