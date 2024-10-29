@@ -3,8 +3,7 @@ import "./ContactRef.css";
 import { FaMap } from "react-icons/fa";
 import { BiSolidPhoneCall } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
-import { IoTimeSharp } from "react-icons/io5";
-import { IoPaperPlaneOutline } from "react-icons/io5";
+import { IoTimeSharp, IoPaperPlaneOutline } from "react-icons/io5";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import ContactImg from "../../../assets/contactImg.jpg";
@@ -24,9 +23,13 @@ const validationSchema = Yup.object().shape({
 const ContactRef = () => {
   const { AtozInfo } = useContext(AppContext);
 
-  const handleSubmit = (values, { resetForm }) => {
+  const handleSubmit = (values, { setSubmitting, resetForm }) => {
     console.log(values);
-    resetForm(); // Reset form after submission
+    // Simulate form submission process
+    setTimeout(() => {
+      setSubmitting(false);
+      resetForm();
+    }, 1000);
   };
 
   return (
@@ -35,10 +38,84 @@ const ContactRef = () => {
         <div className="container">
           <div className="contact-content">
             <div className="row">
-              {/* Contact Information Sections */}
-              {/* ... */}
+              {/* Contact Information Section */}
+              <motion.div
+                className="col-md-3"
+                initial={{ x: -200, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              >
+                <div className="contact-info">
+                  <div className="contact-info-icon">
+                    <span>
+                      <FaMap />
+                    </span>
+                  </div>
+                  <div className="contact-info-content">
+                    <h5>Office Address</h5>
+                    <p>{AtozInfo[0]?.address}</p>
+                  </div>
+                </div>
+              </motion.div>
+              <motion.div
+                className="col-md-3"
+                initial={{ x: -200, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              >
+                <div className="contact-info">
+                  <div className="contact-info-icon">
+                    <span>
+                      <BiSolidPhoneCall />
+                    </span>
+                  </div>
+                  <div className="contact-info-content">
+                    <h5>Call Us</h5>
+                    <p>{AtozInfo[0]?.phone}</p>
+                    <p>{AtozInfo[0]?.phone1}</p>
+                  </div>
+                </div>
+              </motion.div>
+              <motion.div
+                className="col-md-3"
+                initial={{ x: 200, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              >
+                <div className="contact-info">
+                  <div className="contact-info-icon">
+                    <span>
+                      <MdEmail />
+                    </span>
+                  </div>
+                  <div className="contact-info-content">
+                    <h5>Email Us</h5>
+                    <p>{AtozInfo[0]?.email}</p>
+                  </div>
+                </div>
+              </motion.div>
+              <motion.div
+                className="col-md-3"
+                initial={{ x: 200, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              >
+                <div className="contact-info">
+                  <div className="contact-info-icon">
+                    <span>
+                      <IoTimeSharp />
+                    </span>
+                  </div>
+                  <div className="contact-info-content">
+                    <h5>Open Time</h5>
+                    <p>Mon - Sat (10.00AM - 05.30PM)</p>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
+
+          {/* Contact Form Section */}
           <div className="contact-wrapper my-5">
             <div className="row">
               <motion.div
@@ -84,12 +161,7 @@ const ContactRef = () => {
                     {({ isSubmitting }) => (
                       <Form id="contact-form">
                         <div className="row">
-                          <motion.div
-                            className="col-md-6"
-                            initial={{ x: 100, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
-                            transition={{ duration: 0.4, delay: 0.3 }}
-                          >
+                          <div className="col-md-6">
                             <div className="form-group">
                               <Field
                                 type="text"
@@ -103,16 +175,11 @@ const ContactRef = () => {
                                 className="text-danger"
                               />
                             </div>
-                          </motion.div>
-                          <motion.div
-                            className="col-md-6"
-                            initial={{ x: 100, opacity: 0 }}
-                            whileInView={{ x: 0, opacity: 1 }}
-                            transition={{ duration: 0.4, delay: 0.3 }}
-                          >
+                          </div>
+                          <div className="col-md-6">
                             <div className="form-group">
                               <Field
-                                type="number"
+                                type="text"
                                 className="form-control"
                                 name="phone"
                                 placeholder="Your Phone"
@@ -123,7 +190,7 @@ const ContactRef = () => {
                                 className="text-danger"
                               />
                             </div>
-                          </motion.div>
+                          </div>
                         </div>
                         <div className="form-group">
                           <Field
