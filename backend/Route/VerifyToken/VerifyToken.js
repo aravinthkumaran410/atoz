@@ -1,4 +1,4 @@
-const secreteKey=require("../../Config/config")
+const secreteKey=require("../../Config/Config")
 const jwt = require("jsonwebtoken");
 
 
