@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Footer.css";
+import { Link } from "react-router-dom";
 import { RiFacebookFill } from "react-icons/ri";
 import { FaInstagram } from "react-icons/fa6";
+import { MdOutlineEmail } from "react-icons/md";
+import { MdPhoneInTalk } from "react-icons/md";
+import { FaWhatsapp } from "react-icons/fa";
+import { MdLocationOn } from "react-icons/md";
+import { MdTimer } from "react-icons/md";
+import { RiArrowRightSFill } from "react-icons/ri";
+
+import { AppContext } from "../../context/AppContext";
 
 import image_1 from "../../assets/footer/img-1.jpg";
 import image_2 from "../../assets/footer/img-2.jpg";
@@ -11,6 +20,10 @@ import image_5 from "../../assets/footer/img-5.jpg";
 import image_6 from "../../assets/footer/img-6.jpg";
 
 const Footer = () => {
+  const { AtozInfo } = useContext(AppContext);
+  const handleLinkClick = () => {
+    window.scrollTo({ top: "0 !important ", behavior: "smooth" });
+  };
   return (
     <section className="footer-main-container">
       <div className="footer">
@@ -43,36 +56,74 @@ const Footer = () => {
                 </div>
               </div>
             </div>
-            <div className="col-md-6 col-lg-3">
-              <div className="footer-contact">
-                <h3>Get In Touch</h3>
-                <p>
-                  <i className="fa fa-map-marker-alt" />
-                  123 Street, New York, USA
-                </p>
-                <p>
-                  <i className="fa fa-phone-alt" />
-                  +012 345 67890
-                </p>
-                <p>
-                  <i className="fa fa-envelope" />
-                  info@example.com
-                </p>
-                <p>
-                  <i className="far fa-clock" />
-                  Mon - Fri, 9AM - 10PM
-                </p>
-              </div>
+            <div className="col-md-6 col-lg-4">
+              {AtozInfo && AtozInfo.length > 0 && (
+                <div className="footer-contact">
+                  <h3>Get In Touch</h3>
+                  <p>
+                    <MdLocationOn className="me-1" />
+                    {AtozInfo[0]?.address}
+                  </p>
+                  <p>
+                    <a
+                      href={`tel:+91${AtozInfo[0]?.phone}`}
+                      style={{ textDecoration: "none", color: "white" }}
+                    >
+                      <MdPhoneInTalk className="me-1 header-top-info-icons" />
+                      <span>+91 {AtozInfo[0]?.phone}</span>
+                    </a>
+                  </p>
+                  <p>
+                    <a
+                      href={`https://wa.me/91${AtozInfo[0]?.phone1}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: "none", color: "white" }}
+                    >
+                      <FaWhatsapp className="me-1 header-top-info-icons" />
+                      <span>+91 {AtozInfo[0]?.phone1}</span>
+                    </a>
+                  </p>
+
+                  <span>
+                    {AtozInfo[0]?.email ? (
+                      <a
+                        href={`mailto:${AtozInfo[0]?.email}`}
+                        style={{ color: "#fff" }}
+                      >
+                        <MdOutlineEmail className="me-1 header-top-info-icons" />{" "}
+                        <span>{AtozInfo[0]?.email}</span>
+                      </a>
+                    ) : (
+                      "No email available"
+                    )}
+                  </span>
+                  <p className=" mt-2">
+                    <MdTimer className="me-1" />
+                    Mon - Fri, 9AM - 10PM
+                  </p>
+                </div>
+              )}
             </div>
-            <div className="col-md-6 col-lg-3">
+
+            <div className="col-md-6 col-lg-2">
               <div className="footer-links">
                 <h3>Useful Links</h3>
-                <a href>Lorem ipsum</a>
-                <a href>tempus posuere </a>
-                <a href>velit id accumsan</a>
-                <a href>ut porttitor</a>
-                <a href>Nam pretium</a>
-                <a href>accumsan</a>
+                <Link to="/Home" onClick={handleLinkClick}>
+                  <RiArrowRightSFill /> Home
+                </Link>
+                <Link to="/about" onClick={handleLinkClick}>
+                  <RiArrowRightSFill /> about
+                </Link>
+                <Link to="/service" onClick={handleLinkClick}>
+                  <RiArrowRightSFill /> service
+                </Link>
+                <Link to="/tariff" onClick={handleLinkClick}>
+                  <RiArrowRightSFill /> tariff
+                </Link>
+                <Link to="/contact" onClick={handleLinkClick}>
+                  <RiArrowRightSFill /> contact
+                </Link>
               </div>
             </div>
             <div className="col-md-6 col-lg-3">
@@ -107,7 +158,11 @@ const Footer = () => {
               <div className="col-md-6">
                 <div className="copy-text">
                   <p>
-                    © <a href="#">Your Site Name</a>. All Rights Reserved
+                    ©{" "}
+                    <span className="text-danger fs-5 fw-bold">
+                      A to Z Drop Taxi
+                    </span>
+                    . All Rights Reserved
                   </p>
                 </div>
               </div>
