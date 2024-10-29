@@ -194,6 +194,8 @@ const handleVehicleTypeChange = (index, value) => {
             startLocation: startLocation,
             endLocation:endlocation,
             vehicleDetails: formattedVehicleRates
+          },{
+            withCredentials:true
           })
        if (response.status===200){
         toast.success("State permit added successfully")
@@ -204,6 +206,11 @@ const handleVehicleTypeChange = (index, value) => {
 
   }catch(err){
     console.log(err)
+    if (err.response && err.response.status === 401) {
+      toast.error("Login again");
+    } else {
+      toast.error("Failed to add state permit details");
+    }
   }
 }
 
@@ -221,8 +228,7 @@ const handleVehicleTypeChange = (index, value) => {
             </ol>
           </nav>
         </div>
-      </main>
-      <section
+        <section
         className="section dashboard"
         style={{
           display: "flex",
@@ -427,6 +433,8 @@ const handleVehicleTypeChange = (index, value) => {
           </form>
         </div>
       </section>
+      </main>
+     
     </Fragment>
   );
 };

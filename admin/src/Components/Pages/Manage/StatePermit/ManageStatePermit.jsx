@@ -253,6 +253,8 @@ const ManageStatePermit = () => {
               startLocation: startLocation,
               endLocation:endlocation,
               vehicleDetails: formattedVehicleRates
+            },{
+              withCredentials:true
             })
          if (response.status===200){
           toast.success("State permit Update successfully")
@@ -265,7 +267,11 @@ const ManageStatePermit = () => {
          }
   
     }catch(err){
-      console.log(err)
+      if (err.response && err.response.status === 401) {
+        toast.error("Login again");
+      } else {
+        toast.error("Failed to Fetch state permit details");
+      }
     }
   }
   

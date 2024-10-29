@@ -15,6 +15,8 @@ import {
 } from "@mui/material";
 import { Modal } from "antd"; // Import Modal from Ant Design
 import "./TaxiBooking.css"; // Import CSS for styling
+import toast from "react-hot-toast";
+import client from "../../../Common/Client/Client";
 
 function TaxiBooking() {
   const [tripType, setTripType] = useState("all");
@@ -33,8 +35,10 @@ function TaxiBooking() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(
-        `http://localhost:8000/taxibook/getbookings`
+      const response = await client.get(
+        `/taxibook/getbookings`,{
+          withCredentials:true
+        }
       );
       const allBookings = response.data;
 
@@ -92,15 +96,25 @@ function TaxiBooking() {
       },
       onOk: async () => {
         try {
-          await axios.delete(
-            `http://localhost:8000/taxibook/deletebookings/${id}`
+       const response=await client.post(
+            `/taxibook/deletebookings`,{
+              id:id
+            },{
+              withCredentials:true
+            }
           );
-          fetchUserDetails(tripType === "all" ? "all" : tripType);
-          setSnackbarMessage("Booking deleted successfully!");
-          setSnackbarOpen(true);
+
+          if(response.status===200){
+            fetchUserDetails(tripType === "all" ? "all" : tripType);
+            toast.success("Booking deleted successfully!");
+          }
+          
         } catch (err) {
-          console.error("Error deleting booking:", err);
-          setError("Failed to delete booking");
+          if (err.response && err.response.status === 401) {
+            toast.error("Login again");
+          } else {
+            toast.error("Error while delete.please try again");
+          }
         }
       },
     });
@@ -175,7 +189,7 @@ function TaxiBooking() {
             },
             padding: "10px 20px",
             fontWeight: "bold",
-          }}
+          }}                        
           onClick={handleSingleTripClick}
         >
           Single Trip

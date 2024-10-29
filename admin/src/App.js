@@ -25,7 +25,6 @@ function App() {
 function AppContent({ setAdmin,admin }) {
   const navigate = useNavigate();
  
-   console.log(admin)
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {

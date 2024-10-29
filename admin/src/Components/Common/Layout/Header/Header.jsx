@@ -118,7 +118,7 @@ const Header = (props) => {
         </nav>
       </header>
 
-      <Sidebar open={openSidebar} toggleSidebar={toggleSidebar} />
+      <Sidebar open={openSidebar} toggleSidebar={toggleSidebar} setAdmin={setAdmin} />
      
     </Fragment>
   );

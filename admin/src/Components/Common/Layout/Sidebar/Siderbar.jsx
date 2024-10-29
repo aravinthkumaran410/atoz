@@ -1,9 +1,38 @@
 import React, { Fragment } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Button } from "@mui/material";
+import client from "../../Client/Client";
+import toast from "react-hot-toast";
 
-const Sidebar = ({ open, toggleSidebar }) => {
+const Sidebar = ({ open, toggleSidebar,setAdmin }) => {
   const location = useLocation();
+  const navigate=useNavigate();
   const isActive = (path) => location.pathname === path;
+  const handleLogout =async()=>{
+
+    try{
+      const res=await client.post("/admins/logout/",{},{
+        withCredentials:true
+      })
+      if(res.status===200){
+        localStorage.removeItem("token");
+        localStorage.removeItem("Username");
+        localStorage.removeItem("tokenExpiration");
+        setAdmin(null);
+        navigate("/");
+      }
+    }catch(err){
+      console.log(err);
+      if (err.response && err.response.status === 401) {
+        toast.error("Token is invalid.Login again");
+      } else {
+        toast.error("Try again");
+      }
+    }
+    
+
+  }
   return (
     <Fragment>
       <aside id="sidebar" className={`sidebar ${open ? "open" : ""}`}>
@@ -90,14 +119,14 @@ const Sidebar = ({ open, toggleSidebar }) => {
           <li className="nav-item">
             <Link
               className={`nav-link ${
-                isActive("/blogs") ? "active" : "collapsed"
+                isActive("/otherrate") ? "active" : "collapsed"
               }`}
               data-bs-target="#forms-nav"
               data-bs-toggle="collapse"
               to="#"
             >
-              <i class="bi bi-file-text"></i>
-              <span>Blogs</span>
+             <i class="bi bi-currency-dollar"></i>
+              <span>Other Rate</span>
               <i className="bi bi-chevron-down ms-auto" />
             </Link>
             <ul
@@ -107,104 +136,16 @@ const Sidebar = ({ open, toggleSidebar }) => {
             >
               <li>
                 <Link
-                  to="/blogs"
-                  className={`${isActive("/blogs") ? "active" : ""}`}
+                  to="/otherrate"
+                  className={`${isActive("/otherrate") ? "active" : ""}`}
                 >
                   <i className="bi bi-circle" />
-                  <span>Add Blogs Deatils</span>
+                  <span>Add Other Rate</span>
                 </Link>
               </li>
             </ul>
           </li>
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${
-                isActive("/quotes") ? "active" : "collapsed"
-              }`}
-              data-bs-target="#Quotes-nav"
-              data-bs-toggle="collapse"
-              to="#"
-            >
-              <i class="bi bi-quote"></i>
-              <span>Quotes</span>
-              <i className="bi bi-chevron-down ms-auto" />
-            </Link>
-            <ul
-              id="Quotes-nav"
-              className="nav-content collapse "
-              data-bs-parent="#sidebar-nav"
-            >
-              <li>
-                <Link
-                  to="/quotes"
-                  className={`${isActive("/quotes") ? "active" : ""}`}
-                >
-                  <i className="bi bi-circle" />
-                  <span>Add Quotes </span>
-                </Link>
-              </li>
-            </ul>
-          </li>
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${
-                isActive("/founder") ? "active" : "collapsed"
-              }`}
-              data-bs-target="#Founder-nav"
-              data-bs-toggle="collapse"
-              to="#"
-            >
-              <i class="bi bi-person"></i>
-
-              <span>Founder</span>
-              <i className="bi bi-chevron-down ms-auto" />
-            </Link>
-            <ul
-              id="Founder-nav"
-              className="nav-content collapse "
-              data-bs-parent="#sidebar-nav"
-            >
-              <li>
-                <Link
-                  to="/founder"
-                  className={`${isActive("/founder") ? "active" : ""}`}
-                >
-                  <i className="bi bi-circle" />
-                  <span>Add Founder </span>
-                </Link>
-              </li>
-            </ul>
-          </li>
-
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${
-                isActive("/reviews") ? "active" : "collapsed"
-              }`}
-              data-bs-target="#charts-nav"
-              data-bs-toggle="collapse"
-              to="#"
-            >
-              <i class="bi bi-chat-dots"></i>
-              <span>Review</span>
-              <i className="bi bi-chevron-down ms-auto" />
-            </Link>
-            <ul
-              id="charts-nav"
-              className="nav-content collapse "
-              data-bs-parent="#sidebar-nav"
-            >
-              <li>
-                <Link
-                  to="/reviews"
-                  className={`${isActive("/reviews") ? "active" : ""}`}
-                >
-                  <i className="bi bi-circle" />
-                  <span>Add Testimonals</span>
-                </Link>
-              </li>
-            </ul>
-          </li>
+         
 
           <li className="nav-heading">Manage</li>
           <li className="nav-item">
@@ -254,14 +195,14 @@ const Sidebar = ({ open, toggleSidebar }) => {
           </li>
           <li className="nav-item">
             <Link className={`nav-link ${isActive("/manage/taxibooking") ? "active" : "collapsed"}`} to="/manage/taxibooking">
-              <i className="bi bi-book"></i>
+            <i class="bi bi-calendar-check"></i>
               <span>Taxi Bookings</span>
             </Link>
           </li>
           
           <li className="nav-item">
             <Link className={`nav-link ${isActive("/manage/contact") ? "active" : "collapsed"}`} to="/manage/contact">
-              <i className="bi bi-file-text"></i>
+            <i class="bi bi-envelope"></i>
               <span>Contact</span>
             </Link>
           </li>
@@ -276,127 +217,50 @@ const Sidebar = ({ open, toggleSidebar }) => {
               <span>State Permit</span>
             </Link>
           </li>
-
           <li className="nav-item">
             <Link
               className={`nav-link ${
-                isActive("/manage/blogs") ? "active" : "collapsed"
+                isActive("/manage/tariff") ? "active" : "collapsed"
               }`}
-              to="/manage/blogs"
+              to="/manage/tariff"
             >
               <i className="bi bi-file-text"></i>
-              <span>Blogs</span>
+              <span>Tariff</span>
             </Link>
           </li>
-
           <li className="nav-item">
             <Link
               className={`nav-link ${
-                isActive("/manage/quotes") ? "active" : "collapsed"
+                isActive("/manage/otherrate") ? "active" : "collapsed"
               }`}
-              to="/manage/quotes"
-            >
-              <i className="bi bi-quote"></i>
-              <span>Quotes</span>
+              to="/manage/otherrate"
+            >  <i class="bi bi-currency-dollar"></i>
+              <span>Other Rate</span>
             </Link>
           </li>
-
           <li className="nav-item">
             <Link
               className={`nav-link ${
-                isActive("/manage/founder") ? "active" : "collapsed"
+                isActive( '/manage/usercontact') ? "active" : "collapsed"
               }`}
-              to="/manage/founder"
-            >
-              <i className="bi bi-person"></i>
-              <span>Founder</span>
+              to= '/manage/usercontact'
+            >   <i class="bi bi-person-circle"></i>
+              <span>User Contact</span>
             </Link>
           </li>
+          
 
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${
-                isActive("/manage/about") ? "active" : "collapsed"
-              }`}
-              to="/manage/about"
-            >
-              <i className="bi bi-info-circle"></i>
-              <span>About</span>
-            </Link>
-          </li>
-
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${
-                isActive("/manage/contact") ? "active" : "collapsed"
-              }`}
-              to="/manage/contact"
-            >
-              <i className="bi bi-envelope"></i>
-              <span>Contact</span>
-            </Link>
-          </li>
-
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${
-                isActive("/manage/images") ? "active" : "collapsed"
-              }`}
-              to="/manage/images"
-            >
-              <i className="bi bi-images"></i>
-              <span>Image</span>
-            </Link>
-          </li>
-
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${
-                isActive("/manage/videos") ? "active" : "collapsed"
-              }`}
-              to="/manage/videos"
-            >
-              <i className="bi bi-youtube"></i>
-              <span>YouTube URLs</span>
-            </Link>
-          </li>
-
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${
-                isActive("/manage/review") ? "active" : "collapsed"
-              }`}
-              to="/manage/review"
-            >
-              <i className="bi bi-chat-dots"></i>
-              <span>Review</span>
-            </Link>
-          </li>
-
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${
-                isActive("/manage/register") ? "active" : "collapsed"
-              }`}
-              to="/manage/register"
-            >
-              <i className="bi bi-person-plus"></i>
-              <span>Register</span>
-            </Link>
-          </li>
-
-          <li className="nav-item">
-            <Link
-              className={`nav-link ${
-                isActive("/manage/enqiure") ? "active" : "collapsed"
-              }`}
-              to="/manage/enqiure"
-            >
-              <i className="bi bi-calendar-check"></i>
-              <span>Enquire</span>
-            </Link>
-          </li>
+ 
         </ul>
+        <Button variant="contained"
+                  color="error" style={{
+          marginTop:"20px"
+        }} onClick={handleLogout}>
+        <LogoutIcon />
+        <span style={{
+          marginLeft: "5px"
+        }}>Logout</span>
+        </Button>
       </aside>
       {open && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
     </Fragment>

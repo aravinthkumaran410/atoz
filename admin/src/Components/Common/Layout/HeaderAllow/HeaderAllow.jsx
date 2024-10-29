@@ -15,6 +15,10 @@ const HeaderAllow = (props) => {
     '/manage/statepermit',
     '/manage/taxibooking',
     '/manage/contact',
+    '/otherrate',
+    '/manage/otherrate',
+    '/manage/usercontact',
+   '/manage/tariff'
 
    
   ];

@@ -14,16 +14,17 @@ import {
   CircularProgress,
   Divider,
 } from "@mui/material";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import HomeIcon from "@mui/icons-material/Home";
 import "./Contactadmin.css";
+import toast from "react-hot-toast";
 
 function ContactAdmin() {
   const [adminList, setAdminList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentAdmin, setCurrentAdmin] = useState(null);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchAdminDetails = async () => {
@@ -34,8 +35,12 @@ function ContactAdmin() {
         );
         setAdminList(response.data);
         setCurrentAdmin(response.data[0]);
-      } catch (error) {
-        console.error("Error fetching admin details:", error);
+      } catch (err) {
+        if (err.response && err.response.status === 401) {
+          toast.error("Login again");
+        } else {
+          toast.error("Failed to fetch contact details");
+        }
       } finally {
         setLoading(false);
       }
@@ -45,38 +50,66 @@ function ContactAdmin() {
 
   const handleEditClick = () => setIsEditing(true);
 
-  const validationSchema = Yup.object({
-    title: Yup.string().required("Title is required"),
-    phone: Yup.string()
-      .matches(/^[0-9]+$/, "Phone number is invalid")
-      .required("Primary Phone is required"),
-    phone1: Yup.string().matches(
-      /^[0-9]*$/,
-      "Alternate Phone must be a number"
-    ),
-    address: Yup.string().required("Address is required"),
-    email: Yup.string()
-      .email("Invalid email format")
-      .required("Email is required"),
-  });
+  const handleChange = (e) => {
+    setCurrentAdmin({
+      ...currentAdmin,
+      [e.target.name]: e.target.value,
+    });
+    setHasChanges(true);
+  };
 
-  const handleFormSubmit = async (values) => {
+  const validateFields = () => {
+    toast.dismiss()
+    const newErrors = {};
+    if (!currentAdmin.title) {
+     toast.error('Please select a title')
+    }
+    if (!currentAdmin.phone || !/^\d+$/.test(currentAdmin.phone)) {
+      newErrors.phone = "Primary Phone is required and must be numeric.";
+    }
+    if (currentAdmin.phone1 && !/^\d+$/.test(currentAdmin.phone1)) {
+      newErrors.phone1 = "Alternate Phone must be numeric if provided.";
+    }
+    if (!currentAdmin.address) {
+      newErrors.address = "Address is required.";
+    }
+    if (!currentAdmin.email || !/\S+@\S+\.\S+/.test(currentAdmin.email)) {
+      newErrors.email = "Email is required and must be a valid email address.";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // return true if no errors
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!hasChanges) return;
+
+    if (!validateFields()) {
+      toast.error("Please fix the errors before submitting.");
+      return;
+    }
+
     try {
-      await axios.put(
-        `http://localhost:8000/admin/updateAdmin/${currentAdmin._id}`,
-        values
+      await axios.post(
+        'http://localhost:8000/admin/updateAdmin',
+        currentAdmin,{
+          withCredentials:true
+        }
       );
       setIsEditing(false);
-      alert("Details updated successfully!");
+      setHasChanges(false);
+      toast.success("Details updated successfully!");
       setAdminList((prevList) =>
         prevList.map((admin) =>
-          admin._id === currentAdmin._id ? values : admin
+          admin._id === currentAdmin._id ? currentAdmin : admin
         )
       );
-      setCurrentAdmin(values);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Error submitting form. Please try again.");
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        toast.error("Login again");
+      } else {
+        toast.error("Failed to Update contact details");
+      }
     }
   };
 
@@ -105,122 +138,118 @@ function ContactAdmin() {
                     {isEditing ? "Update Admin" : "Admin Details"}
                   </Typography>
                   <Divider sx={{ mb: 2 }} />
-
-                  {loading ? (
-                    <CircularProgress />
-                  ) : currentAdmin ? (
-                    <Formik
-                      initialValues={currentAdmin}
-                      validationSchema={validationSchema}
-                      onSubmit={handleFormSubmit}
-                      enableReinitialize
-                    >
-                      {({ isSubmitting }) => (
-                        <Form className="admin-form">
-                          <Field
-                            as={TextField}
+                  <form onSubmit={handleSubmit} className="admin-form">
+                    {loading ? (
+                      <CircularProgress />
+                    ) : currentAdmin ? (
+                      <>
+                        <TextField
+                          fullWidth
+                          label="Title"
+                          name="title"
+                          value={currentAdmin.title}
+                          onChange={isEditing ? handleChange : null}
+                          margin="normal"
+                          variant="outlined"
+                          required
+                          InputProps={{
+                            readOnly: !isEditing,
+                          }}
+                          className="input-field"
+                          error={!!errors.title}
+                          helperText={errors.title}
+                        />
+                        <TextField
+                          fullWidth
+                          label="Primary Phone"
+                          name="phone"
+                          value={currentAdmin.phone}
+                          onChange={isEditing ? handleChange : null}
+                          margin="normal"
+                          variant="outlined"
+                          required
+                          InputProps={{
+                            readOnly: !isEditing,
+                          }}
+                          className="input-field"
+                          error={!!errors.phone}
+                          helperText={errors.phone}
+                        />
+                        <TextField
+                          fullWidth
+                          label="Alternate Phone"
+                          name="phone1"
+                          value={currentAdmin.phone1 || ""}
+                          onChange={isEditing ? handleChange : null}
+                          margin="normal"
+                          variant="outlined"
+                          InputProps={{
+                            readOnly: !isEditing,
+                          }}
+                          className="input-field"
+                          error={!!errors.phone1}
+                          helperText={errors.phone1}
+                        />
+                        <TextField
+                          fullWidth
+                          label="Address"
+                          name="address"
+                          value={currentAdmin.address}
+                          onChange={isEditing ? handleChange : null}
+                          margin="normal"
+                          variant="outlined"
+                          multiline
+                          rows={4}
+                          required
+                          InputProps={{
+                            readOnly: !isEditing,
+                          }}
+                          className="input-field"
+                          error={!!errors.address}
+                          helperText={errors.address}
+                        />
+                        <TextField
+                          fullWidth
+                          label="Email"
+                          name="email"
+                          value={currentAdmin.email}
+                          onChange={isEditing ? handleChange : null}
+                          margin="normal"
+                          variant="outlined"
+                          required
+                          InputProps={{
+                            readOnly: !isEditing,
+                          }}
+                          className="input-field"
+                          error={!!errors.email}
+                          helperText={errors.email}
+                        />
+                        {isEditing ? (
+                          <Button
+                            variant="contained"
+                            type="submit"
                             fullWidth
-                            label="Title"
-                            name="title"
-                            margin="normal"
+                            className="update-button"
+                          >
+                            Update Admin
+                          </Button>
+                        ) : (
+                          <Button
                             variant="outlined"
-                            required
-                            InputProps={{
-                              readOnly: !isEditing,
-                            }}
-                            className="input-field"
-                            helperText={<ErrorMessage name="title" />}
-                            error={Boolean(ErrorMessage.name)}
-                          />
-                          <Field
-                            as={TextField}
+                            onClick={handleEditClick}
                             fullWidth
-                            label="Primary Phone"
-                            name="phone"
-                            margin="normal"
-                            variant="outlined"
-                            required
-                            InputProps={{
-                              readOnly: !isEditing,
-                            }}
-                            className="input-field"
-                            helperText={<ErrorMessage name="phone" />}
-                            error={Boolean(ErrorMessage.phone)}
-                          />
-                          <Field
-                            as={TextField}
-                            fullWidth
-                            label="Alternate Phone"
-                            name="phone1"
-                            margin="normal"
-                            variant="outlined"
-                            InputProps={{
-                              readOnly: !isEditing,
-                            }}
-                            className="input-field"
-                            helperText={<ErrorMessage name="phone1" />}
-                            error={Boolean(ErrorMessage.phone1)}
-                          />
-                          <Field
-                            as={TextField}
-                            fullWidth
-                            label="Address"
-                            name="address"
-                            margin="normal"
-                            variant="outlined"
-                            multiline
-                            rows={4}
-                            required
-                            InputProps={{
-                              readOnly: !isEditing,
-                            }}
-                            className="input-field"
-                            helperText={<ErrorMessage name="address" />}
-                            error={Boolean(ErrorMessage.address)}
-                          />
-                          <Field
-                            as={TextField}
-                            fullWidth
-                            label="Email"
-                            name="email"
-                            margin="normal"
-                            variant="outlined"
-                            required
-                            InputProps={{
-                              readOnly: !isEditing,
-                            }}
-                            className="input-field"
-                            helperText={<ErrorMessage name="email" />}
-                            error={Boolean(ErrorMessage.email)}
-                          />
-                          {isEditing ? (
-                            <Button
-                              variant="contained"
-                              type="submit"
-                              fullWidth
-                              disabled={isSubmitting}
-                              className="update-button"
-                            >
-                              Update Admin
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="outlined"
-                              onClick={handleEditClick}
-                              fullWidth
-                              className="edit-button"
-                            >
-                              Edit
-                            </Button>
-                          )}
-                        </Form>
-                      )}
-                    </Formik>
-                  ) : (
-                    <Typography variant="body1">
-                      No admin details available.
-                    </Typography>
-                  )}
+                            className="edit-button"
+                          >
+                            Edit
+                          </Button>
+                        )}
+                      </>
+                    ) : (
+                      <Typography variant="body1">
+                        No admin details available.
+                      </Typography>
+                    )}
+                  </form>
                 </CardContent>
               </Card>
             </Grid>

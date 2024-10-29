@@ -48,9 +48,9 @@ try {
 
 const updateAdmin = async (req, res) => {
   try {
-    const { id } = req.params; // Correct destructuring for id
-    const { title, phone, phone1, address, email } = req.body;
-
+ 
+    const {_id,title, phone, phone1, address, email } = req.body;
+   console.log(_id)
     // Validation checks
     if (!title || !phone || !address || !email) {
       return res
@@ -58,15 +58,11 @@ const updateAdmin = async (req, res) => {
         .json({ message: "Title, phone, address, and email are required" });
     }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ message: "Invalid email format" });
-    }
+   
 
     // Update the admin details in the database
     const updatedAdmin = await Admincreates.findByIdAndUpdate(
-      id,
+      _id,
       { title, phone, phone1, address, email },
       { new: true } // Return the updated document
     );
