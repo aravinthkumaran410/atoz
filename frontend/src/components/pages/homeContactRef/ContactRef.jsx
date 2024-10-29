@@ -25,13 +25,7 @@ const ContactRef = ({ bookingFormRef }) => {
           <div className="row align-items-center">
             <div className="col-lg-7 text-center text-lg-start">
               <div className="cta-text cta-divider">
-                <motion.h1
-                  initial={{ y: -200, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
-                >
-                  Book Your Cab It's Simple And Affordable
-                </motion.h1>
+                <h1>Book Your Cab It's Simple And Affordable</h1>
                 <p>
                   It is a long established fact that a reader will be distracted
                   by the readable content of a page when looking at its layout

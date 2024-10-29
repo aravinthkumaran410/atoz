@@ -10,30 +10,95 @@ import ContactImg from "../../../assets/contactImg.jpg";
 import { motion } from "framer-motion";
 import { AppContext } from "../../../context/AppContext";
 
+import AxiosInstance from "../../../api/AxiosInstance";
+
+import { Button, message, Space } from "antd";
+
 // Validation schema
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required("Your Name is required"),
+  name: Yup.string()
+    .required("Your Name is required")
+    .max(15, "Name must be at most 15 characters")
+    .test(
+      "no-leading-space",
+      "Name cannot start with a space",
+      (value) =>
+        typeof value === "string" && !/^\s/.test(value) && value.length > 0
+    ),
   email: Yup.string()
     .email("Invalid email address")
-    .required("Your Email is required"),
-  phone: Yup.string().required("Phone is required"),
-  message: Yup.string().required("Message is required"),
+    .required("Your Email is required")
+    .test(
+      "no-leading-space",
+      "email cannot start with a space",
+      (value) =>
+        typeof value === "string" && !/^\s/.test(value) && value.length > 0
+    ),
+  phoneNumber: Yup.string()
+    .required("Phone is required")
+    .matches(
+      /^[1-9]\d{9}$/,
+      "Must be a valid phone number without leading zeros"
+    ),
+  message: Yup.string()
+    .required("Message is required")
+    .test(
+      "no-leading-space",
+      "message cannot start with a space",
+      (value) =>
+        typeof value === "string" && !/^\s/.test(value) && value.length > 0
+    ),
 });
 
 const ContactRef = () => {
   const { AtozInfo } = useContext(AppContext);
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    console.log(values);
-    // Simulate form submission process
-    setTimeout(() => {
+  const [messageApi, contextHolder] = message.useMessage(); // for ant design
+  const successAlert = () => {
+    messageApi.open({
+      type: "success",
+      content: "Contact added successfully!",
+      duration: 1,
+    });
+  };
+
+  const errorAlert = () => {
+    messageApi.open({
+      type: "error",
+      content: "Failed to contact.",
+      duration: 1,
+    });
+  };
+  const handleSubmit = async (
+    values,
+    { setSubmitting, resetForm, setErrors }
+  ) => {
+    try {
+      const res = await AxiosInstance.post(
+        "/usercontact/add-user-contact",
+        values
+      );
+
+      successAlert();
       setSubmitting(false);
       resetForm();
-    }, 1000);
+    } catch (error) {
+      // console.error("Error submitting form:", error);
+
+      if (error.response && error.response.data) {
+        setErrors(
+          error.response.data.errors || {
+            general: "An error occurred. Please try again.",
+          }
+        );
+      }
+      errorAlert();
+    }
   };
 
   return (
     <section className="main-contact-ref" style={{ overflow: "hidden" }}>
+      {contextHolder}
       <div className="contact-area py-2">
         <div className="container">
           <div className="contact-content">
@@ -151,7 +216,7 @@ const ContactRef = () => {
                   <Formik
                     initialValues={{
                       name: "",
-                      phone: "",
+                      phoneNumber: "",
                       email: "",
                       message: "",
                     }}
@@ -181,11 +246,11 @@ const ContactRef = () => {
                               <Field
                                 type="text"
                                 className="form-control"
-                                name="phone"
+                                name="phoneNumber"
                                 placeholder="Your Phone"
                               />
                               <ErrorMessage
-                                name="phone"
+                                name="phoneNumber"
                                 component="div"
                                 className="text-danger"
                               />

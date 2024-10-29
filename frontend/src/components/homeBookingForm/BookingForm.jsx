@@ -46,9 +46,28 @@ const BookingForm = ({ selVeh }) => {
         name: selVeh.carname,
         rate: selectedVehicle,
       });
+
+      // Ensure Formik is also updated
+      formik.setFieldValue("selectedCar", {
+        label: `${selVeh.carname} - ${selectedVehicle}/km`,
+        value: selVeh.carname,
+      });
     }
   }, [selVeh, isRoundTrip]);
+
   console.log(vehFromCard);
+
+  const options = isRoundTrip
+    ? roundTripCars.map((car) => ({
+        label: `${car.carname} - ${car.roundWayRate}/km`,
+        value: car.carname,
+        rate: car.roundWayRate,
+      }))
+    : oneWayCars.map((car) => ({
+        label: ` ${car.carname} -  ${car.oneWayRate}/km`,
+        value: car.carname,
+        rate: car.oneWayRate,
+      }));
 
   const success = () => {
     messageApi.open({
@@ -78,13 +97,38 @@ const BookingForm = ({ selVeh }) => {
 
         setOneWayCars(oneWayResponse.data);
         setRoundTripCars(roundTripResponse.data);
+
+        const oneWayCarsData = oneWayResponse.data;
+        const roundTripCarsData = roundTripResponse.data;
+
+        const selectedCar =
+          selVeh || (isRoundTrip ? roundTripCarsData[0] : oneWayCarsData[0]);
+
+        if (selectedCar) {
+          setVehFromCard({
+            name: selectedCar.carname,
+            rate: isRoundTrip
+              ? selectedCar.roundWayRate || selectedCar.twoWayRate
+              : selectedCar.oneWayRate,
+          });
+
+          // Update Formik's field value
+          formik.setFieldValue("selectedCar", {
+            label: `${selectedCar.carname} - ${
+              isRoundTrip
+                ? selectedCar.roundWayRate || selectedCar.twoWayRate
+                : selectedCar.oneWayRate
+            }/km`,
+            value: selectedCar.carname,
+          });
+        }
       } catch (error) {
         console.error("Error fetching car types:", error);
       }
     };
 
     fetchCarTypes();
-  }, []);
+  }, [selVeh, isRoundTrip]);
 
   const formik = useFormik({
     initialValues: {
@@ -99,17 +143,45 @@ const BookingForm = ({ selVeh }) => {
       selectedCar: { label: "Select a car", value: "" },
     },
     validationSchema: Yup.object({
-      fullName: Yup.string().required("Required"),
+      fullName: Yup.string()
+        .required("Required")
+        .max(25, "fullName must be at most 25 characters")
+        .test(
+          "no-leading-space",
+          "fullName cannot start with a space",
+          (value) =>
+            typeof value === "string" && !/^\s/.test(value) && value.length > 0
+        ),
       phone: Yup.string()
         .required("Required")
-        .matches(/^\d{10}$/, "Must be a valid phone number"),
-      pickupLocation: Yup.string().required("Required"),
+        .matches(
+          /^[1-9]\d{9}$/,
+          "Must be a valid phone number without leading zeros"
+        ),
+      pickupLocation: Yup.string()
+        .required("Required")
+        .test(
+          "no-leading-space",
+          "pickupLocation cannot start with a space",
+          (value) =>
+            typeof value === "string" && !/^\s/.test(value) && value.length > 0
+        ),
       dropLocation: Yup.string()
         .required("Required")
-        .notOneOf([Yup.ref("pickupLocation")], "Cannot be the same as pickup"),
+        .notOneOf([Yup.ref("pickupLocation")], "Cannot be the same as pickup")
+        .test(
+          "no-leading-space",
+          "pickupLocation cannot start with a space",
+          (value) =>
+            typeof value === "string" && !/^\s/.test(value) && value.length > 0
+        ),
       pickupDate: Yup.date().required("Required"),
       pickupTime: Yup.string().required("Required"),
-      returnDate: isRoundTrip ? Yup.date().required("Required") : Yup.string(),
+      returnDate: isRoundTrip
+        ? Yup.date()
+            .required("Required")
+            .min(new Date(), "Return date must be in the future")
+        : Yup.string(),
       returnTime: isRoundTrip
         ? Yup.string().required("Required")
         : Yup.string(),
@@ -120,7 +192,27 @@ const BookingForm = ({ selVeh }) => {
         })
         .required("Required"),
     }),
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm, setErrors }) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Validate Pickup Date
+      const selectedPickupDate = new Date(values.pickupDate);
+      if (selectedPickupDate < today) {
+        setErrors({ pickupDate: "Pickup date must be today or in the future" });
+        return;
+      }
+
+      if (values.isRoundTrip) {
+        const selectedReturnDate = new Date(values.returnDate);
+        if (selectedReturnDate < today) {
+          setErrors({
+            returnDate: "Return date must be today or in the future",
+          });
+          return;
+        }
+      }
+
       setSubmittedData(values);
       const selectedCar = isRoundTrip
         ? roundTripCars.find((car) => car.carname === values.selectedCar.value)
@@ -397,8 +489,8 @@ const BookingForm = ({ selVeh }) => {
                 {distance && !isNaN(distance) && (
                   <p className="h5">
                     <strong>Total:</strong>
-                    <span className="fs-4 text-warning ms-2">
-                      Rs
+                    <span className="fs-4 text-success ms-2">
+                      Rs{" "}
                       {(
                         Number(distance) * Number(rate) +
                         Number(driverFare)
@@ -445,9 +537,22 @@ const BookingForm = ({ selVeh }) => {
                       : "Not selected"}
                   </p>
                   {distance && !isNaN(distance) && (
-                    <p>
-                      <strong>Distance:</strong> {distance} km
-                    </p>
+                    <>
+                      <p>
+                        <strong>Distance:</strong> {distance} km
+                      </p>
+                      {isRoundTrip
+                        ? distance < 250 && (
+                            <span className="text-danger">
+                              Minimum distance is: 250 km
+                            </span>
+                          )
+                        : distance < 130 && (
+                            <span className="text-danger">
+                              Minimum distance is: 130 km
+                            </span>
+                          )}
+                    </>
                   )}
                 </div>
 
@@ -701,26 +806,32 @@ const BookingForm = ({ selVeh }) => {
                 <div className="form-group row">
                   <div className="col-md-6">
                     <CustomSelectForChooseCar
-                      options={
-                        isRoundTrip
-                          ? roundTripCars.map((car) => ({
-                              label: `${car.carname} - ${car.acType} - ${car.roundWayRate}/km`,
-                              value: car.carname,
-                            }))
-                          : oneWayCars.map((car) => ({
-                              label: `${car.carname} - ${car.acType} - ${car.oneWayRate}/km`,
-                              value: car.carname,
-                            }))
-                      }
-                      value={
-                        formik.values.selectedCar || {
-                          label: "Select a car",
-                          value: "",
-                        }
-                      }
+                      options={options}
+                      value={formik.values.selectedCar} // Ensure this points to Formik's state
                       onChange={(selectedOption) => {
-                        console.log("Selected car:", selectedOption);
-                        formik.setFieldValue("selectedCar", selectedOption);
+                        const selectedCar = isRoundTrip
+                          ? roundTripCars.find(
+                              (car) => car.carname === selectedOption.value
+                            )
+                          : oneWayCars.find(
+                              (car) => car.carname === selectedOption.value
+                            );
+
+                        setVehFromCard({
+                          name: selectedCar.carname,
+                          rate: isRoundTrip
+                            ? selectedCar.roundWayRate || selectedCar.twoWayRate
+                            : selectedCar.oneWayRate,
+                        });
+
+                        // Update Formik's state for selectedCar
+                        formik.setFieldValue("selectedCar", {
+                          label: selectedOption.label,
+                          value: selectedOption.value,
+                        });
+
+                        // Mark field as touched to trigger validation
+                        formik.setFieldTouched("selectedCar", true, true);
                       }}
                       label="Choose a car"
                     />
