@@ -7,6 +7,10 @@ import Roundway from "../../Pages/Service/Round-way/Roundway";
 import StatePermit from "../../Pages/StatePermit/StatePermit";
 import TaxiBooking from "../../Pages/Manage/TaxiBooking/TaxiBooking";
 import Contactadmin from "../../Pages/Manage/Contact/ContactAdmin";
+import OtherRate from "../../Pages/OtherRate/OtherRate";
+import ManageOtherRate from "../../Pages/Manage/OtherRate/ManageOtherRate";
+import UserContact from "../../Pages/Manage/UserContact/UserContact";
+import Tariff from "../../Pages/Manage/Tariff/Tariff";
 
 
 
@@ -21,6 +25,10 @@ const route=[
     {path:"/manage/statepermit",element:<ManageStatePermit/>},
     { path: "/manage/taxibooking", element: <TaxiBooking /> },
   { path: "/manage/contact", element: <Contactadmin /> },
+  {path:"/otherrate",element:<OtherRate/>},
+  {path:"/manage/otherrate",element:<ManageOtherRate/>},
+  {path:"/manage/usercontact",element:<UserContact/>},
+  { path: "/manage/tariff", element: <Tariff /> },
 ]
 
 

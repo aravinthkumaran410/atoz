@@ -50,8 +50,16 @@ h6 {
 @media (max-width: 1199px) {
   #main {
     padding: 20px;
+    margin-left: 300px;
   }
 }
+@media (max-width: 1010px) {
+  #main {
+    padding: 20px;
+    margin-left: 0px;
+  }
+}
+
 
 /*--------------------------------------------------------------
 # Page Title
@@ -613,11 +621,7 @@ h6 {
   background-color: #fff;
 }
 
-@media (max-width: 1199px) {
-  .sidebar {
-    left: -300px;
-  }
-}
+
 
 .sidebar::-webkit-scrollbar {
   width: 5px;
@@ -668,7 +672,7 @@ h6 {
 }
 
 .sidebar-nav .nav-item {
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 .sidebar-nav .nav-heading {

@@ -13,6 +13,9 @@ const statePermitRoute=require("./Route/statePermitRoute");
 const taxibook = require('./Route/TaxibookingRouter')
 const adminadded = require('./Route/AdminContactRouter')
 const addtraffic = require('./Route/AddTariffRouter')
+const otherRateRoute=require('./Route/otherRateRoute')
+
+const userContactRoute=require('./Route/userContactRoute')
 
 app.use(cookieParser());
 app.use(express.json());
@@ -39,6 +42,9 @@ app.use("/taxibook", taxibook);
 app.use("/admin", adminadded);
 //add traffic
 app.use("/traffic", addtraffic);
+//other rate
+app.use("/otherrate", otherRateRoute);
+app.use('/usercontact',userContactRoute)
 
 const mongo_url =
   "mongodb+srv://karthickc726:Karthick@cluster0.04mzp.mongodb.net/AtoZ-drop-taxi?retryWrites=true&w=majority&appName=Cluster0";

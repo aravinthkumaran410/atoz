@@ -281,8 +281,7 @@ const Roundway = () => {
             </ol>
           </nav>
         </div>
-      </main>
-      <section
+          <section
         className="section dashboard"
         style={{
           display: "flex",
@@ -635,6 +634,8 @@ const Roundway = () => {
           </div>
         </div>
       </section>
+      </main>
+   
       {loading && <Loader />}
     </Fragment>
   );

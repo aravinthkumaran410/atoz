@@ -15,7 +15,7 @@ exports.onewayTripAdded = async (req, res) => {
       let resizedImage = await sharp(image.buffer)
         .toFormat("jpeg")
         .jpeg({ quality })
-        .toBuffer();
+        .toBuffer();   
 
       const imageString = resizedImage.toString("base64");
 

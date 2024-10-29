@@ -10,14 +10,16 @@ const {
   Limitations,
 } = require("../Controller/TaxibookingController");
 
+const VerifyToken = require("./VerifyToken/VerifyToken");
+
 // Route to create a new taxi booking
 router.post("/createbookings", createTaxiBooking);
 
 // Route to get all bookings
-router.get("/getbookings", getAllBookings);
+router.get("/getbookings", VerifyToken,getAllBookings);
 
 //Route to delete bookings
-router.delete("/deletebookings/:id", deleteBooking);
+router.post("/deletebookings",VerifyToken, deleteBooking);
 
 //Route to getbyid user bookings
 router.get("/getidbookings/:id", getBookingsbyid);

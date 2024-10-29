@@ -246,7 +246,8 @@ const {setAdmin}=porps
                 <div className="form-button">
                   <Stack spacing={2} direction="row">
                     <Button variant="contained" onClick={handleSubmit} style={{
-                      backgroundColor:"#f1bc00"
+                      backgroundColor:"#f1bc00",
+                      color:"black"
                     }}>
                       Login
                     </Button>

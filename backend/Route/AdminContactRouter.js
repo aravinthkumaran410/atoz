@@ -6,13 +6,13 @@ const {
   updateAdmin,
   deleteAdmin,
 } = require("../Controller/AdminContactController");
-
+const VerifyToken = require("./VerifyToken/VerifyToken");
 
 
 
 router.post('/createadmin', addingdetails);
 router.get('/getAdmins', getAdmins);
-router.put('/updateadmin/:id', updateAdmin);
+router.post('/updateadmin', VerifyToken,updateAdmin);
 router.delete("/deleteadmins/:id", deleteAdmin);
 
 

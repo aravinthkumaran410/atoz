@@ -489,16 +489,32 @@ const ManageRoundWay = () => {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  padding: "16px",
+                  padding: "24px",
                   border: "1px solid #ddd",
-                  borderRadius: "8px"
+                  borderRadius: "12px",
+                  backgroundColor: "#f9f9f9",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  maxWidth: "300px",
+                  margin: "20px auto",
+                  textAlign: "center",
                 }}
               >
-                <span className="mb-2" style={{ marginBottom: "8px" }}>No Round Way Trip</span>
+                <span className="mb-2"  style={{
+                    marginBottom: "12px",
+                    fontSize: "16px",
+                    fontWeight: "500",
+                    color: "#555",
+                  }}>No Round Way Trip</span>
                 
                 <Button
                 color="success"
                  variant="contained"
+                 style={{
+                  padding: "8px 16px",
+                  fontWeight: "bold",
+                  borderRadius: "8px",
+                  boxShadow: "0 3px 6px rgba(0, 123, 255, 0.2)",
+                }}
                   onClick={() => {
                     navigate("/trip/round");
                   }}

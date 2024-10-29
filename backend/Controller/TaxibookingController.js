@@ -79,7 +79,7 @@ const getAllBookings = async (req, res) => {
 };
 
 const deleteBooking = async (req, res) => {
-  const id = req.params.id;
+  const {id} = req.body;
 
   try {
     const booking = await TaxiBooking.findByIdAndDelete(id);

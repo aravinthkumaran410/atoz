@@ -279,8 +279,7 @@ const Oneway = () => {
             </ol>
           </nav>
         </div>
-      </main>
-      <section
+        <section
         className="section dashboard"
         style={{
           display: "flex",
@@ -631,6 +630,8 @@ const Oneway = () => {
           </div>
         </div>
       </section>
+      </main>
+      
       {loading && <Loader />}
     </Fragment>
   );
