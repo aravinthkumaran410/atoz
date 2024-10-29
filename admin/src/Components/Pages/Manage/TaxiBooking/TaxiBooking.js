@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+
 import {
   Table,
   TableBody,
@@ -54,7 +54,7 @@ function TaxiBooking() {
         setUserDetails(filteredBookings);
       }
     } catch (err) {
-      setError("Failed to fetch user details");
+      toast.error("Failed to fetch user details");
     } finally {
       setLoading(false);
     }
