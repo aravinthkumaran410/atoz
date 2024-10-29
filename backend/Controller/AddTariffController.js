@@ -1,4 +1,5 @@
 const Traffic = require("../Schema/AddTariffSchema");
+const mongoose = require("mongoose");
 
 const addTraffic = async (req, res) => {
   try {
@@ -42,7 +43,7 @@ const getTraffic = async (req, res) => {
     }
 
     // Send the traffic names as a response
-    res.status(200).json({ Traffiname: trafficData.Traffiname });
+    res.status(200).json( trafficData );
   } catch (error) {
     console.error("Error fetching traffic names:", error);
     res.status(500).json({
@@ -54,51 +55,37 @@ const getTraffic = async (req, res) => {
 
 const deleteTrafficName = async (req, res) => {
   try {
-    const { id } = req.params; // ID from params
-    const { Traffiname } = req.body; // Traffic name from body
-
-    // Check if both ID and Traffiname are provided
-    if (!id || !Traffiname) {
-      return res
-        .status(400)
-        .json({ message: "Please provide a valid traffic name id and name." });
-    }
+    const { id,index } = req.body; // ID from params
+  
 
     console.log("Received ID:", id);
-    console.log("Received Traffiname:", Traffiname);
+    console.log("Received Index:", index);
 
-    // Step 1: Find the document to verify its structure
-    const trafficData = await Traffic.findOne({ _id: id });
-    if (!trafficData) {
-      return res.status(404).json({ message: "Traffic document not found." });
+    // Check if the ID format is valid
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid ID format." });
     }
-    console.log("Original Traffic Data:", JSON.stringify(trafficData, null, 2));
 
-    // Step 2: Pull the specific name from the array
-    const result = await Traffic.updateOne(
-      { _id: id },
-      { $pull: { Traffiname: Traffiname } } // Directly pull by string match
-    );
-    console.log("Update Result:", result);
+  // Step 1: Find the document to verify its structure
+  const trafficData = await Traffic.findOne({ _id: id });
 
-    // Step 3: Fetch and return the updated document to confirm
-    const updatedTrafficData = await Traffic.findOne({ _id: id });
-    console.log(
-      "Updated Traffic Data:",
-      JSON.stringify(updatedTrafficData, null, 2)
-    );
-
-    res.status(200).json({
-      message: "Traffic name deleted successfully",
-      data: updatedTrafficData,
-    });
-  } catch (error) {
-    console.error("Error deleting traffic name:", error);
-    res.status(500).json({
-      message: "An error occurred while deleting the traffic name",
-      error: error.message,
-    });
+  if (!trafficData) {
+    return res.status(404).json({ message: "Traffic data not found." });
   }
+   console.log(trafficData)
+ 
+
+  // Step 3: Use splice to remove the item at the specified index
+  trafficData.Traffiname.splice(index, 1);
+
+  // Step 4: Save the updated document
+  await trafficData.save();
+
+  res.status(200).json({ message: "City name deleted successfully!" });
+} catch (error) {
+  console.error("Error deleting traffic name:", error);
+  res.status(500).json({ message: "Failed to delete the city name." });
+}
 };
 
 

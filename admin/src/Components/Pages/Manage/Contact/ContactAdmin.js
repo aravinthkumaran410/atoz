@@ -17,6 +17,7 @@ import {
 import HomeIcon from "@mui/icons-material/Home";
 import "./Contactadmin.css";
 import toast from "react-hot-toast";
+import client from "../../../Common/Client/Client";
 
 function ContactAdmin() {
   const [adminList, setAdminList] = useState([]);
@@ -24,14 +25,21 @@ function ContactAdmin() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentAdmin, setCurrentAdmin] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    title:"",
+    email:"",
+    phone:"",
+    phone1:"",
+    address:""
+
+  });
 
   useEffect(() => {
     const fetchAdminDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          "http://localhost:8000/admin/getAdmins"
+        const response = await client.get(
+          "/admin/getAdmins"
         );
         setAdminList(response.data);
         setCurrentAdmin(response.data[0]);
@@ -50,7 +58,93 @@ function ContactAdmin() {
 
   const handleEditClick = () => setIsEditing(true);
 
+
+  const errorMessage = (fieldName, fieldValue) => {
+    let message;
+    if (fieldName) {
+      if (fieldValue === "") {
+        message = "";
+      }
+    }
+
+    if(fieldName==="title"){
+      if(fieldValue.length<3){
+        message="Please enter a valid Title"
+        }else{
+          message="";
+        }
+    }
+
+    if(fieldName==="address"){
+      if(fieldValue.length<10){
+        message="Please enter a valid address"
+        }else{
+          message="";
+        }
+
+    }
+    if (fieldName === "phone") {
+      // Remove non-numeric characters for validation
+      const numericValue = fieldValue.replace(/[^0-9]/g, "");
+
+      if (numericValue.length < 10) {
+        message = "Phone number needs 10 characters";
+      } else if (numericValue.length > 10) {
+        message = "Phone number is too long";
+      } else {
+        const prefix = parseInt(numericValue.slice(0, 2), 10);
+        if (!(prefix >= 63 && prefix <= 99)) {
+          message = "Invalid Phone Number";
+        } else {
+          message = "";
+        }
+      }
+    }
+    if (fieldName === "phone1") {
+      // Remove non-numeric characters for validation
+      const numericValue = fieldValue.replace(/[^0-9]/g, "");
+
+      if (numericValue.length < 10) {
+        message = "Phone number needs 10 characters";
+      } else if (numericValue.length > 10) {
+        message = "Phone number is too long";
+      } else {
+        const prefix = parseInt(numericValue.slice(0, 2), 10);
+        if (!(prefix >= 63 && prefix <= 99)) {
+          message = "Invalid Phone Number";
+        } else {
+          message = "";
+        }
+      }
+    }
+
+    
+
+    if (fieldName === "email") {
+      const emailRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]{2,}@[a-zA-Z-]+\.[a-zA-Z-]{2,}$/;
+      if (!emailRegex.test(fieldValue)) {
+        message = `Email is Invalid`;
+      } else {
+        message = "";
+      }
+    }
+
+
+  
+   
+
+ 
+    return { message: message };
+  };
   const handleChange = (e) => {
+    const { name, value } = e.target;
+    const err = errorMessage(name, value).message;
+
+    setErrors((prevError) => ({
+      ...prevError,
+      [name]: err,
+    }));
     setCurrentAdmin({
       ...currentAdmin,
       [e.target.name]: e.target.value,
@@ -59,26 +153,19 @@ function ContactAdmin() {
   };
 
   const validateFields = () => {
-    toast.dismiss()
-    const newErrors = {};
-    if (!currentAdmin.title) {
-     toast.error('Please select a title')
-    }
-    if (!currentAdmin.phone || !/^\d+$/.test(currentAdmin.phone)) {
-      newErrors.phone = "Primary Phone is required and must be numeric.";
-    }
-    if (currentAdmin.phone1 && !/^\d+$/.test(currentAdmin.phone1)) {
-      newErrors.phone1 = "Alternate Phone must be numeric if provided.";
-    }
-    if (!currentAdmin.address) {
-      newErrors.address = "Address is required.";
-    }
-    if (!currentAdmin.email || !/\S+@\S+\.\S+/.test(currentAdmin.email)) {
-      newErrors.email = "Email is required and must be a valid email address.";
-    }
+    toast.dismiss();
+    const newErrors = {
+      title: !currentAdmin.title ? "Please enter a title" : errors.title,
+      phone: !currentAdmin.phone ? "Primary Phone is required" : errors.phone,
+      phone1: errors.phone1,
+      address: !currentAdmin.address ? "Address is required" : errors.address,
+      email: !currentAdmin.email ? "Email is required" : errors.email,
+    };
+
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // return true if no errors
+    return !Object.values(newErrors).some((err) => err); // returns true if no errors
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,9 +176,11 @@ function ContactAdmin() {
       return;
     }
 
+
+
     try {
-      await axios.post(
-        'http://localhost:8000/admin/updateAdmin',
+      await client.post(
+        '/admin/updateAdmin',
         currentAdmin,{
           withCredentials:true
         }
@@ -111,7 +200,12 @@ function ContactAdmin() {
         toast.error("Failed to Update contact details");
       }
     }
+
+  
+    
   };
+
+  console.log(errors)
 
   return (
     <main id="main" className="main">
@@ -145,6 +239,11 @@ function ContactAdmin() {
                       <>
                         <TextField
                           fullWidth
+                          slotProps={{
+                            htmlInput: {
+                              maxLength: 20,
+                            },
+                          }}
                           label="Title"
                           name="title"
                           value={currentAdmin.title}
@@ -158,10 +257,37 @@ function ContactAdmin() {
                           className="input-field"
                           error={!!errors.title}
                           helperText={errors.title}
+                          onKeyDown={(e) => {
+                            const allowedKeys = [
+                              "Backspace",
+                              "ArrowLeft",
+                              "ArrowRight",
+                              "Delete",
+                              "Tab",
+                              " ",
+                            ];
+                            const allowedCharPattern = /^[A-Za-z.,_-]$/;
+                            if (currentAdmin.title.length === 0 && e.key === " ") {
+                              e.preventDefault();
+                              return;
+                            }
+                
+                            if (
+                              !allowedKeys.includes(e.key) &&
+                              !allowedCharPattern.test(e.key)
+                            ) {
+                              e.preventDefault();
+                            }
+                          }}
                         />
                         <TextField
                           fullWidth
                           label="Primary Phone"
+                          slotProps={{
+                            htmlInput: {
+                              maxLength: 10,
+                            },
+                          }}
                           name="phone"
                           value={currentAdmin.phone}
                           onChange={isEditing ? handleChange : null}
@@ -174,10 +300,38 @@ function ContactAdmin() {
                           className="input-field"
                           error={!!errors.phone}
                           helperText={errors.phone}
+                          onKeyDown={(e) => {
+                            const allowedKeys = [
+                              "Backspace",
+                              "ArrowLeft",
+                              "ArrowRight",
+                              "Delete",
+                              "Tab",
+                              " ",
+                            ];
+                            const allowedCharPattern = /^[0-9-]$/;
+        
+                            if (currentAdmin.phone.length === 0 && e.key === " ") {
+                              e.preventDefault();
+                              return;
+                            }
+        
+                            if (
+                              !allowedKeys.includes(e.key) &&
+                              !allowedCharPattern.test(e.key)
+                            ) {
+                              e.preventDefault();
+                            }
+                          }}
                         />
                         <TextField
                           fullWidth
                           label="Alternate Phone"
+                          slotProps={{
+                            htmlInput: {
+                              maxLength: 10,
+                            },
+                          }}
                           name="phone1"
                           value={currentAdmin.phone1 || ""}
                           onChange={isEditing ? handleChange : null}
@@ -189,10 +343,38 @@ function ContactAdmin() {
                           className="input-field"
                           error={!!errors.phone1}
                           helperText={errors.phone1}
+                          onKeyDown={(e) => {
+                            const allowedKeys = [
+                              "Backspace",
+                              "ArrowLeft",
+                              "ArrowRight",
+                              "Delete",
+                              "Tab",
+                              " ",
+                            ];
+                            const allowedCharPattern = /^[0-9-]$/;
+        
+                            if (currentAdmin.phone.length === 0 && e.key === " ") {
+                              e.preventDefault();
+                              return;
+                            }
+        
+                            if (
+                              !allowedKeys.includes(e.key) &&
+                              !allowedCharPattern.test(e.key)
+                            ) {
+                              e.preventDefault();
+                            }
+                          }}
                         />
                         <TextField
                           fullWidth
                           label="Address"
+                          slotProps={{
+                            htmlInput: {
+                              maxLength: 300,
+                            },
+                          }}
                           name="address"
                           value={currentAdmin.address}
                           onChange={isEditing ? handleChange : null}
@@ -207,6 +389,24 @@ function ContactAdmin() {
                           className="input-field"
                           error={!!errors.address}
                           helperText={errors.address}
+                          onKeyDown={(e) => {
+                            const allowedKeys = [
+                              "Backspace",
+                              "ArrowLeft",
+                              "ArrowRight",
+                              "Delete",
+                              "Tab",
+                              " ",
+                            ];
+                      
+        
+                            if (currentAdmin.address.length === 0 && e.key === " ") {
+                              e.preventDefault();
+                              return;
+                            }
+        
+                           
+                          }}
                         />
                         <TextField
                           fullWidth
@@ -223,6 +423,11 @@ function ContactAdmin() {
                           className="input-field"
                           error={!!errors.email}
                           helperText={errors.email}
+                          onKeyDown={(event) => {
+                            if (event.key === " ") {
+                              event.preventDefault(); // Prevent space from being entered
+                            }
+                          }}
                         />
                         {isEditing ? (
                           <Button

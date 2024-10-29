@@ -225,7 +225,7 @@ const Sidebar = ({ open, toggleSidebar,setAdmin }) => {
               to="/manage/tariff"
             >
               <i className="bi bi-file-text"></i>
-              <span>Tariff</span>
+              <span>City</span>
             </Link>
           </li>
           <li className="nav-item">
