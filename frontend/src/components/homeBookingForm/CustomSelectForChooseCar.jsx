@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./customSelect.css";
+import { FaCaretDown } from "react-icons/fa";
 
 const CustomSelectForChooseCar = ({ options, value, onChange, label }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,7 +9,7 @@ const CustomSelectForChooseCar = ({ options, value, onChange, label }) => {
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleOptionClick = (option) => {
-    onChange(option); // Pass the entire option object
+    onChange(option);
     setIsOpen(false);
   };
 
@@ -26,14 +27,14 @@ const CustomSelectForChooseCar = ({ options, value, onChange, label }) => {
   }, []);
 
   return (
-    <div
-      className={`custom-select ${isOpen ? "open" : ""}`}
-      ref={selectRef}
-      onClick={toggleDropdown}
-    >
+    <div className={`custom-select ${isOpen ? "open" : ""}`} ref={selectRef}>
       {label && <label className="select-label">{label}</label>}
-      <div className="select-selected">
-        {value.label || "Select an option"} {/* Show the full label */}
+      <div
+        className="select-selected d-flex justify-content-between"
+        onClick={toggleDropdown}
+      >
+        {value.label || "Select a car"}
+        <FaCaretDown />
       </div>
       {isOpen && (
         <div className="select-items">
@@ -53,9 +54,3 @@ const CustomSelectForChooseCar = ({ options, value, onChange, label }) => {
 };
 
 export default CustomSelectForChooseCar;
-
-
-
-
-
-

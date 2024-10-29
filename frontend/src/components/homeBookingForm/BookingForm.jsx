@@ -14,7 +14,7 @@ import { Button, message, Space } from "antd";
 
 import { motion } from "framer-motion";
 
-const BookingForm = () => {
+const BookingForm = ({ selVeh }) => {
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
@@ -33,6 +33,22 @@ const BookingForm = () => {
   const [dropInputError, setDropInputError] = useState(false);
 
   const [messageApi, contextHolder] = message.useMessage();
+
+  const [vehFromCard, setVehFromCard] = useState();
+
+  useEffect(() => {
+    if (selVeh) {
+      const selectedVehicle = isRoundTrip
+        ? selVeh.twoWayRate
+        : selVeh.oneWayRate;
+
+      setVehFromCard({
+        name: selVeh.carname,
+        rate: selectedVehicle,
+      });
+    }
+  }, [selVeh, isRoundTrip]);
+  console.log(vehFromCard);
 
   const success = () => {
     messageApi.open({
@@ -251,7 +267,7 @@ const BookingForm = () => {
   };
 
   const handleConfirmBooking = async (data) => {
-    const tripType = isRoundTrip ? "Round-trip" : "One-trip";
+    const tripType = isRoundTrip ? "round-trip" : "one-way";
     const totalFare = (
       Number(distance) * Number(rate) +
       Number(driverFare)
@@ -361,7 +377,7 @@ const BookingForm = () => {
   // };
 
   return (
-    <section className="container">
+    <section className="container" id="booking-form">
       {contextHolder}
       <motion.div
         initial={{ y: 100, opacity: 0 }}
@@ -701,10 +717,10 @@ const BookingForm = () => {
                           label: "Select a car",
                           value: "",
                         }
-                      } // Provide a default value
+                      }
                       onChange={(selectedOption) => {
                         console.log("Selected car:", selectedOption);
-                        formik.setFieldValue("selectedCar", selectedOption); // Pass the entire option object
+                        formik.setFieldValue("selectedCar", selectedOption);
                       }}
                       label="Choose a car"
                     />

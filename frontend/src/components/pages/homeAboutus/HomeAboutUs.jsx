@@ -11,10 +11,10 @@ import { motion } from "framer-motion";
 //variants
 import { fadeIn } from "../../framer/Varients";
 
-const HomeAboutUs = () => {
+const HomeAboutUs = ({ bgColor }) => {
   return (
-    <section style={{ backgroundColor: " #fff5de" }}>
-      <div className="container HomeAboutUsContainer mt-5">
+    <section style={{ backgroundColor: bgColor }}>
+      <div className="container HomeAboutUsContainer ">
         <motion.div
           className="HomeAboutUsLeftContainer"
           initial={{ x: -200, opacity: 0 }}
