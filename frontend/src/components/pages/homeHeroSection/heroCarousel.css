@@ -88,6 +88,10 @@
   color: var(--main-color);
 }
 
+.home-container-carousel .carousel-caption p {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+}
+
 @media (max-width: 991px) {
   .home-container-carousel {
     height: auto;
@@ -118,19 +122,15 @@
   color: #000;
 }
 
-.home-container-carousel .carousel-caption p {
-  font-size: clamp(0.8rem, 2vw, 1.2rem);
-}
-
 /* .home-container-carousel .carousel-caption .btn {
   font-size: clamp(0.8rem, 1.5vw, 1rem);
   padding: 0.5rem 1rem;
 } */
 
 .home-container-carousel button {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--color-dark);
-  padding: 17px 28px;
+  padding: 18px 30px;
   transition: all 0.5s;
   text-transform: uppercase;
   position: relative;
@@ -175,7 +175,7 @@
   } */
 
   .home-container-carousel .carousel-caption .hero-carousel-highlight {
-    font-size: 10px;
+    font-size: 16px !important;
   }
 
   /* .home-container-carousel .carousel-caption {
@@ -189,7 +189,7 @@
 
   .home-container-carousel .carousel-caption p,
   .home-container-carousel .carousel-caption h5 {
-    font-size: 0.8rem !important;
+    font-size: 1rem !important;
   }
 
   .home-container-carousel .carousel-caption .btn {

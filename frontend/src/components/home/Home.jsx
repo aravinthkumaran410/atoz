@@ -1,5 +1,5 @@
-import React, { useRef,useState } from "react";
-
+import React, { useRef, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import HeroCarousel from "../pages/homeHeroSection/HeroCarousel";
 import BookingForm from "../homeBookingForm/BookingForm";
 import VehicleCard from "../VehicleCard/VehicleCard";
@@ -11,11 +11,20 @@ import ContactRef from "../pages/homeContactRef/ContactRef";
 const Home = () => {
   const bookingFormRef = useRef(null);
   const [selVeh, setSelVeh] = useState();
+
+  const location = useLocation();
+  const selectedPlace = location.state?.place;
+
+  useEffect(() => {
+    if (location.hash === "#booking-form") {
+      bookingFormRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [location]);
   return (
     <section>
       <HeroCarousel />
-      <div ref={bookingFormRef}>
-        <BookingForm selVeh={selVeh}/>
+      <div ref={bookingFormRef} id="booking-form">
+        <BookingForm selVeh={selVeh} selectedPlace={selectedPlace} />
       </div>
 
       <HomeAboutUs bgColor="#fff5de" />

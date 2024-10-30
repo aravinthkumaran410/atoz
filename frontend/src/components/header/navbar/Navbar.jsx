@@ -54,7 +54,11 @@ const Navbar = () => {
             <Link
               // to="/#home"
               to="/"
-              className={`nav-item nav-link ${isActive("/")}`}
+              className={`nav-item nav-link ${
+                isActive("/") ||
+                isActive("/home") ||
+                isActive("/home#booking-form")
+              }`}
               onClick={handleLinkClick}
             >
               Home

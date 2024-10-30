@@ -7,6 +7,7 @@ import About from "./components/about/About";
 import MainService from "./components/service/MainService";
 import Contact from "./components/contact/Contact";
 import { AppProvider } from "./context/AppContext";
+import Tariff from "./components/tariff/Tariff";
 
 const App = () => {
   return (
@@ -19,7 +20,7 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/service" element={<MainService />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/tariff" element={<h2>Tariff</h2>} />
+            <Route path="/tariff" element={<Tariff />} />
           </Route>
         </Routes>
       </Router>

@@ -105,7 +105,7 @@ const ContactRef = () => {
             <div className="row">
               {/* Contact Information Section */}
               <motion.div
-                className="col-md-3"
+                className="col-lg-3 col-md-6 col-12"
                 initial={{ x: -200, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.3 }}
@@ -122,8 +122,9 @@ const ContactRef = () => {
                   </div>
                 </div>
               </motion.div>
+
               <motion.div
-                className="col-md-3"
+                className="col-lg-3 col-md-6 col-12"
                 initial={{ x: -200, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.3 }}
@@ -141,8 +142,9 @@ const ContactRef = () => {
                   </div>
                 </div>
               </motion.div>
+
               <motion.div
-                className="col-md-3"
+                className="col-lg-3 col-md-6 col-12"
                 initial={{ x: 200, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.3 }}
@@ -159,8 +161,9 @@ const ContactRef = () => {
                   </div>
                 </div>
               </motion.div>
+
               <motion.div
-                className="col-md-3"
+                className="col-lg-3 col-md-6 col-12"
                 initial={{ x: 200, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.3 }}

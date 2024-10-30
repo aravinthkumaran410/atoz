@@ -14,7 +14,7 @@ import { Button, message, Space } from "antd";
 
 import { motion } from "framer-motion";
 
-const BookingForm = ({ selVeh }) => {
+const BookingForm = ({ selVeh, selectedPlace }) => {
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
@@ -33,6 +33,10 @@ const BookingForm = ({ selVeh }) => {
   const [dropInputError, setDropInputError] = useState(false);
 
   const [messageApi, contextHolder] = message.useMessage();
+
+  //split selected place
+  const splitSeletedPlace = selectedPlace && selectedPlace.split("-");
+  // console.log(splitSeletedPlace && splitSeletedPlace[0]);
 
   const [vehFromCard, setVehFromCard] = useState();
 
@@ -236,10 +240,10 @@ const BookingForm = ({ selVeh }) => {
     if (!query) {
       if (isPickup) {
         setPickupSuggestions([]);
-        setPickupInputError(false); // Reset error
+        setPickupInputError(false);
       } else {
         setDropSuggestions([]);
-        setDropInputError(false); // Reset error
+        setDropInputError(false);
       }
       return;
     }
@@ -251,10 +255,10 @@ const BookingForm = ({ selVeh }) => {
       const suggestions = response.data;
       if (isPickup) {
         setPickupSuggestions(suggestions);
-        setPickupInputError(suggestions.length === 0); // Set error if no suggestions
+        setPickupInputError(suggestions.length === 0);
       } else {
         setDropSuggestions(suggestions);
-        setDropInputError(suggestions.length === 0); // Set error if no suggestions
+        setDropInputError(suggestions.length === 0);
       }
     } catch (error) {
       console.error("Error fetching location suggestions", error);
@@ -438,8 +442,7 @@ const BookingForm = ({ selVeh }) => {
         console.error("Error sending notification:", error);
       }
 
-      // Reload the page after the confirmation
-      window.location.reload();
+      handleReset();
     } catch (err) {
       console.error("Error confirming booking:", err);
       // alert("Failed to confirm booking.");
@@ -479,6 +482,9 @@ const BookingForm = ({ selVeh }) => {
       >
         <div className="home-booking-left-container">
           <h3 className="home-booking-left-container-title">Book Your Ride</h3>
+          <h5 className="mt-1 mb-3 text-danger fw-bold">
+            {selectedPlace && selectedPlace}
+          </h5>
         </div>
         <div className="home-booking-right-container">
           {submittedData ? (

@@ -12,6 +12,7 @@
   box-shadow: var(--box-shadow);
   transition: var(--transition);
   margin-top: 100px;
+  min-height: 280px;
 }
 
 .main-contact-ref .contact-info::before {
