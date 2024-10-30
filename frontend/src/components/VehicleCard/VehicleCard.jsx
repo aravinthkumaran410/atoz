@@ -49,7 +49,12 @@ const VehicleCard = ({ setSelVeh, bookingFormRef }) => {
               className="col-lg-4 col-md-6 col-sm-12 mb-4"
               key={eachVehicle._id}
             >
-              <div className="vehicle-card">
+              <motion.div
+                className="vehicle-card"
+                initial={{ y: 100, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              >
                 <div className="vehicle-details">
                   <div className="vehicle-img-wrapper">
                     <img
@@ -93,7 +98,7 @@ const VehicleCard = ({ setSelVeh, bookingFormRef }) => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           ))}
       </div>

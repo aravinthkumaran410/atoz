@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import "./TaxiService.css";
 import { IoArrowForward } from "react-icons/io5";
 import { IoArrowBack } from "react-icons/io5";
+import AxiosInstance from "../../../api/AxiosInstance";
 
 const TaxiService = () => {
   const [isSelectCity, setIsSelectCity] = useState(null);
@@ -13,6 +14,24 @@ const TaxiService = () => {
   const citiesPerPage = 20;
 
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [ourCities, setOurCities] = useState([]);
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const res = await AxiosInstance.get("/traffic/gettraffic");
+        setOurCities(res.data);
+      } catch (err) {
+        setError("Failed to fetch cities. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCities();
+  }, []);
 
   const OurCities = [
     "Madurai",
@@ -47,6 +66,9 @@ const TaxiService = () => {
   const indexOfFirstCity = indexOfLastCity - citiesPerPage;
   const currentCities = OurCities.slice(indexOfFirstCity, indexOfLastCity);
   const totalPages = Math.ceil(OurCities.length / citiesPerPage);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <section className="cities-service-container">

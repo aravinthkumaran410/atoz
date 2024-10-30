@@ -168,9 +168,11 @@ const Footer = () => {
               </div>
               <div className="col-md-6">
                 <div className="copy-menu">
-                  <a href>Terms</a>
-                  <a href>Privacy</a>
-                  <a href>Contact</a>
+                  <Link to="/">Terms</Link>
+                  <Link to="/">Privacy</Link>
+                  <Link to="/sitemap" onClick={handleLinkClick}>
+                    SiteMap
+                  </Link>
                 </div>
               </div>
             </div>

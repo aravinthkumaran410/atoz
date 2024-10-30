@@ -8,6 +8,7 @@ import MainService from "./components/service/MainService";
 import Contact from "./components/contact/Contact";
 import { AppProvider } from "./context/AppContext";
 import Tariff from "./components/tariff/Tariff";
+import SiteMap from "./components/sitemap/SiteMap";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/service" element={<MainService />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/tariff" element={<Tariff />} />
+            <Route path="/sitemap" element={<SiteMap />} />
           </Route>
         </Routes>
       </Router>
