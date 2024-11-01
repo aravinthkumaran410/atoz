@@ -1,9 +1,12 @@
+
 const secreteKey=require("../../Config/Config")
+
 const jwt = require("jsonwebtoken");
 
 
 const VerifyToken = async (req, res, next) => {
   const token = req.cookies.token;
+  console.log(token)
   if (!token) {
     return res.status(401).json({ message: "Please log in to access this resource." });
   }

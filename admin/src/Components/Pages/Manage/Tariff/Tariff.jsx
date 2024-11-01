@@ -27,6 +27,7 @@ function Tariff() {
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [id,setId]=useState("")
 
   useEffect(() => {
     fetchTraffic();
@@ -36,19 +37,38 @@ function Tariff() {
     try {
       const response = await client.get("/traffic/gettraffic");
       const trafficNames = response.data.Traffiname || [];
+       setId(response.data._id)
       setTrafficList(trafficNames.map((name) => String(name)));
     } catch (error) {
       toast.error("Error fetching City names.");
     }
   };
 
-  const handleInputChange = (e) => setTrafficName(e.target.value);
+  const handleInputChange = (e) =>{
+    const {value}=e.target;
+    if(value===""){
+        
+
+    }
+    setTrafficName(e.target.value);
+
+  } 
   const handleSearchChange = (e) =>
     setSearchQuery(e.target.value.toLowerCase());
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const trimmedName = trafficName.trim();
+    toast.dismiss()
+    e.preventDefault()
+    if(  trafficList.includes(trafficName.toLowerCase())
+)
+{
+    toast.error("Already Exist")
+    return
+}
+  ;
+    let trimmedName = trafficName.trim();
+    trimmedName=trimmedName.toLowerCase();
+
     if (!trimmedName) return toast.error("Please enter a traffic name.");
 
     setLoading(true);
@@ -64,6 +84,7 @@ function Tariff() {
       );
       setTrafficList((prev) => [...prev, response.data.data.Traffiname]);
       setTrafficName("");
+      fetchTraffic()
       toast.success("City name added successfully!");
     } catch (err) {
       if (err.response && err.response.status === 401) {
@@ -80,11 +101,14 @@ function Tariff() {
     toast.error("You Cancle delete");
   };
 
-  const handleDelete = async (id, index) => {
+  const handleDelete = async (value, index) => {
+    toast.dismiss()
     try {
       const response = await client.post(`/traffic/deletetraffic`, {
         id: id,
         index: index,
+      },{
+        withCredentials: true,
       });
 
       if (response.status === 200) {
@@ -157,6 +181,28 @@ function Tariff() {
             required
             margin="normal"
             sx={{ bgcolor: "#fff", borderRadius: 1 }}
+            onKeyDown={(e) => {
+                const allowedKeys = [
+                  "Backspace",
+                  "ArrowLeft",
+                  "ArrowRight",
+                  "Delete",
+                  "Tab",
+                  " ",
+                ];
+                const allowedCharPattern = /^[A-Za-z.,_-]$/;
+                if (trafficName.length === 0 && e.key === " ") {
+                  e.preventDefault();
+                  return;
+                }
+
+                if (
+                  !allowedKeys.includes(e.key) &&
+                  !allowedCharPattern.test(e.key)
+                ) {
+                  e.preventDefault();
+                }
+              }}
           />
           <Button
             type="submit"
@@ -164,7 +210,7 @@ function Tariff() {
             fullWidth
             disabled={
               !trafficName.trim() ||
-              trafficList.includes(trafficName) ||
+            
               loading
             }
             sx={{
@@ -187,6 +233,28 @@ function Tariff() {
           fullWidth
           value={searchQuery}
           onChange={handleSearchChange}
+          onKeyDown={(e) => {
+            const allowedKeys = [
+              "Backspace",
+              "ArrowLeft",
+              "ArrowRight",
+              "Delete",
+              "Tab",
+              " ",
+            ];
+            const allowedCharPattern = /^[A-Za-z.,_-]$/;
+            if (searchQuery.length === 0 && e.key === " ") {
+              e.preventDefault();
+              return;
+            }
+
+            if (
+              !allowedKeys.includes(e.key) &&
+              !allowedCharPattern.test(e.key)
+            ) {
+              e.preventDefault();
+            }
+          }}
           margin="normal"
           sx={{ bgcolor: "#fff", borderRadius: 1 }}
           InputProps={{
@@ -205,7 +273,7 @@ function Tariff() {
                 <Grid item xs={12} sm={6} md={4} lg={3}>
                   <Card
                     sx={{
-                      bgcolor: "#f9c20c",
+                      bgcolor: "#f6f9ff",
                       borderRadius: 2,
                       boxShadow: 2,
                       "&:hover": {
@@ -223,27 +291,33 @@ function Tariff() {
                           color: "#333",
                           fontWeight: "bold",
                           letterSpacing: 1,
+                          textTransform:"capitalize"
                         }}
                       >
                         {name}
                       </Typography>
 
                       <Popconfirm
-                        title="Delete the city name Details"
-                        description="Are you sure to delete city name Details?"
-                        onConfirm={() => handleDelete(name._id)}
+                        title="Delete the city name details"
+                        description="Are you sure you want to delete this city name?"
+                        onConfirm={() => handleDelete(name, index)}
                         onCancel={cancel}
                         okText="Yes"
                         cancelText="No"
-                        className="table-button"
-                      ></Popconfirm>
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        startIcon={<DeleteIcon />}
                       >
-                        Delete
-                      </Button>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          className="table-button"
+                          style={{
+                            marginTop: "10px",
+                          }}
+                          startIcon={<DeleteIcon />}
+                        >
+                            Delete
+                         
+                        </Button>
+                      </Popconfirm>
                     </CardContent>
                   </Card>
                 </Grid>

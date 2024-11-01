@@ -6,13 +6,14 @@ const {
 
   deleteTrafficName,
 } = require("../Controller/AddTariffController");
+const VerifyToken = require('./VerifyToken/VerifyToken');
 
 
-router.post("/addtraffic", addTraffic);
+router.post("/addtraffic", VerifyToken,addTraffic);
 router.get("/gettraffic", getTraffic);
 
 
 // Delete traffic name
-router.delete("/deletetraffic/:id", deleteTrafficName);
+router.post("/deletetraffic", VerifyToken,deleteTrafficName);
 
 module.exports = router
