@@ -14,7 +14,7 @@ import { Button, message, Space } from "antd";
 
 import { motion } from "framer-motion";
 
-const BookingForm = () => {
+const BookingForm = ({ selVeh, selectedPlace }) => {
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
@@ -33,6 +33,45 @@ const BookingForm = () => {
   const [dropInputError, setDropInputError] = useState(false);
 
   const [messageApi, contextHolder] = message.useMessage();
+
+  //split selected place
+  const splitSeletedPlace = selectedPlace && selectedPlace.split("-");
+  // console.log(splitSeletedPlace && splitSeletedPlace[0]);
+
+  const [vehFromCard, setVehFromCard] = useState();
+
+  useEffect(() => {
+    if (selVeh) {
+      const selectedVehicle = isRoundTrip
+        ? selVeh.twoWayRate
+        : selVeh.oneWayRate;
+
+      setVehFromCard({
+        name: selVeh.carname,
+        rate: selectedVehicle,
+      });
+
+      // Ensure Formik is also updated
+      formik.setFieldValue("selectedCar", {
+        label: `${selVeh.carname} - ${selectedVehicle}/km`,
+        value: selVeh.carname,
+      });
+    }
+  }, [selVeh, isRoundTrip]);
+
+  console.log(vehFromCard);
+
+  const options = isRoundTrip
+    ? roundTripCars.map((car) => ({
+        label: `${car.carname} - ${car.roundWayRate}/km`,
+        value: car.carname,
+        rate: car.roundWayRate,
+      }))
+    : oneWayCars.map((car) => ({
+        label: ` ${car.carname} -  ${car.oneWayRate}/km`,
+        value: car.carname,
+        rate: car.oneWayRate,
+      }));
 
   const success = () => {
     messageApi.open({
@@ -62,13 +101,38 @@ const BookingForm = () => {
 
         setOneWayCars(oneWayResponse.data);
         setRoundTripCars(roundTripResponse.data);
+
+        const oneWayCarsData = oneWayResponse.data;
+        const roundTripCarsData = roundTripResponse.data;
+
+        const selectedCar =
+          selVeh || (isRoundTrip ? roundTripCarsData[0] : oneWayCarsData[0]);
+
+        if (selectedCar) {
+          setVehFromCard({
+            name: selectedCar.carname,
+            rate: isRoundTrip
+              ? selectedCar.roundWayRate || selectedCar.twoWayRate
+              : selectedCar.oneWayRate,
+          });
+
+          // Update Formik's field value
+          formik.setFieldValue("selectedCar", {
+            label: `${selectedCar.carname} - ${
+              isRoundTrip
+                ? selectedCar.roundWayRate || selectedCar.twoWayRate
+                : selectedCar.oneWayRate
+            }/km`,
+            value: selectedCar.carname,
+          });
+        }
       } catch (error) {
         console.error("Error fetching car types:", error);
       }
     };
 
     fetchCarTypes();
-  }, []);
+  }, [selVeh, isRoundTrip]);
 
   const formik = useFormik({
     initialValues: {
@@ -83,17 +147,45 @@ const BookingForm = () => {
       selectedCar: { label: "Select a car", value: "" },
     },
     validationSchema: Yup.object({
-      fullName: Yup.string().required("Required"),
+      fullName: Yup.string()
+        .required("Required")
+        .max(25, "fullName must be at most 25 characters")
+        .test(
+          "no-leading-space",
+          "fullName cannot start with a space",
+          (value) =>
+            typeof value === "string" && !/^\s/.test(value) && value.length > 0
+        ),
       phone: Yup.string()
         .required("Required")
-        .matches(/^\d{10}$/, "Must be a valid phone number"),
-      pickupLocation: Yup.string().required("Required"),
+        .matches(
+          /^[1-9]\d{9}$/,
+          "Must be a valid phone number without leading zeros"
+        ),
+      pickupLocation: Yup.string()
+        .required("Required")
+        .test(
+          "no-leading-space",
+          "pickupLocation cannot start with a space",
+          (value) =>
+            typeof value === "string" && !/^\s/.test(value) && value.length > 0
+        ),
       dropLocation: Yup.string()
         .required("Required")
-        .notOneOf([Yup.ref("pickupLocation")], "Cannot be the same as pickup"),
+        .notOneOf([Yup.ref("pickupLocation")], "Cannot be the same as pickup")
+        .test(
+          "no-leading-space",
+          "pickupLocation cannot start with a space",
+          (value) =>
+            typeof value === "string" && !/^\s/.test(value) && value.length > 0
+        ),
       pickupDate: Yup.date().required("Required"),
       pickupTime: Yup.string().required("Required"),
-      returnDate: isRoundTrip ? Yup.date().required("Required") : Yup.string(),
+      returnDate: isRoundTrip
+        ? Yup.date()
+            .required("Required")
+            .min(new Date(), "Return date must be in the future")
+        : Yup.string(),
       returnTime: isRoundTrip
         ? Yup.string().required("Required")
         : Yup.string(),
@@ -104,7 +196,27 @@ const BookingForm = () => {
         })
         .required("Required"),
     }),
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values, { resetForm, setErrors }) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Validate Pickup Date
+      const selectedPickupDate = new Date(values.pickupDate);
+      if (selectedPickupDate < today) {
+        setErrors({ pickupDate: "Pickup date must be today or in the future" });
+        return;
+      }
+
+      if (values.isRoundTrip) {
+        const selectedReturnDate = new Date(values.returnDate);
+        if (selectedReturnDate < today) {
+          setErrors({
+            returnDate: "Return date must be today or in the future",
+          });
+          return;
+        }
+      }
+
       setSubmittedData(values);
       const selectedCar = isRoundTrip
         ? roundTripCars.find((car) => car.carname === values.selectedCar.value)
@@ -128,10 +240,10 @@ const BookingForm = () => {
     if (!query) {
       if (isPickup) {
         setPickupSuggestions([]);
-        setPickupInputError(false); // Reset error
+        setPickupInputError(false);
       } else {
         setDropSuggestions([]);
-        setDropInputError(false); // Reset error
+        setDropInputError(false);
       }
       return;
     }
@@ -143,10 +255,10 @@ const BookingForm = () => {
       const suggestions = response.data;
       if (isPickup) {
         setPickupSuggestions(suggestions);
-        setPickupInputError(suggestions.length === 0); // Set error if no suggestions
+        setPickupInputError(suggestions.length === 0);
       } else {
         setDropSuggestions(suggestions);
-        setDropInputError(suggestions.length === 0); // Set error if no suggestions
+        setDropInputError(suggestions.length === 0);
       }
     } catch (error) {
       console.error("Error fetching location suggestions", error);
@@ -251,7 +363,7 @@ const BookingForm = () => {
   };
 
   const handleConfirmBooking = async (data) => {
-    const tripType = isRoundTrip ? "Round-trip" : "One-trip";
+    const tripType = isRoundTrip ? "round-trip" : "one-way";
     const totalFare = (
       Number(distance) * Number(rate) +
       Number(driverFare)
@@ -330,8 +442,7 @@ const BookingForm = () => {
         console.error("Error sending notification:", error);
       }
 
-      // Reload the page after the confirmation
-      window.location.reload();
+      handleReset();
     } catch (err) {
       console.error("Error confirming booking:", err);
       // alert("Failed to confirm booking.");
@@ -361,7 +472,7 @@ const BookingForm = () => {
   // };
 
   return (
-    <section className="container">
+    <section className="container" id="booking-form">
       {contextHolder}
       <motion.div
         initial={{ y: 100, opacity: 0 }}
@@ -371,6 +482,9 @@ const BookingForm = () => {
       >
         <div className="home-booking-left-container">
           <h3 className="home-booking-left-container-title">Book Your Ride</h3>
+          <h5 className="mt-1 mb-3 text-danger fw-bold">
+            {selectedPlace && selectedPlace}
+          </h5>
         </div>
         <div className="home-booking-right-container">
           {submittedData ? (
@@ -381,8 +495,8 @@ const BookingForm = () => {
                 {distance && !isNaN(distance) && (
                   <p className="h5">
                     <strong>Total:</strong>
-                    <span className="fs-4 text-warning ms-2">
-                      Rs
+                    <span className="fs-4 text-success ms-2">
+                      Rs{" "}
                       {(
                         Number(distance) * Number(rate) +
                         Number(driverFare)
@@ -429,9 +543,22 @@ const BookingForm = () => {
                       : "Not selected"}
                   </p>
                   {distance && !isNaN(distance) && (
-                    <p>
-                      <strong>Distance:</strong> {distance} km
-                    </p>
+                    <>
+                      <p>
+                        <strong>Distance:</strong> {distance} km
+                      </p>
+                      {isRoundTrip
+                        ? distance < 250 && (
+                            <span className="text-danger">
+                              Minimum distance is: 250 km
+                            </span>
+                          )
+                        : distance < 130 && (
+                            <span className="text-danger">
+                              Minimum distance is: 130 km
+                            </span>
+                          )}
+                    </>
                   )}
                 </div>
 
@@ -685,26 +812,32 @@ const BookingForm = () => {
                 <div className="form-group row">
                   <div className="col-md-6">
                     <CustomSelectForChooseCar
-                      options={
-                        isRoundTrip
-                          ? roundTripCars.map((car) => ({
-                              label: `${car.carname} - ${car.acType} - ${car.roundWayRate}/km`,
-                              value: car.carname,
-                            }))
-                          : oneWayCars.map((car) => ({
-                              label: `${car.carname} - ${car.acType} - ${car.oneWayRate}/km`,
-                              value: car.carname,
-                            }))
-                      }
-                      value={
-                        formik.values.selectedCar || {
-                          label: "Select a car",
-                          value: "",
-                        }
-                      } // Provide a default value
+                      options={options}
+                      value={formik.values.selectedCar} // Ensure this points to Formik's state
                       onChange={(selectedOption) => {
-                        console.log("Selected car:", selectedOption);
-                        formik.setFieldValue("selectedCar", selectedOption); // Pass the entire option object
+                        const selectedCar = isRoundTrip
+                          ? roundTripCars.find(
+                              (car) => car.carname === selectedOption.value
+                            )
+                          : oneWayCars.find(
+                              (car) => car.carname === selectedOption.value
+                            );
+
+                        setVehFromCard({
+                          name: selectedCar.carname,
+                          rate: isRoundTrip
+                            ? selectedCar.roundWayRate || selectedCar.twoWayRate
+                            : selectedCar.oneWayRate,
+                        });
+
+                        // Update Formik's state for selectedCar
+                        formik.setFieldValue("selectedCar", {
+                          label: selectedOption.label,
+                          value: selectedOption.value,
+                        });
+
+                        // Mark field as touched to trigger validation
+                        formik.setFieldTouched("selectedCar", true, true);
                       }}
                       label="Choose a car"
                     />

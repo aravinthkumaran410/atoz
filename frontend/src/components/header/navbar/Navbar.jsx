@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { RiMenu5Fill } from "react-icons/ri";
 import { IoCallOutline } from "react-icons/io5";
 import logo from "../../../assets/logo_1 2.svg";
 // import ScrollBar from "../farmorMotion/ScrollBar";
 import { HiMenu } from "react-icons/hi";
+import { MdPhoneInTalk } from "react-icons/md";
+import { AppContext } from "../../../context/AppContext";
 
 const Navbar = () => {
   const location = useLocation();
-
+  const { AtozInfo } = useContext(AppContext);
   const isActive = (path) => (location.pathname === path ? "active" : "");
+  const navigate = useNavigate();
+
+  const handleContactBtn = () => {
+    navigate("/contact");
+  };
 
   const handleLinkClick = () => {
     const navbarCollapse = document.getElementById("navbarCollapse");
@@ -47,7 +54,11 @@ const Navbar = () => {
             <Link
               // to="/#home"
               to="/"
-              className={`nav-item nav-link ${isActive("/")}`}
+              className={`nav-item nav-link ${
+                isActive("/") ||
+                isActive("/home") ||
+                isActive("/home#booking-form")
+              }`}
               onClick={handleLinkClick}
             >
               Home
@@ -116,8 +127,21 @@ const Navbar = () => {
 
           <div>
             <div className="nav-contact-container">
-              <span className="nav-contact-phone">6382712627</span>
-              <button className="nav-contact-button">contact</button>
+              <span className="nav-contact-phone">
+                <a
+                  className="para me-3 fw-bold"
+                  href={`https://wa.me/91${AtozInfo[0]?.phone}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="nav-contact-phone ">
+                    {AtozInfo[0]?.phone}
+                  </span>
+                </a>
+              </span>
+              <button className="nav-contact-button" onClick={handleContactBtn}>
+                contact
+              </button>
             </div>
           </div>
         </div>

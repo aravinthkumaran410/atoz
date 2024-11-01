@@ -5,22 +5,27 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const app = express();
 
-const loginRoute=require("./Route/loginRoute")
-const logoutRoute=require("./Route/logoutRoute")
-const oneWayTripRoute=require("./Route/oneWayTripRoute");
-const roundWayTripRoute=require("./Route/roundWayTripRoute");
-const statePermitRoute=require("./Route/statePermitRoute");
-const taxibook = require('./Route/TaxibookingRouter')
-const adminadded = require('./Route/AdminContactRouter')
-const addtraffic = require('./Route/AddTariffRouter')
-const otherRateRoute=require('./Route/otherRateRoute')
+const loginRoute = require("./Route/loginRoute");
+const logoutRoute = require("./Route/logoutRoute");
+const oneWayTripRoute = require("./Route/oneWayTripRoute");
+const roundWayTripRoute = require("./Route/roundWayTripRoute");
+const statePermitRoute = require("./Route/statePermitRoute");
+const taxibook = require("./Route/TaxibookingRouter");
+const adminadded = require("./Route/AdminContactRouter");
+const addtraffic = require("./Route/AddTariffRouter");
+const otherRateRoute = require("./Route/otherRateRoute");
 
-const userContactRoute=require('./Route/userContactRoute')
+const userContactRoute = require("./Route/userContactRoute");
 
 app.use(cookieParser());
 app.use(express.json());
 const corsOptions = {
-  origin: ["http://localhost:3001", "http://localhost:3000"],
+  origin: [
+    "http://localhost:3001",
+    "http://localhost:3000",
+    "https://ato-z-drop-taxi.vercel.app",
+    "https://ato-z-drop-taxi-admin.vercel.app",
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
@@ -31,12 +36,12 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.use("/admin",loginRoute);
-app.use("/admins",logoutRoute);
-app.use("/onewaytrip",oneWayTripRoute);
-app.use("/roundtrip",roundWayTripRoute);
-app.use("/statepermit",statePermitRoute);
-//taxi booking form 
+app.use("/admin", loginRoute);
+app.use("/admins", logoutRoute);
+app.use("/onewaytrip", oneWayTripRoute);
+app.use("/roundtrip", roundWayTripRoute);
+app.use("/statepermit", statePermitRoute);
+//taxi booking form
 app.use("/taxibook", taxibook);
 //admin can add their details
 app.use("/admin", adminadded);
@@ -44,7 +49,7 @@ app.use("/admin", adminadded);
 app.use("/traffic", addtraffic);
 //other rate
 app.use("/otherrate", otherRateRoute);
-app.use('/usercontact',userContactRoute)
+app.use("/usercontact", userContactRoute);
 
 const mongo_url =
   "mongodb+srv://karthickc726:Karthick@cluster0.04mzp.mongodb.net/AtoZ-drop-taxi?retryWrites=true&w=majority&appName=Cluster0";

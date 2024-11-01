@@ -82,11 +82,17 @@
   color: var(--color-red);
   cursor: pointer;
 }
+.footer .footer-contact p:hover,
+.footer-contact a:hover,
+.footer-contact a span:hover {
+  color: var(--color-red);
+  cursor: pointer;
+}
 
 .footer .footer-links a {
   display: block;
   margin-bottom: 6px;
-  padding-left: 15px;
+
   color: #ffffff;
   cursor: pointer;
 }
@@ -100,13 +106,13 @@
   cursor: pointer;
 }
 
-.footer .footer-links a::before {
+/* .footer .footer-links a::before {
   position: absolute;
   content: "\f105";
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   left: 0;
-}
+} */
 
 .footer .footer-project {
   float: left;
