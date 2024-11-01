@@ -6,6 +6,7 @@ import './Home.css';
 import client from '../../Common/Client/Client';
 
 const Home = () => {
+
   const [trafficCount, setTrafficCount] = useState(0);
   const [oneWayCount, setOneWayCount] = useState(0);
   const [roundWayCount, setRoundWayCount] = useState(0);
@@ -53,22 +54,26 @@ const Home = () => {
     }
   };
 
+  const fetchTrafficCount = async () => {
+    try {
+      const response = await client.get('/traffic/gettraffic');
+      const trafficData = response.data.Traffiname || [];
+      setTrafficCount(trafficData.length);
+    } catch (error) {
+      setError('Error fetching total traffic data.');
+    }
+  };
+
   // Fetch total traffic count and other trip counts
   useEffect(() => {
-    const fetchTrafficCount = async () => {
-      try {
-        const response = await client.get('/traffic/gettraffic');
-        const trafficData = response.data.Traffiname || [];
-        setTrafficCount(trafficData.length);
-      } catch (error) {
-        setError('Error fetching total traffic data.');
-      }
-    };
-
+    const token = localStorage.getItem("token");
+   if(token){
     fetchTrafficCount();
     getOneWayTrip();
     getRoundWayTrip();
-    fetchRecentBookings(); // Call to fetch recent bookings
+    fetchRecentBookings();
+   }
+   
   }, []);
 
   return (
@@ -92,7 +97,7 @@ const Home = () => {
           <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ bgcolor: '#D76C82', color: 'black', p: 2, boxShadow: 3 }}>
               <CardContent>
-                <Typography variant="h6" align="center">Total Traffic</Typography>
+                <Typography variant="h6" align="center">Total Cities</Typography>
                 <Typography variant="h4" align="center">{trafficCount}</Typography>
               </CardContent>
             </Card>
@@ -102,7 +107,7 @@ const Home = () => {
           <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ bgcolor: '#243642', color: '#fff', p: 2, boxShadow: 3 }}>
               <CardContent>
-                <Typography variant="h6" align="center">One-Way Traffic</Typography>
+                <Typography variant="h6" align="center">One-Way Trip</Typography>
                 <Typography variant="h4" align="center">{oneWayCount}</Typography>
               </CardContent>
             </Card>
@@ -112,7 +117,7 @@ const Home = () => {
           <Grid item xs={12} sm={6} md={4}>
             <Card sx={{ bgcolor: '#C1E2A4', color: 'black', p: 2, boxShadow: 3 }}>
               <CardContent>
-                <Typography variant="h6" align="center">Round-Way Traffic</Typography>
+                <Typography variant="h6" align="center">Round-Way Trip</Typography>
                 <Typography variant="h4" align="center">{roundWayCount}</Typography>
               </CardContent>
             </Card>

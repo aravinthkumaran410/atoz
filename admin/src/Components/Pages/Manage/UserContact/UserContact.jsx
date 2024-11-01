@@ -107,7 +107,7 @@ const UserContact = () => {
                                 <td style={{ padding: "8px" }}>{item.email}</td>
                                 <td style={{ padding: "8px" }}>{item.phoneNumber}</td>
                                 <td style={{ padding: "8px" }}>{item.message}</td>
-                                <td style={{ padding: "8px", textAlign: "center" }}></td>
+                                <td style={{ padding: "8px", textAlign: "center" }}>
                                 <Popconfirm
                           title="Delete the State Permit Details"
                           description="Are you sure to delete thisState Permit Details?"
@@ -128,6 +128,7 @@ const UserContact = () => {
                             Delete
                           </Button>
                         </Popconfirm>
+                        </td>
                             </tr>)
                     })}
                     </tbody>
