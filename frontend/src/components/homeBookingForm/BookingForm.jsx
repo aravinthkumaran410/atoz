@@ -355,7 +355,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
 
   const handleReset = () => {
     setSubmittedData(null);
-    setDistance(null); // Reset distance
+    setDistance(null);
     setPickupCoords({});
     setDropCoords({});
     setPickupSuggestions([]);
@@ -481,11 +481,14 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
         className="home-booking-form-container"
       >
         <div className="home-booking-left-container">
-          <h3 className="home-booking-left-container-title">Book Your Ride</h3>
-          <h5 className="mt-1 mb-3 text-danger fw-bold">
-            {selectedPlace && selectedPlace}
-          </h5>
+          <h3 className="home-booking-left-container-title text-uppercase fw-bold">
+            Book Your Ride
+          </h3>
+          <blockquote className="booking-quote text-white text-center m-3">
+            "Your journey begins with us. Let us take you where you need to go."
+          </blockquote>
         </div>
+
         <div className="home-booking-right-container">
           {submittedData ? (
             <div className="summary">
@@ -596,6 +599,9 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
               >
                 BOOK A TAXI
               </h4>
+              <h5 className="mt-1 mb-3 text-danger fw-bold text-uppercase text-center">
+                {selectedPlace && selectedPlace}
+              </h5>
               <div className="d-flex mb-3">
                 <div className="form-check form-check-inline">
                   <input

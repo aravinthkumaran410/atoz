@@ -50,27 +50,18 @@ const Service = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div
-                className="service-item wow fadeInUp"
-                data-wow-delay=".25s"
-                style={{
-                  visibility: "visible",
-                  animationDelay: "0.25s",
-                  animationName: "fadeInUp",
-                }}
-              >
+              <div className="service-item">
                 <div className="service-img">
-                  <img src={image_1} alt />
+                  <img src={image_1} alt="Online Booking" />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_1} alt />
+                  <img src={icon_1} alt="Online Booking Icon" />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">Online Booking</h3>
                   <p className="service-text">
-                    There are many variations of passages orem psum available
-                    but the majority have suffered alteration in some form by
-                    injected.
+                    Easily book your ride online with our user-friendly
+                    platform, ensuring a hassle-free experience.
                   </p>
                 </div>
               </div>
@@ -81,27 +72,18 @@ const Service = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              <div
-                className="service-item wow fadeInUp"
-                data-wow-delay=".25s"
-                style={{
-                  visibility: "visible",
-                  animationDelay: "0.25s",
-                  animationName: "fadeInUp",
-                }}
-              >
+              <div className="service-item">
                 <div className="service-img">
-                  <img src={image_2} alt />
+                  <img src={image_2} alt="City Transport" />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_3} alt />
+                  <img src={icon_3} alt="City Transport Icon" />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">City Transport</h3>
                   <p className="service-text">
-                    There are many variations of passages orem psum available
-                    but the majority have suffered alteration in some form by
-                    injected.
+                    Explore the city with our reliable transportation options,
+                    perfect for your daily commute.
                   </p>
                 </div>
               </div>
@@ -112,29 +94,20 @@ const Service = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              <div
-                className="service-item wow fadeInUp"
-                data-wow-delay=".25s"
-                style={{
-                  visibility: "visible",
-                  animationDelay: "0.25s",
-                  animationName: "fadeInUp",
-                }}
-              >
+              <div className="service-item">
                 <div className="service-img">
-                  <img src={image_4} alt />
+                  <img src={image_4} alt="Airport Transport" />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_2} alt />
+                  <img src={icon_2} alt="Airport Transport Icon" />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">
                     Airport Transport
                   </h3>
                   <p className="service-text">
-                    There are many variations of passages orem psum available
-                    but the majority have suffered alteration in some form by
-                    injected.
+                    Enjoy stress-free airport transfers with our prompt and
+                    professional drivers.
                   </p>
                 </div>
               </div>
@@ -145,29 +118,20 @@ const Service = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div
-                className="service-item wow fadeInUp"
-                data-wow-delay=".25s"
-                style={{
-                  visibility: "visible",
-                  animationDelay: "0.25s",
-                  animationName: "fadeInUp",
-                }}
-              >
+              <div className="service-item">
                 <div className="service-img">
-                  <img src={image_3} alt />
+                  <img src={image_3} alt="Business Transport" />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_3} alt />
+                  <img src={icon_3} alt="Business Transport Icon" />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">
                     Business Transport
                   </h3>
                   <p className="service-text">
-                    There are many variations of passages orem psum available
-                    but the majority have suffered alteration in some form by
-                    injected.
+                    Tailored transport solutions for corporate clients, ensuring
+                    punctuality and professionalism.
                   </p>
                 </div>
               </div>
@@ -178,29 +142,20 @@ const Service = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              <div
-                className="service-item wow fadeInUp"
-                data-wow-delay=".25s"
-                style={{
-                  visibility: "visible",
-                  animationDelay: "0.25s",
-                  animationName: "fadeInUp",
-                }}
-              >
+              <div className="service-item">
                 <div className="service-img">
-                  <img src={image_5} alt />
+                  <img src={image_5} alt="Regular Transport" />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_5} alt />
+                  <img src={icon_5} alt="Regular Transport Icon" />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">
                     Regular Transport
                   </h3>
                   <p className="service-text">
-                    There are many variations of passages orem psum available
-                    but the majority have suffered alteration in some form by
-                    injected.
+                    Consistent and reliable transport services for your everyday
+                    needs, available 24/7.
                   </p>
                 </div>
               </div>
@@ -211,27 +166,18 @@ const Service = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              <div
-                className="service-item wow fadeInUp"
-                data-wow-delay=".25s"
-                style={{
-                  visibility: "visible",
-                  animationDelay: "0.25s",
-                  animationName: "fadeInUp",
-                }}
-              >
+              <div className="service-item">
                 <div className="service-img">
-                  <img src={image_6} alt />
+                  <img src={image_6} alt="Tour Transport" />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_4} alt />
+                  <img src={icon_4} alt="Tour Transport Icon" />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">Tour Transport</h3>
                   <p className="service-text">
-                    There are many variations of passages orem psum available
-                    but the majority have suffered alteration in some form by
-                    injected.
+                    Discover new places with our comfortable tour transport
+                    services designed for sightseeing.
                   </p>
                 </div>
               </div>

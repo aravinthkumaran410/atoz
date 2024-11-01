@@ -1,20 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./HomeAboutUs.css";
-// import homeAboutImage from "../../assets/banner/aboutusGallery.png";
 import homeAboutImage from "../../../assets/about/01.png";
-
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
-
-// motion
 import { motion } from "framer-motion";
-
-//variants
-import { fadeIn } from "../../framer/Varients";
 
 const HomeAboutUs = ({ bgColor }) => {
   return (
     <section style={{ backgroundColor: bgColor }}>
-      <div className="container HomeAboutUsContainer ">
+      <div className="container HomeAboutUsContainer">
         <motion.div
           className="HomeAboutUsLeftContainer"
           initial={{ x: -200, opacity: 0 }}
@@ -33,9 +26,8 @@ const HomeAboutUs = ({ bgColor }) => {
             >
               ABOUT US
             </motion.h6>
-            {/* <hr className="text-warning" /> */}
-            <h2 class="site-title mt-3">
-              We Provide Trusted <span>Cab Service</span> In The World
+            <h2 className="site-title mt-3">
+              We Provide Trusted <span>Cab Service</span> Across India
             </h2>
           </div>
           <motion.div
@@ -52,19 +44,25 @@ const HomeAboutUs = ({ bgColor }) => {
               airport, or exploring the city, we are dedicated to making your
               journey comfortable and convenient.
             </p>
-            <div class="about-list-wrapper">
-              <ul class="about-list list-unstyled">
+            <div className="about-list-wrapper">
+              <ul className="about-list list-unstyled">
                 <li>
-                  <IoCheckmarkCircleSharp className="home-list-icons me-2" /> At
-                  vero eos et accusamus et iusto odio.
+                  <IoCheckmarkCircleSharp className="home-list-icons me-2" />
+                  Reliable and punctual service for all your transportation
+                  needs.
                 </li>
                 <li>
-                  <IoCheckmarkCircleSharp className="home-list-icons me-2" />{" "}
-                  Established fact that a reader will be distracted.
+                  <IoCheckmarkCircleSharp className="home-list-icons me-2" />
+                  Professional drivers committed to ensuring your safety and
+                  comfort.
                 </li>
                 <li>
-                  <IoCheckmarkCircleSharp className="home-list-icons me-2" />{" "}
-                  Sed ut perspiciatis unde omnis iste natus sit.
+                  <IoCheckmarkCircleSharp className="home-list-icons me-2" />
+                  Affordable rates without compromising on quality.
+                </li>
+                <li>
+                  <IoCheckmarkCircleSharp className="home-list-icons me-2" />
+                  24/7 availability for all your travel requirements.
                 </li>
               </ul>
             </div>

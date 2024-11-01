@@ -8,10 +8,12 @@ import supportImage from "../../../assets/features/support.png";
 
 import AOS from "aos";
 import { motion } from "framer-motion";
+
 const Homefeatures = () => {
   useEffect(() => {
     AOS.init({ duration: 2000 });
   }, []);
+
   return (
     <section>
       <section className="home-feature-container">
@@ -22,14 +24,14 @@ const Homefeatures = () => {
                 <div className="site-heading text-center">
                   <span className="site-title-tagline">Feature</span>
                   <h2 className="site-title text-white fs-1">
-                    Our Awesome Feature
+                    Our Awesome Features
                   </h2>
                   <div className="heading-divider" />
                 </div>
               </div>
             </div>
             <motion.div
-              className="row "
+              className="row"
               style={{ marginBottom: "100px" }}
               initial={{ opacity: 0, y: 200 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -41,23 +43,15 @@ const Homefeatures = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
               >
-                <div
-                  className="feature-item wow fadeInUp"
-                  data-wow-delay=".25s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.25s",
-                    animationName: "fadeInUp",
-                  }}
-                >
+                <div className="feature-item">
                   <div className="feature-icon">
-                    <img src={safetyImage} alt="safety svg" />
+                    <img src={safetyImage} alt="Safety Guarantee" />
                   </div>
                   <div className="feature-content">
-                    <h4>Safety Guarantee</h4>
+                    <h4>Safety First</h4>
                     <p>
-                      There are many variations of majority have suffered
-                      alteration in some form injected humour randomised words.
+                      Your safety is our priority. Our drivers are trained to
+                      ensure a secure and comfortable ride.
                     </p>
                   </div>
                 </div>
@@ -68,23 +62,15 @@ const Homefeatures = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
-                <div
-                  className="feature-item mt-lg-5 wow fadeInDown"
-                  data-wow-delay=".25s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.25s",
-                    animationName: "fadeInDown",
-                  }}
-                >
+                <div className="feature-item mt-lg-5">
                   <div className="feature-icon">
-                    <img src={fastPickUp} alt="fast pickup" />
+                    <img src={fastPickUp} alt="Fast Pickup" />
                   </div>
                   <div className="feature-content">
-                    <h4>Fast Pickup</h4>
+                    <h4>Quick Pickup</h4>
                     <p>
-                      There are many variations of majority have suffered
-                      alteration in some form injected humour randomised words.
+                      Enjoy prompt pick-up services, ensuring you never miss
+                      your schedule. We value your time!
                     </p>
                   </div>
                 </div>
@@ -95,23 +81,15 @@ const Homefeatures = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.1 }}
               >
-                <div
-                  className="feature-item wow fadeInUp"
-                  data-wow-delay=".25s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.25s",
-                    animationName: "fadeInUp",
-                  }}
-                >
+                <div className="feature-item">
                   <div className="feature-icon">
-                    <img src={rateImage} alt="affordable Rate" />
+                    <img src={rateImage} alt="Affordable Rates" />
                   </div>
                   <div className="feature-content">
-                    <h4>Affordable Rate</h4>
+                    <h4>Affordable Rates</h4>
                     <p>
-                      There are many variations of majority have suffered
-                      alteration in some form injected humour randomised words.
+                      We offer competitive pricing with no hidden charges. Enjoy
+                      transparent pricing for all rides.
                     </p>
                   </div>
                 </div>
@@ -122,23 +100,15 @@ const Homefeatures = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                <div
-                  className="feature-item mt-lg-5 wow fadeInDown"
-                  data-wow-delay=".25s"
-                  style={{
-                    visibility: "visible",
-                    animationDelay: "0.25s",
-                    animationName: "fadeInDown",
-                  }}
-                >
+                <div className="feature-item mt-lg-5">
                   <div className="feature-icon">
-                    <img src={supportImage} alt="support image" />
+                    <img src={supportImage} alt="24/7 Support" />
                   </div>
                   <div className="feature-content">
-                    <h4>24/7 Support</h4>
+                    <h4>24/7 Customer Support</h4>
                     <p>
-                      There are many variations of majority have suffered
-                      alteration in some form injected humour randomised words.
+                      Our support team is available around the clock to assist
+                      you with any queries or concerns.
                     </p>
                   </div>
                 </div>

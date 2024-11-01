@@ -176,7 +176,7 @@ const ContactRef = () => {
                   </div>
                   <div className="contact-info-content">
                     <h5>Open Time</h5>
-                    <p>Mon - Sat (10.00AM - 05.30PM)</p>
+                    <p> Open 24 Hours</p>
                   </div>
                 </div>
               </motion.div>

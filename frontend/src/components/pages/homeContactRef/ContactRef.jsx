@@ -27,9 +27,10 @@ const ContactRef = ({ bookingFormRef }) => {
               <div className="cta-text cta-divider">
                 <h1>Book Your Cab It's Simple And Affordable</h1>
                 <p>
-                  It is a long established fact that a reader will be distracted
-                  by the readable content of a page when looking at its layout
-                  point of using is that it has normal distribution of letters.
+                  Experience hassle-free travel with our simple booking process.
+                  Whether you're heading to the airport or exploring the city,
+                  our reliable cab service ensures you get where you need to go
+                  without breaking the bank.
                 </p>
               </div>
             </div>

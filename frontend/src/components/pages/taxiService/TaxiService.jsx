@@ -5,6 +5,7 @@ import "./TaxiService.css";
 import { IoArrowForward } from "react-icons/io5";
 import { IoArrowBack } from "react-icons/io5";
 import AxiosInstance from "../../../api/AxiosInstance";
+import { MdKeyboardBackspace } from "react-icons/md";
 
 const TaxiService = () => {
   const [isSelectCity, setIsSelectCity] = useState(null);
@@ -17,13 +18,14 @@ const TaxiService = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [ourCities, setOurCities] = useState([]);
+  const [OurCities, setOurCities] = useState([]);
 
   useEffect(() => {
     const fetchCities = async () => {
       try {
         const res = await AxiosInstance.get("/traffic/gettraffic");
-        setOurCities(res.data);
+        setOurCities(res.data.Traffiname);
+        console.log(res.data.Traffiname);
       } catch (err) {
         setError("Failed to fetch cities. Please try again later.");
       } finally {
@@ -32,20 +34,6 @@ const TaxiService = () => {
     };
     fetchCities();
   }, []);
-
-  const OurCities = [
-    "Madurai",
-    "Chennai",
-    "Hyderabad",
-    "Kerala",
-    "Mumbai",
-    "Delhi",
-    "Bangalore",
-    "Pune",
-    "Jaipur",
-    "Kolkata",
-    "ooty",
-  ];
 
   useEffect(() => {
     if (isSelectCity) {
@@ -88,12 +76,19 @@ const TaxiService = () => {
       </div>
       {isSelectCity ? (
         <article>
+          <MdKeyboardBackspace
+            className="ms-5 mb-4 fs-4"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setIsSelectCity(null);
+            }}
+          />
           {mergeCitiesData.length > 0 ? (
             <div className="merge-cities-list">
               {mergeCitiesData.map((item, index) => (
                 <div key={index} className="merge-city-item">
                   <p
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: "pointer", textTransform: "capitalize" }}
                     className="m-2 fw-bold"
                     onClick={() => handleSelectedPlace(item)}
                   >
@@ -112,7 +107,7 @@ const TaxiService = () => {
             {currentCities.map((city, index) => (
               <div key={index} className="city-item">
                 <p
-                  style={{ cursor: "pointer" }}
+                  style={{ textTransform: "capitalize", cursor: "pointer" }}
                   onClick={() => setIsSelectCity(city)}
                 >
                   {city}
@@ -121,25 +116,35 @@ const TaxiService = () => {
             ))}
           </div>
           <div className="pagination">
-            <IoArrowBack
-              className="fs-4 me-3"
-              style={{ cursor: "pointer" }}
+            <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-            />
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                fontSize: "20px",
+              }}
+            >
+              <IoArrowBack className="fs-4 me-3" />
+            </button>
 
             <span>
               {currentPage} of {totalPages}
             </span>
 
-            <IoArrowForward
-              className="fs-4 ms-3"
-              style={{ cursor: "pointer" }}
+            <button
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                fontSize: "20px",
+              }}
               onClick={() =>
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
               disabled={currentPage === totalPages}
-            />
+            >
+              <IoArrowForward className="fs-4 ms-3" />
+            </button>
           </div>
         </article>
       )}

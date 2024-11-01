@@ -33,9 +33,9 @@ const Footer = () => {
               <div className="footer-about">
                 <h3>About Us</h3>
                 <p>
-                  Lorem ipsum dolor sit amet elit. Quisque eu lectus a leo
-                  dictum nec non quam. Tortor eu placerat rhoncus, lorem quam
-                  iaculis felis, sed lacus neque id eros
+                  At A to Z Drop Taxi, we are committed to providing a seamless
+                  transportation experience. Our dedicated team ensures that you
+                  receive safe, reliable, and efficient cab services.
                 </p>
                 <div className="footer-social">
                   <a href className="me-2">
@@ -98,9 +98,9 @@ const Footer = () => {
                       "No email available"
                     )}
                   </span>
-                  <p className=" mt-2">
+                  <p className="mt-2">
                     <MdTimer className="me-1" />
-                    Mon - Fri, 9AM - 10PM
+                    Open 24 Hours
                   </p>
                 </div>
               )}
@@ -108,7 +108,7 @@ const Footer = () => {
 
             <div className="col-md-6 col-lg-2">
               <div className="footer-links">
-                <h3>Useful Links</h3>
+                <h3>Our Links</h3>
                 <Link to="/Home" onClick={handleLinkClick}>
                   <RiArrowRightSFill /> Home
                 </Link>
@@ -128,7 +128,7 @@ const Footer = () => {
             </div>
             <div className="col-md-6 col-lg-3">
               <div className="footer-project">
-                <h3>Latest Projects</h3>
+                <h3>Our Gallery</h3>
                 <a href>
                   <img src={image_1} alt="Image" />
                 </a>

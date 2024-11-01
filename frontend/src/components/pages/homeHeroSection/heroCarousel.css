@@ -5,6 +5,9 @@
 .home-container-carousel .carousel-indicators {
   display: none;
 }
+.home-container-carousel p {
+  font-size: 16px !important;
+}
 
 .home-container-carousel .image-container {
   position: relative;

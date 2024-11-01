@@ -86,8 +86,8 @@ const HeroCarousel = () => {
                 whileInView={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.2, delay: 0.2 }}
               >
-                <Link to="/package" className="text-light">
-                  Explore <IoArrowForward />
+                <Link to="/home#booking-form" className="text-light">
+                  Book Now <IoArrowForward />
                 </Link>
               </motion.button>
             </div>
@@ -126,7 +126,7 @@ const HeroCarousel = () => {
               transition={{ duration: 0.4, delay: 0.3 }}
             >
               BOOK
-              <span> TAXI</span> FOR YOUR RIDE
+              <span> FAST AND RELIABLE</span> SERVICE
             </motion.h3>
             {/* <p>Explore our curated collection of the season's must-haves.</p> */}
             <motion.p
@@ -136,22 +136,16 @@ const HeroCarousel = () => {
               transition={{ duration: 0.4, delay: 0.3 }}
               style={{ fontSize: "14px", textAlign: "center" }}
             >
-              There are many variations of passages available the majority have
-              suffered alteration in some form generators on the Internet tend
-              to repeat predefined chunks injected humour randomised words look
-              even slightly believable.
+              Experience the convenience of booking your taxi online. Our
+              reliable drivers ensure you reach your destination safely and on
+              time, every time.
             </motion.p>
             <div className="d-flex justify-content-center">
-              <motion.button
-                className="btn btn-dark text-light mt-4"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.2, delay: 0.2 }}
-              >
-                <Link to="/package" className="text-light">
-                  Explore <IoArrowForward />
+              <button className="btn btn-dark text-light mt-4">
+                <Link to="/tariff" className="text-light">
+                  View Tariff <IoArrowForward />
                 </Link>
-              </motion.button>
+              </button>
             </div>
           </Carousel.Caption>
         </Carousel.Item>
@@ -187,7 +181,7 @@ const HeroCarousel = () => {
               transition={{ duration: 0.4, delay: 0.3 }}
             >
               BOOK
-              <span> TAXI</span> FOR YOUR RIDE
+              <span> YOUR COMFORT </span>IS OUR PRIORITY
             </motion.h3>
             {/* <p>Explore our curated collection of the season's must-haves.</p> */}
             <motion.p
@@ -197,22 +191,15 @@ const HeroCarousel = () => {
               transition={{ duration: 0.4, delay: 0.3 }}
               style={{ fontSize: "14px", textAlign: "center" }}
             >
-              There are many variations of passages available the majority have
-              suffered alteration in some form generators on the Internet tend
-              to repeat predefined chunks injected humour randomised words look
-              even slightly believable.
+              Enjoy a comfortable ride with our well-maintained vehicles. We
+              prioritize your comfort and safety to make your journey enjoyable.
             </motion.p>
             <div className="d-flex justify-content-center">
-              <motion.button
-                className="btn btn-dark text-light mt-4"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.2, delay: 0.2 }}
-              >
-                <Link to="/package" className="text-light">
-                  Explore <IoArrowForward />
+              <button className="btn btn-dark text-light mt-4">
+                <Link to="/service" className="text-light">
+                  view service <IoArrowForward />
                 </Link>
-              </motion.button>
+              </button>
             </div>
           </Carousel.Caption>
         </Carousel.Item>
