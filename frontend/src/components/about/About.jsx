@@ -12,6 +12,7 @@ const About = () => {
         description="Beginner friendly page for learning React Helmet."
         name="wwwwwww"
         type="article"
+        linkk="https://ato-z-drop-taxi.vercel.app/about"
       />
         <section className="about-container m-0">
       <SubAllbanners title="About us" />

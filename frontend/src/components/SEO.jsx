@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-export default function SEO({ title, description, name, type }) {
+export default function SEO({ title, description, name, type,linkk }) {
   console.log(description);
   
   return (
@@ -22,6 +22,7 @@ export default function SEO({ title, description, name, type }) {
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       {/* End Twitter tags */}
+      <link rel="canonical" href={linkk}></link>
     </Helmet>
   );
 }

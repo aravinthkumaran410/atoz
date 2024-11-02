@@ -30,6 +30,7 @@ const Home = () => {
         description="Beginner friendly page for learning React Helmet."
         name="wwwwwww"
         type="article"
+        linkk="https://ato-z-drop-taxi.vercel.app"
       />
       <HeroCarousel />
       {selectedPlace ? (
