@@ -1,0 +1,24 @@
+.state-permit-container h2 {
+  margin-top: 20px;
+}
+
+.state-permit-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.state-permit-container th,
+.state-permit-container td {
+  border: 1px solid #fff5de;
+  padding: 8px;
+  text-align: left;
+}
+
+.state-permit-container th {
+  background-color: #fff5de;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}

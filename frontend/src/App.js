@@ -24,6 +24,7 @@ const App = () => {
             <Route path="/tariff" element={<Tariff />} />
             <Route path="/sitemap" element={<SiteMap />} />
           </Route>
+          <Route path="*" element={<h2>404 page</h2>} />
         </Routes>
       </Router>
     </AppProvider>
