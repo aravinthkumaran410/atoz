@@ -192,7 +192,7 @@ const Home = () => {
             <Table>
               <TableHead>
                 <TableRow sx={{ backgroundColor: '#333' }}>
-                  {['Name', 'Trip Type', 'Phone', 'Pickup Location', 'Pickup Date', 'Pickup Time', 'Return Date', 'Return Time'].map(header => (
+                  {['Name', 'Trip Type', 'Phone', 'Pickup Location','Drop Location','Total Distance','Total Fare', 'Pickup Date', 'Pickup Time', 'Return Date', 'Return Time'].map(header => (
                     <TableCell key={header} sx={{ color: '#FFD700' }}>{header}</TableCell>
                   ))}
                 </TableRow>
@@ -209,6 +209,9 @@ const Home = () => {
                       <TableCell>{booking.tripType}</TableCell>
                       <TableCell>{booking.phone}</TableCell>
                       <TableCell>{booking.pickupLocation}</TableCell>
+                      <TableCell>{booking.dropLocation}</TableCell>
+                      <TableCell>{booking.distance}</TableCell>
+                      <TableCell>{booking.total}</TableCell>
                       <TableCell>{new Date(booking.pickupDate).toLocaleDateString()}</TableCell>
                       <TableCell>{booking.pickupTime}</TableCell>
                       <TableCell>{booking.returnDate ? new Date(booking.returnDate).toLocaleDateString() : '-'}</TableCell>

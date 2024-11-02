@@ -236,8 +236,12 @@ function TaxiBooking() {
                   <TableCell>Trip Type</TableCell>
                   <TableCell>Phone</TableCell>
                   <TableCell>Pickup Location</TableCell>
+                  <TableCell>Drop Location</TableCell>
+                  <TableCell>Total Distance</TableCell>
+                  <TableCell>Total Fare</TableCell>
                   <TableCell>Pickup Date</TableCell>
                   <TableCell>Pickup Time</TableCell>
+                
                   {/* Conditionally render Return Date and Return Time columns */}
                   {(tripType === "all" || tripType === "round-trip") && (
                     <>
@@ -255,6 +259,9 @@ function TaxiBooking() {
                     <TableCell>{user.tripType}</TableCell>
                     <TableCell>{user.phone}</TableCell>
                     <TableCell>{user.pickupLocation}</TableCell>
+                    <TableCell>{user.dropLocation}</TableCell>
+                    <TableCell>{user.distance}</TableCell>
+                    <TableCell>{user.total}</TableCell>
                     <TableCell>{formatDate(user.pickupDate)}</TableCell>
                     <TableCell>{user.pickupTime}</TableCell>
                     {/* Render Return Date and Return Time only if tripType is 'all' or 'round-trip' */}
