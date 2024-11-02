@@ -1,7 +1,11 @@
 import React from "react";
 import SubAllBanner from "../pages/subAllBanner/SubAllbanners";
+import { Link } from "react-router-dom";
 
 const TermsAndCondtions = () => {
+  const handleLinkClick = () => {
+    window.scrollTo({ top: "0 !important ", behavior: "smooth" });
+  };
   return (
     <section>
       <SubAllBanner title="Terms And Conditions" />
@@ -15,7 +19,7 @@ const TermsAndCondtions = () => {
         <p>
           These terms and conditions outline the rules and regulations for the
           use of Atoz Drop Taxi's Website, located at{" "}
-          <a href="https://atozdroptaxi.com/">https://atozdroptaxi.com/</a>.
+          <a href="https://ato-z-drop-taxi.vercel.app/">atozdroptaxi</a>.
         </p>
 
         <p>
@@ -110,8 +114,10 @@ const TermsAndCondtions = () => {
         <p>
           The Company respects your privacy and is committed to protecting your
           personal information. Please refer to our{" "}
-          <a href="privacy-policy.html">Privacy Policy</a> for details on how we
-          collect, use, and protect your information.
+          <Link to="/privacypolicy" onClick={handleLinkClick}>
+            Privacy Policy
+          </Link>{" "}
+          for details on how we collect, use, and protect your information.
         </p>
 
         <h4 className="my-2">Changes to this Agreement</h4>
@@ -139,7 +145,10 @@ const TermsAndCondtions = () => {
         <p>
           We employ the use of cookies. By accessing Atoz Drop Taxi, you agreed
           to use cookies in agreement with Atoz Drop Taxi's{" "}
-          <a href="privacy-policy.html">Privacy Policy</a>.
+          <Link to="/privacypolicy" onClick={handleLinkClick}>
+            Privacy Policy
+          </Link>
+          .
         </p>
 
         <h4 className="my-2">License</h4>
@@ -171,7 +180,11 @@ const TermsAndCondtions = () => {
 
         <h4 className="my-2">Your Privacy</h4>
         <p>
-          Please read our <a href="privacy-policy.html">Privacy Policy</a>.
+          Please read our{" "}
+          <Link to="/privacypolicy" onClick={handleLinkClick}>
+            Privacy Policy
+          </Link>
+          .
         </p>
 
         <h4 className="my-2">Disclaimer</h4>
