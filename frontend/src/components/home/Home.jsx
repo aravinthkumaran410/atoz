@@ -9,6 +9,8 @@ import Service from "../pages/homeService/Service";
 import ContactRef from "../pages/homeContactRef/ContactRef";
 import TaxiService from "../pages/taxiService/TaxiService";
 
+import SEO from "../SEO";
+
 const Home = () => {
   const bookingFormRef = useRef(null);
   const [selVeh, setSelVeh] = useState();
@@ -23,6 +25,12 @@ const Home = () => {
   }, [location]);
   return (
     <section>
+      <SEO
+        title="A to Z Drop Taxi"
+        description="Beginner friendly page for learning React Helmet."
+        name="wwwwwww"
+        type="article"
+      />
       <HeroCarousel />
       {selectedPlace ? (
         <div ref={bookingFormRef} id="booking-form">

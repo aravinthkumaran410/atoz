@@ -2,14 +2,24 @@ import React from "react";
 import SubAllbanners from "../pages/subAllBanner/SubAllbanners";
 import HomeAboutUs from "../pages/homeAboutus/HomeAboutUs";
 import WhyChoose from "../pages/whyChooseAbout/WhyChoose";
+import SEO from "../SEO";
 
 const About = () => {
   return (
-    <section className="about-container m-0">
+    <>
+      <SEO
+         title="A to Z Drop Taxi-about"
+        description="Beginner friendly page for learning React Helmet."
+        name="wwwwwww"
+        type="article"
+      />
+        <section className="about-container m-0">
       <SubAllbanners title="About us" />
       <HomeAboutUs bgColor="#fff" />
       <WhyChoose />
     </section>
+    </>
+  
   );
 };
 

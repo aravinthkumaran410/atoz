@@ -14,27 +14,31 @@ import PrivacyPolicy from "./components/TermsandPrivacyPolicy/PrivacyPolicy";
 import TermsAndCondtions from "./components/TermsandPrivacyPolicy/TermsAndCondtions";
 import NotFound from "./components/NotFound/NotFound";
 
+import { HelmetProvider } from "react-helmet-async";
+
 const App = () => {
   return (
-    <AppProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/service" element={<MainService />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/tariff" element={<Tariff />} />
-            <Route path="/home/:route" element={<Home />} />
-            <Route path="/sitemap" element={<SiteMap />} />
-            <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-            <Route path="/term" element={<TermsAndCondtions />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </AppProvider>
+  
+      <AppProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/service" element={<MainService />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/tariff" element={<Tariff />} />
+              <Route path="/home/:route" element={<Home />} />
+              <Route path="/sitemap" element={<SiteMap />} />
+              <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+              <Route path="/term" element={<TermsAndCondtions />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </AppProvider>
+
   );
 };
 

@@ -9,7 +9,7 @@ import "./TaxiService.css";
 const TaxiService = () => {
   const location = useLocation();
   const selectedPlace = location.state?.place;
-  const [isSelectCity, setIsSelectCity] = useState(selectedPlace);
+  const [isSelectCity, setIsSelectCity] = useState(null);
   const [firstCity, setFirstCity] = useState("");
   const [selectedCitiesData, setSelectedCitiesData] = useState([]);
   const [mergeCitiesData, setMergeCitiesData] = useState([]);
