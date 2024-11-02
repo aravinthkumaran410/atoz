@@ -361,11 +361,12 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
     setPickupSuggestions([]);
     setDropSuggestions([]);
   };
+  const totalCalc = isRoundTrip ? 250 : 130;
 
   const handleConfirmBooking = async (data) => {
     const tripType = isRoundTrip ? "round-trip" : "one-way";
     const totalFare = (
-      Number(distance) * Number(rate) +
+      Number(distance < totalCalc ? totalCalc : distance) * Number(rate) +
       Number(driverFare)
     ).toFixed(2);
 
@@ -471,7 +472,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
   //   }
   // };
 
-  const totalCalc = isRoundTrip ? 250 : 130;
+
 
   return (
     <section className="container" id="booking-form">
