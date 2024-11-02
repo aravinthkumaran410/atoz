@@ -11,6 +11,7 @@ import OtherRate from "../../Pages/OtherRate/OtherRate";
 import ManageOtherRate from "../../Pages/Manage/OtherRate/ManageOtherRate";
 import UserContact from "../../Pages/Manage/UserContact/UserContact";
 import Tariff from "../../Pages/Manage/Tariff/Tariff";
+import NotFound from "../NotFound/NotFound";
 
 
 
@@ -29,6 +30,7 @@ const route=[
   {path:"/manage/otherrate",element:<ManageOtherRate/>},
   {path:"/manage/usercontact",element:<UserContact/>},
   { path: "/manage/tariff", element: <Tariff /> },
+  {path:"*",element:<NotFound/>}
 ]
 
 
