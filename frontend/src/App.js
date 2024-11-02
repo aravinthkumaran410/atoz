@@ -12,6 +12,7 @@ import SiteMap from "./components/sitemap/SiteMap";
 import PrivacyPolicy from "./components/TermsandPrivacyPolicy/PrivacyPolicy";
 // import Terms from "./components/TermsandPrivacyPolicy/terms";
 import TermsAndCondtions from "./components/TermsandPrivacyPolicy/TermsAndCondtions";
+import NotFound from "./components/NotFound/NotFound";
 
 const App = () => {
   return (
@@ -29,7 +30,7 @@ const App = () => {
             <Route path="/privacypolicy" element={<PrivacyPolicy />} />
             <Route path="/term" element={<TermsAndCondtions />} />
           </Route>
-          <Route path="*" element={<h2>404 page</h2>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </AppProvider>
