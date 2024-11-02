@@ -9,6 +9,9 @@ import Contact from "./components/contact/Contact";
 import { AppProvider } from "./context/AppContext";
 import Tariff from "./components/tariff/Tariff";
 import SiteMap from "./components/sitemap/SiteMap";
+import PrivacyPolicy from "./components/TermsandPrivacyPolicy/PrivacyPolicy";
+// import Terms from "./components/TermsandPrivacyPolicy/terms";
+import TermsAndCondtions from "./components/TermsandPrivacyPolicy/TermsAndCondtions";
 
 const App = () => {
   return (
@@ -23,6 +26,8 @@ const App = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/tariff" element={<Tariff />} />
             <Route path="/sitemap" element={<SiteMap />} />
+            <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+            <Route path="/term" element={<TermsAndCondtions />} />
           </Route>
           <Route path="*" element={<h2>404 page</h2>} />
         </Routes>

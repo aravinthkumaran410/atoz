@@ -38,21 +38,29 @@ const Footer = () => {
                   receive safe, reliable, and efficient cab services.
                 </p>
                 <div className="footer-social">
-                  <a href className="me-2">
+                  <Link
+                    to="https://www.facebook.com/atozcalltaxi.dharmapuri"
+                    target="_blank"
+                    className="me-3"
+                  >
                     <RiFacebookFill className="fs-5" />
-                  </a>
-                  <a href className="me-2">
+                  </Link>
+                  <Link
+                    to="https://www.instagram.com/atozdroptaxi"
+                    target="_blank"
+                    className="me-2"
+                  >
                     <FaInstagram className="fs-5" />
-                  </a>
-                  <a href className="me-2">
+                  </Link>
+                  {/* <Link href className="me-2">
                     <RiFacebookFill className="fs-5" />
-                  </a>
-                  <a href className="me-2">
+                  </Link>
+                  <Link href className="me-2">
                     <RiFacebookFill className="fs-5" />
-                  </a>
-                  <a href className="me-2">
+                  </Link>
+                  <Link href className="me-2">
                     <RiFacebookFill className="fs-5" />
-                  </a>
+                  </Link> */}
                 </div>
               </div>
             </div>
@@ -113,16 +121,16 @@ const Footer = () => {
                   <RiArrowRightSFill /> Home
                 </Link>
                 <Link to="/about" onClick={handleLinkClick}>
-                  <RiArrowRightSFill /> about
+                  <RiArrowRightSFill /> About
                 </Link>
                 <Link to="/service" onClick={handleLinkClick}>
-                  <RiArrowRightSFill /> service
+                  <RiArrowRightSFill /> Service
                 </Link>
                 <Link to="/tariff" onClick={handleLinkClick}>
-                  <RiArrowRightSFill /> tariff
+                  <RiArrowRightSFill /> Tariff
                 </Link>
                 <Link to="/contact" onClick={handleLinkClick}>
-                  <RiArrowRightSFill /> contact
+                  <RiArrowRightSFill /> Contact
                 </Link>
               </div>
             </div>
@@ -168,8 +176,12 @@ const Footer = () => {
               </div>
               <div className="col-md-6">
                 <div className="copy-menu">
-                  <Link to="/">Terms</Link>
-                  <Link to="/">Privacy</Link>
+                  <Link to="/term" onClick={handleLinkClick}>
+                    Terms
+                  </Link>
+                  <Link to="/privacypolicy" onClick={handleLinkClick}>
+                    Privacy
+                  </Link>
                   <Link to="/sitemap" onClick={handleLinkClick}>
                     SiteMap
                   </Link>

@@ -60,3 +60,10 @@ a:focus {
   outline: none;
   text-decoration: none;
 }
+
+.term-condition-container p {
+  font-size: 18px;
+}
+.term-condition-container ul li {
+  font-size: 18px;
+}

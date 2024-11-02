@@ -58,9 +58,20 @@ const Header = () => {
             <span className="para fw-bold ">
               follow as :
               <span className="ms-2 header-top-info-social-icons">
-                <FaFacebook />
-                <FaInstagram />
-                <FaXTwitter />
+                <Link
+                  to="https://www.instagram.com/atozdroptaxi/"
+                  target="_blank"
+                  className="text-white"
+                >
+                  <FaInstagram />
+                </Link>
+                <Link
+                  to="https://www.facebook.com/atozcalltaxi.dharmapuri"
+                  target="_blank"
+                  className="text-white"
+                >
+                  <FaFacebook />
+                </Link>
               </span>
             </span>
           </div>
