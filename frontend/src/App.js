@@ -26,6 +26,7 @@ const App = () => {
             <Route path="/service" element={<MainService />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/tariff" element={<Tariff />} />
+            <Route path="/home/:route" element={<Home />} />
             <Route path="/sitemap" element={<SiteMap />} />
             <Route path="/privacypolicy" element={<PrivacyPolicy />} />
             <Route path="/term" element={<TermsAndCondtions />} />

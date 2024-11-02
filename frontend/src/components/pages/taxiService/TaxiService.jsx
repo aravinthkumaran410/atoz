@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import "./TaxiService.css";
-import { IoArrowForward } from "react-icons/io5";
-import { IoArrowBack } from "react-icons/io5";
+import { IoArrowForward, IoArrowBack } from "react-icons/io5";
 import AxiosInstance from "../../../api/AxiosInstance";
 import { MdKeyboardBackspace } from "react-icons/md";
+import "./TaxiService.css";
 
 const TaxiService = () => {
-  const [isSelectCity, setIsSelectCity] = useState(null);
+  const location = useLocation();
+  const selectedPlace = location.state?.place;
+  const [isSelectCity, setIsSelectCity] = useState(selectedPlace);
+  const [firstCity, setFirstCity] = useState("");
   const [selectedCitiesData, setSelectedCitiesData] = useState([]);
   const [mergeCitiesData, setMergeCitiesData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const citiesPerPage = 20;
-
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [OurCities, setOurCities] = useState([]);
@@ -25,7 +25,6 @@ const TaxiService = () => {
       try {
         const res = await AxiosInstance.get("/traffic/gettraffic");
         setOurCities(res.data.Traffiname);
-        console.log(res.data.Traffiname);
       } catch (err) {
         setError("Failed to fetch cities. Please try again later.");
       } finally {
@@ -42,11 +41,26 @@ const TaxiService = () => {
       setMergeCitiesData(
         filteredCities.map((place) => `${isSelectCity} - ${place}`)
       );
+
+      if (filteredCities.length > 0) {
+        setFirstCity(filteredCities[0]);
+      }
     }
-  }, [isSelectCity]);
+  }, [isSelectCity, OurCities]);
+
+  const handleLinkClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const handleSelectedPlace = (place) => {
-    navigate("/home#booking-form", { state: { place } });
+    const formattedPlace = place.replace(/\s+-\s+/g, "-").toLowerCase();
+    handleLinkClick();
+    navigate(`/home/${formattedPlace}`, { state: { place } });
+  };
+
+  const handleSelectedFirstPlace = (place) => {
+    handleLinkClick();
+    navigate(`/home/${place}`, { state: { place } });
   };
 
   // Pagination logic
@@ -79,9 +93,7 @@ const TaxiService = () => {
           <MdKeyboardBackspace
             className="ms-5 mb-4 fs-4"
             style={{ cursor: "pointer" }}
-            onClick={() => {
-              setIsSelectCity(null);
-            }}
+            onClick={() => setIsSelectCity(null)}
           />
           {mergeCitiesData.length > 0 ? (
             <div className="merge-cities-list">
@@ -105,13 +117,16 @@ const TaxiService = () => {
         <article className="all-cities-container mb-5">
           <div className="cities-grid">
             {currentCities.map((city, index) => (
-              <div key={index} className="city-item">
-                <p
-                  style={{ textTransform: "capitalize", cursor: "pointer" }}
-                  onClick={() => setIsSelectCity(city)}
-                >
-                  {city}
-                </p>
+              <div
+                key={index}
+                className="city-item"
+                onClick={() => {
+                  setIsSelectCity(city);
+                  setFirstCity(city);
+                  handleSelectedFirstPlace(city);
+                }}
+              >
+                <p style={{ textTransform: "capitalize" }}>{city}</p>
               </div>
             ))}
           </div>

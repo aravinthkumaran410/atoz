@@ -7,6 +7,7 @@ import HomeAboutUs from "../pages/homeAboutus/HomeAboutUs";
 import Homefeatures from "../pages/homefeatures/Homefeatures";
 import Service from "../pages/homeService/Service";
 import ContactRef from "../pages/homeContactRef/ContactRef";
+import TaxiService from "../pages/taxiService/TaxiService";
 
 const Home = () => {
   const bookingFormRef = useRef(null);
@@ -23,12 +24,19 @@ const Home = () => {
   return (
     <section>
       <HeroCarousel />
-      <div ref={bookingFormRef} id="booking-form">
-        <BookingForm selVeh={selVeh} selectedPlace={selectedPlace} />
-      </div>
+      {selectedPlace ? (
+        <div ref={bookingFormRef} id="booking-form">
+          <BookingForm selVeh={selVeh} selectedPlace={selectedPlace} />
+        </div>
+      ) : (
+        <div ref={bookingFormRef} id="booking-form">
+          <BookingForm selVeh={selVeh} selectedPlace={selectedPlace} />
+        </div>
+      )}
 
       <HomeAboutUs bgColor="#fff5de" />
       <VehicleCard setSelVeh={setSelVeh} bookingFormRef={bookingFormRef} />
+      <TaxiService />
       <Homefeatures />
       <Service />
       <ContactRef bookingFormRef={bookingFormRef} />

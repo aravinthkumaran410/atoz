@@ -3,23 +3,19 @@ import SubAllbanner from "../pages/subAllBanner/SubAllbanners";
 import "./SiteMpa.css";
 import AxiosInstance from "../../api/AxiosInstance";
 import { useNavigate } from "react-router-dom";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const SiteMap = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [OurCities, setOurCities] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage] = useState(50);
+  const [cities, setCities] = useState([]);
 
   useEffect(() => {
     const fetchCities = async () => {
       try {
         const res = await AxiosInstance.get("/traffic/gettraffic");
-        setOurCities(res.data.Traffiname);
-        console.log(res.data.Traffiname);
+        setCities(res.data.Traffiname || []);
       } catch (err) {
         setError("Failed to fetch cities. Please try again later.");
       } finally {
@@ -29,34 +25,19 @@ const SiteMap = () => {
     fetchCities();
   }, []);
 
-  let result = [];
+  const generateCityPairs = (cities) => {
+    return cities
+      .flatMap((cityA) =>
+        cities.map((cityB) => (cityA !== cityB ? `${cityA} - ${cityB}` : null))
+      )
+      .filter(Boolean);
+  };
 
-  for (let i = 0; i < OurCities.length; i++) {
-    for (let j = 0; j < OurCities.length; j++) {
-      if (i !== j) {
-        result.push(OurCities[i] + " - " + OurCities[j]);
-      }
-    }
-  }
-
-  const totalPages = Math.ceil(result.length / rowsPerPage);
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const currentResults = result.slice(startIndex, startIndex + rowsPerPage);
+  const result = generateCityPairs(cities);
 
   const handleSelectedPlace = (place) => {
-    navigate("/home#booking-form", { state: { place } });
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
+    const placeName = place.replace(/\s+-\s+/g, "-").toLowerCase();
+    navigate(`/home/${placeName}`, { state: { place } });
   };
 
   if (loading) return <div>Loading...</div>;
@@ -64,48 +45,24 @@ const SiteMap = () => {
 
   return (
     <section>
-      <SubAllbanner title="sitemap" />
+      <SubAllbanner title="Site Map" />
       <section className="sitemap-city-container">
-        {currentResults.map((cityPair, index) => (
+        {result.map((cityPair, index) => (
           <div
             key={index}
             className="city-pair"
             style={{ textTransform: "capitalize" }}
             onClick={() => handleSelectedPlace(cityPair)}
+            role="button"
+            tabIndex={0}
+            onKeyPress={(e) =>
+              e.key === "Enter" && handleSelectedPlace(cityPair)
+            }
           >
             {cityPair}
           </div>
         ))}
       </section>
-      <div className="pagination my-3">
-        <button
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-          className="me-3"
-          style={{
-            backgroundColor: "transparent",
-            border: "none",
-            fontSize: "20px",
-          }}
-        >
-          <FaChevronLeft />
-        </button>
-        <span>
-          {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-          className="ms-3"
-          style={{
-            backgroundColor: "transparent",
-            border: "none",
-            fontSize: "20px",
-          }}
-        >
-          <FaChevronRight />
-        </button>
-      </div>
     </section>
   );
 };

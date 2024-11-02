@@ -362,6 +362,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
     setDropSuggestions([]);
   };
   const totalCalc = isRoundTrip ? 250 : 130;
+  
 
   const handleConfirmBooking = async (data) => {
     const tripType = isRoundTrip ? "round-trip" : "one-way";

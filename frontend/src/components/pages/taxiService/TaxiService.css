@@ -35,7 +35,6 @@
   width: 15px;
   border-radius: 50px;
   background: var(--theme-color);
-  -webkit-animation: heading-move 5s infinite linear;
   animation: heading-move 5s infinite linear;
 }
 
@@ -43,7 +42,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  justify-content: left;
+  justify-content: flex-start;
 }
 
 .merge-city-item {
@@ -84,6 +83,7 @@
   border-radius: 5px;
   text-align: center;
   transition: background 0.3s;
+  cursor: pointer;
 }
 
 .city-item:hover {
