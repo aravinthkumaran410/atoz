@@ -34,6 +34,8 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
 
   const [messageApi, contextHolder] = message.useMessage();
 
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   //split selected place
   const splitSeletedPlace = selectedPlace && selectedPlace.split("-");
   // console.log(splitSeletedPlace && splitSeletedPlace[0]);
@@ -362,9 +364,9 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
     setDropSuggestions([]);
   };
   const totalCalc = isRoundTrip ? 250 : 130;
-  
 
   const handleConfirmBooking = async (data) => {
+    setIsButtonDisabled(true);
     const tripType = isRoundTrip ? "round-trip" : "one-way";
     const totalFare = (
       Number(distance < totalCalc ? totalCalc : distance) * Number(rate) +
@@ -449,6 +451,8 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
       console.error("Error confirming booking:", err);
       // alert("Failed to confirm booking.");
       error();
+    } finally {
+      setIsButtonDisabled(false); // Re-enable the button
     }
   };
 
@@ -472,8 +476,6 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
   //     );
   //   }
   // };
-
-
 
   return (
     <section className="container" id="booking-form">
@@ -582,6 +584,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                 <button
                   className="btn btn-primary"
                   onClick={() => handleConfirmBooking(submittedData)}
+                  disabled={isButtonDisabled}
                 >
                   Confirm Booking
                 </button>

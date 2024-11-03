@@ -34,9 +34,13 @@ const SiteMap = () => {
   };
 
   const result = generateCityPairs(cities);
+  const handleLinkClick = () => {
+    window.scrollTo({ top: "0 !important ", behavior: "smooth" });
+  };
 
   const handleSelectedPlace = (place) => {
     const placeName = place.replace(/\s+-\s+/g, "-").toLowerCase();
+    handleLinkClick();
     navigate(`/home/${placeName}`, { state: { place } });
   };
 

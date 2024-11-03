@@ -1,5 +1,5 @@
 .home-container-carousel {
-  height: 100vh;
+  height: 100vh !important;
   overflow: hidden;
 }
 .home-container-carousel .carousel-indicators {
@@ -13,6 +13,20 @@
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.home-container-carousel .carousel-caption .hero-carousel-selected-highlight {
+  background-color: #fff;
+  color: #ffcc00;
+  padding: 8px 20px;
+  border-radius: 10px;
+  display: flex;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  align-items: center;
+  box-shadow: -2px 46px 85px -33px rgba(255, 204, 0, 0.32);
+  font-size: 20px;
+  margin-left: 20px;
 }
 
 .carousel-control-icon {
@@ -97,7 +111,7 @@
 
 @media (max-width: 991px) {
   .home-container-carousel {
-    height: auto;
+    height: auto !important;
   }
 }
 
@@ -179,6 +193,10 @@
 
   .home-container-carousel .carousel-caption .hero-carousel-highlight {
     font-size: 16px !important;
+  }
+
+  .home-container-carousel .carousel-caption .hero-carousel-selected-highlight {
+    font-size: 16px;
   }
 
   /* .home-container-carousel .carousel-caption {

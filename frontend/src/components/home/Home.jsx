@@ -32,7 +32,7 @@ const Home = () => {
         type="article"
         linkk="https://ato-z-drop-taxi.vercel.app"
       />
-      <HeroCarousel />
+      <HeroCarousel selectedPlace={selectedPlace} />
       {selectedPlace ? (
         <div ref={bookingFormRef} id="booking-form">
           <BookingForm selVeh={selVeh} selectedPlace={selectedPlace} />

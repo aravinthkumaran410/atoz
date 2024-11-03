@@ -67,3 +67,73 @@ a:focus {
 .term-condition-container ul li {
   font-size: 18px;
 }
+
+.animated-text {
+  font-size: 3rem;
+  font-weight: bold;
+  background: linear-gradient(
+    270deg,
+    #ff4b1f,
+    #1fddff,
+    #a0ff1f,
+    #ff1f7a,
+    #4b1fff
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: colorChange 6s infinite linear;
+}
+
+@keyframes colorChange {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 0%;
+  }
+  75% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-border-text {
+  /* background: linear-gradient(270deg, #ff4b1f, #1fddff, #a0ff1f, #ff1f7a, #4b1fff); */
+  animation: borderAnimation 3s infinite alternate;
+}
+
+@keyframes borderAnimation {
+  0% {
+    border-color: rgba(255, 75, 31, 1);
+  }
+  25% {
+    border-color: rgba(31, 221, 255, 1);
+  }
+  50% {
+    border-color: rgba(160, 255, 31, 1);
+  }
+  75% {
+    border-color: rgba(255, 31, 122, 1);
+  }
+  100% {
+    border-color: rgba(75, 31, 255, 1);
+  }
+}
+
+@keyframes boxShadowAnimation {
+  0% {
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 4px 20px;
+  }
+  50% {
+    box-shadow: #ffe7ae 0px 20px 40px;
+  }
+  100% {
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 4px 20px;
+  }
+}
