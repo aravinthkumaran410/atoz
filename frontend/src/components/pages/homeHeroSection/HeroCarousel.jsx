@@ -6,9 +6,8 @@ import "./heroCarousel.css";
 
 import { FaArrowRight } from "react-icons/fa6";
 
-// Image imports
-import banner_1 from "../../../assets/heroCarousel/slider-1.jpg";
-import banner_2 from "../../../assets/heroCarousel/slider-2.jpg";
+import banner_1 from "../../../assets/heroCarousel/godSlider.png";
+import banner_2 from "../../../assets/heroCarousel/slider-1.jpg";
 import banner_3 from "../../../assets/heroCarousel/slider-3.jpg";
 
 import { motion } from "framer-motion";
