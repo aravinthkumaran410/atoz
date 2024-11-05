@@ -61,7 +61,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
     }
   }, [selVeh, isRoundTrip]);
 
-  console.log(vehFromCard);
+  // console.log(vehFromCard);
 
   const options = isRoundTrip
     ? roundTripCars.map((car) => ({
@@ -199,10 +199,30 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
         .required("Required"),
     }),
     onSubmit: async (values, { resetForm, setErrors }) => {
+      let checkPickupLocation = values.pickupLocation.toLowerCase();
+      let checkDropLocation = values.dropLocation.toLowerCase();
+
+      let PickLocationresult =
+        checkPickupLocation.includes("india") &&
+        !checkPickupLocation.includes("indiana");
+      let DropLocationresult =
+        checkDropLocation.includes("india") &&
+        !checkDropLocation.includes("indiana");
+
+      // console.log(PickLocationresult, DropLocationresult);
+
+      if (!PickLocationresult) {
+        setErrors({ pickupLocation: "Pickup location must include 'India'" });
+        return;
+      }
+      if (!DropLocationresult) {
+        setErrors({ dropLocation: "Drop location must include 'India'" });
+        return;
+      }
+
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      // Validate Pickup Date
       const selectedPickupDate = new Date(values.pickupDate);
       if (selectedPickupDate < today) {
         setErrors({ pickupDate: "Pickup date must be today or in the future" });
@@ -227,14 +247,18 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
       setRate(selectedCar.oneWayRate || selectedCar.roundWayRate);
       setdriverFare(selectedCar.driverfare);
 
-      resetForm();
+      // resetForm();
+
       calculateDistance(pickupCoords, dropCoords);
+
       const totalFare =
         distance && rate && driverFare
           ? (distance * rate + driverFare).toFixed(2)
           : 0;
+
       setEstimatedFare(totalFare);
-      console.log("total : ", totalFare);
+
+      // console.log("Total Fare: ", totalFare);
     },
   });
 
@@ -252,7 +276,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
 
     try {
       const response = await axios.get(
-        `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=5`
+        `https://nominatim.openstreetmap.org/search?q=${query}&countrycodes=IN&format=json&limit=5&bounded=1&viewbox=68.1,37.6,97.4,6.5`
       );
       const suggestions = response.data;
       if (isPickup) {
@@ -441,7 +465,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
           chat_id: chatId,
           text: message,
         });
-        console.log("Notification sent to Telegram");
+        // console.log("Notification sent to Telegram");
       } catch (error) {
         console.error("Error sending notification:", error);
       }
@@ -587,6 +611,13 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                   disabled={isButtonDisabled}
                 >
                   Confirm Booking
+                </button>
+                <button
+                  className="btn btn-primary ms-5"
+                  onClick={() => setSubmittedData(null)}
+                  disabled={isButtonDisabled}
+                >
+                  back
                 </button>
               </div>
 
