@@ -251,4 +251,7 @@
   .home-booking-right-container .image-container {
     display: none;
   }
+  .form-back-btn {
+    margin-top: 10px;
+  }
 }
