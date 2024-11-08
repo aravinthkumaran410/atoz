@@ -193,7 +193,12 @@ const ContactRef = () => {
                 transition={{ duration: 0.4, delay: 0.3 }}
               >
                 <div className="contact-img">
-                  <img src={ContactImg} alt="contact-img" />
+                  <img
+                    src={ContactImg}
+                    alt="contact-img"
+                    width="100%"
+                    height="auto"
+                  />
                 </div>
               </motion.div>
               <div className="col-lg-6 align-self-center">

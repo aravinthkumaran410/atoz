@@ -45,7 +45,13 @@ const Homefeatures = () => {
               >
                 <div className="feature-item">
                   <div className="feature-icon">
-                    <img src={safetyImage} alt="Safety Guarantee"  loading="lazy"/>
+                    <img
+                      src={safetyImage}
+                      alt="Safety Guarantee"
+                      width="100%"
+                      height="auto"
+                      loading="lazy"
+                    />
                   </div>
                   <div className="feature-content">
                     <h4>Safety First</h4>
@@ -64,7 +70,13 @@ const Homefeatures = () => {
               >
                 <div className="feature-item mt-lg-5">
                   <div className="feature-icon">
-                    <img src={fastPickUp} alt="Fast Pickup"  loading="lazy" />
+                    <img
+                      src={fastPickUp}
+                      alt="Fast Pickup"
+                      width="100%"
+                      height="auto"
+                      loading="lazy"
+                    />
                   </div>
                   <div className="feature-content">
                     <h4>Quick Pickup</h4>
@@ -83,7 +95,13 @@ const Homefeatures = () => {
               >
                 <div className="feature-item">
                   <div className="feature-icon">
-                    <img src={rateImage} alt="Affordable Rates"  loading="lazy"/>
+                    <img
+                      src={rateImage}
+                      alt="Affordable Rates"
+                      width="100%"
+                      height="auto"
+                      loading="lazy"
+                    />
                   </div>
                   <div className="feature-content">
                     <h4>Affordable Rates</h4>
@@ -102,7 +120,13 @@ const Homefeatures = () => {
               >
                 <div className="feature-item mt-lg-5">
                   <div className="feature-icon">
-                    <img src={supportImage} alt="24/7 Support"  loading="lazy"/>
+                    <img
+                      src={supportImage}
+                      alt="24/7 Support"
+                      width="100%"
+                      height="auto"
+                      loading="lazy"
+                    />
                   </div>
                   <div className="feature-content">
                     <h4>24/7 Customer Support</h4>

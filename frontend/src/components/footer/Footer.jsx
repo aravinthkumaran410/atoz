@@ -138,22 +138,58 @@ const Footer = () => {
               <div className="footer-project">
                 <h3>Our Gallery</h3>
                 <a href>
-                  <img src={image_1} alt="Image" loading="lazy" />
+                  <img
+                    src={image_1}
+                    alt="Image"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </a>
                 <a href>
-                  <img src={image_2} alt="Image"  loading="lazy"/>
+                  <img
+                    src={image_2}
+                    alt="Image"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </a>
                 <a href>
-                  <img src={image_3} alt="Image"  loading="lazy"/>
+                  <img
+                    src={image_3}
+                    alt="Image"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </a>
                 <a href>
-                  <img src={image_4} alt="Image" loading="lazy" />
+                  <img
+                    src={image_4}
+                    alt="Image"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </a>
                 <a href>
-                  <img src={image_5} alt="Image" loading="lazy" />
+                  <img
+                    src={image_5}
+                    alt="Image"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </a>
                 <a href>
-                  <img src={image_6} alt="Image"  loading="lazy" />
+                  <img
+                    src={image_6}
+                    alt="Image"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </a>
               </div>
             </div>

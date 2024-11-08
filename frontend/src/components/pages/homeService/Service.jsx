@@ -52,10 +52,22 @@ const Service = () => {
             >
               <div className="service-item">
                 <div className="service-img">
-                  <img src={image_1} alt="Online Booking"  loading="lazy"/>
+                  <img
+                    src={image_1}
+                    alt="Online Booking"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_1} alt="Online Booking Icon"  loading="lazy"/>
+                  <img
+                    src={icon_1}
+                    alt="Online Booking Icon"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">Online Booking</h3>
@@ -74,10 +86,22 @@ const Service = () => {
             >
               <div className="service-item">
                 <div className="service-img">
-                  <img src={image_2} alt="City Transport"  loading="lazy"/>
+                  <img
+                    src={image_2}
+                    alt="City Transport"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_3} alt="City Transport Icon" loading="lazy" />
+                  <img
+                    src={icon_3}
+                    alt="City Transport Icon"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">City Transport</h3>
@@ -96,10 +120,22 @@ const Service = () => {
             >
               <div className="service-item">
                 <div className="service-img">
-                  <img src={image_4} alt="Airport Transport"  loading="lazy"/>
+                  <img
+                    src={image_4}
+                    alt="Airport Transport"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_2} alt="Airport Transport Icon" loading="lazy" />
+                  <img
+                    src={icon_2}
+                    alt="Airport Transport Icon"
+                    loading="lazy"
+                    width="100%"
+                    height="auto"
+                  />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">
@@ -120,10 +156,22 @@ const Service = () => {
             >
               <div className="service-item">
                 <div className="service-img">
-                  <img src={image_3} alt="Business Transport" loading="lazy" />
+                  <img
+                    src={image_3}
+                    alt="Business Transport"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_3} alt="Business Transport Icon" loading="lazy" />
+                  <img
+                    src={icon_3}
+                    alt="Business Transport Icon"
+                    loading="lazy"
+                    width="100%"
+                    height="auto"
+                  />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">
@@ -144,12 +192,20 @@ const Service = () => {
             >
               <div className="service-item">
                 <div className="service-img">
-                  <img src={image_5} alt="Regular Transport" loading="lazy" />
+                  <img
+                    src={image_5}
+                    alt="Regular Transport"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="service-icon">
                   <img
                     src={icon_5}
                     alt="Regular Transport Icon"
+                    width="100%"
+                    height="auto"
                     loading="lazy"
                   />
                 </div>
@@ -172,10 +228,22 @@ const Service = () => {
             >
               <div className="service-item">
                 <div className="service-img">
-                  <img src={image_6} alt="Tour Transport" loading="lazy" />
+                  <img
+                    src={image_6}
+                    alt="Tour Transport"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="service-icon">
-                  <img src={icon_4} alt="Tour Transport Icon" loading="lazy" />
+                  <img
+                    src={icon_4}
+                    alt="Tour Transport Icon"
+                    width="100%"
+                    height="auto"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="service-content">
                   <h3 className="service-title my-3 fw-bold">Tour Transport</h3>
