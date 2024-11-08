@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import WhatsApp from "./components/socialMedia/Whatsapp";
+import ScrollToTopButton from "./components/scrollToTop/ScrollToTopButton";
 
 //common
 
@@ -14,6 +15,7 @@ const Layout = () => {
         <Outlet />
       </main>
       <WhatsApp />
+      <ScrollToTopButton />
       <Footer />
     </>
   );

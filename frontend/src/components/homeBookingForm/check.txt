@@ -1,0 +1,44 @@
+const fetchLocationSuggestions = async (query, isPickup) => {
+  try {
+    // Fetch location suggestions with bounding box restricted to India
+    const response = await axios.get(
+     `https://nominatim.openstreetmap.org/search?q=${query}&countrycodes=IN&format=json&limit=5&bounded=1&viewbox=68.1,37.6,97.4,6.5`
+    );
+    const suggestions = response.data.map((item) => ({
+      displayName: item.display_name,
+      lat: item.lat,
+      lon: item.lon,
+    }));
+
+    if (isPickup) {
+      setPickupSuggestions(suggestions);
+    } else {
+      setDropSuggestions(suggestions);
+    }
+  } catch (error) {
+    console.error("Error fetching location suggestions", error);
+  }
+};
+
+const fetchCoordinates = async (location, isPickup) => {
+  try {
+    // Fetch coordinates restricted to India
+    const response = await axios.get(
+     `https://nominatim.openstreetmap.org/search?q=${location}&countrycodes=IN&format=json&limit=1&bounded=1&viewbox=68.1,37.6,97.4,6.5`
+    );
+    const data = response.data[0];
+    if (data) {
+      const coords = {
+        lat: parseFloat(data.lat),
+        lon: parseFloat(data.lon),
+      };
+      if (isPickup) {
+        setPickupCoords(coords);
+      } else {
+        setDropCoords(coords);
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching coordinates", error);
+  }
+};

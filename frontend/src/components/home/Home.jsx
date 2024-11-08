@@ -7,6 +7,9 @@ import HomeAboutUs from "../pages/homeAboutus/HomeAboutUs";
 import Homefeatures from "../pages/homefeatures/Homefeatures";
 import Service from "../pages/homeService/Service";
 import ContactRef from "../pages/homeContactRef/ContactRef";
+import TaxiService from "../pages/taxiService/TaxiService";
+
+import SEO from "../SEO";
 
 const Home = () => {
   const bookingFormRef = useRef(null);
@@ -22,13 +25,27 @@ const Home = () => {
   }, [location]);
   return (
     <section>
-      <HeroCarousel />
-      <div ref={bookingFormRef} id="booking-form">
-        <BookingForm selVeh={selVeh} selectedPlace={selectedPlace} />
-      </div>
+      <SEO
+        title="A to Z Drop Taxi"
+        description="Beginner friendly page for learning React Helmet."
+        name="wwwwwww"
+        type="article"
+        linkk="https://ato-z-drop-taxi.vercel.app"
+      />
+      <HeroCarousel selectedPlace={selectedPlace} />
+      {selectedPlace ? (
+        <div ref={bookingFormRef} id="booking-form">
+          <BookingForm selVeh={selVeh} selectedPlace={selectedPlace} />
+        </div>
+      ) : (
+        <div ref={bookingFormRef} id="booking-form">
+          <BookingForm selVeh={selVeh} selectedPlace={selectedPlace} />
+        </div>
+      )}
 
       <HomeAboutUs bgColor="#fff5de" />
       <VehicleCard setSelVeh={setSelVeh} bookingFormRef={bookingFormRef} />
+      <TaxiService />
       <Homefeatures />
       <Service />
       <ContactRef bookingFormRef={bookingFormRef} />

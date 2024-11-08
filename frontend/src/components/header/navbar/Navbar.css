@@ -130,7 +130,8 @@
     text-align: center;
   }
   .nav-contact-container {
-    flex-direction: column;
+    /* flex-direction: column; */
+    display: none;
   }
 
   .call-us-section {
