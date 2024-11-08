@@ -267,6 +267,9 @@ const ManageOneWay = () => {
           setShowImage(reader.result);
         };
         reader.readAsDataURL(file);
+        setError((pre) => {
+          return { ...pre, image: "" };
+        });
       }
     }
   };

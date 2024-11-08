@@ -128,7 +128,9 @@ const Roundway = () => {
         });
       } else {
         setImage(file);
-
+        setError((pre) => {
+          return { ...pre, image: "" };
+        });
       
       }
     }

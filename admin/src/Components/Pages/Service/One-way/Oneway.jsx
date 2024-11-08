@@ -186,7 +186,10 @@ const Oneway = () => {
         });
       } else {
         setImage(file);
-      }
+        setError((pre) => {
+          return { ...pre, image: "" };
+        });
+      }      
     }
   };
 
