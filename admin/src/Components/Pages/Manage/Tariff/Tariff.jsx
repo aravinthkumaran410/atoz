@@ -102,17 +102,24 @@ function Tariff() {
   };
 
   const handleDelete = async (value, index) => {
+  const indexFind=  trafficList.findIndex((e,i)=>{
+      if(e===value.toLowerCase()){
+        return i
+    }})
+
+
     toast.dismiss()
     try {
       const response = await client.post(`/traffic/deletetraffic`, {
         id: id,
-        index: index,
+        index: indexFind,
       },{
         withCredentials: true,
       });
 
       if (response.status === 200) {
         fetchTraffic();
+    
         toast.success("City name deleted successfully!");
       }
     } catch (err) {

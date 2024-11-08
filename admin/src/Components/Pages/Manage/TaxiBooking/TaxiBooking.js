@@ -246,7 +246,7 @@ function TaxiBooking() {
                   {(tripType === "all" || tripType === "round-trip") && (
                     <>
                       <TableCell>Return Date</TableCell>
-                      <TableCell>Return Time</TableCell>
+                    
                     </>
                   )}
                   <TableCell>Actions</TableCell>
@@ -270,12 +270,11 @@ function TaxiBooking() {
                         {user.tripType === "one-way" ? (
                           <>
                             <TableCell>-</TableCell>
-                            <TableCell>-</TableCell>
                           </>
                         ) : (
                           <>
                             <TableCell>{formatDate(user.returnDate)}</TableCell>
-                            <TableCell>{user.returnTime}</TableCell>
+                          
                           </>
                         )}
                       </>

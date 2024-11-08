@@ -21,6 +21,9 @@ const Sidebar = ({ open, toggleSidebar,setAdmin }) => {
         localStorage.removeItem("tokenExpiration");
         setAdmin(null);
         navigate("/");
+
+        window.location.reload();
+        
       }
     }catch(err){
       console.log(err);

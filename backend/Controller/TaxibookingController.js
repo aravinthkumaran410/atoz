@@ -1,4 +1,4 @@
- const TaxiBooking = require("../Schema/TaxibookingSchema");
+const TaxiBooking = require("../Schema/TaxibookingSchema");
 
 // Controller to create a new taxi booking
 const createTaxiBooking = async (req, res) => {
@@ -13,7 +13,6 @@ const createTaxiBooking = async (req, res) => {
       selectedCar,
       tripType,
       returnDate,
-      returnTime,
       distance,
       totalFare,
     } = req.body;
@@ -42,7 +41,6 @@ const createTaxiBooking = async (req, res) => {
       chooseCarType: selectedCar.label, // Using the car type's value
       tripType,
       returnDate,
-      returnTime,
       distance: parseFloat(distance), // Convert to number
       total: parseFloat(totalFare), // Convert to number
     });
@@ -79,7 +77,7 @@ const getAllBookings = async (req, res) => {
 };
 
 const deleteBooking = async (req, res) => {
-  const {id} = req.body;
+  const { id } = req.body;
 
   try {
     const booking = await TaxiBooking.findByIdAndDelete(id);
@@ -143,7 +141,6 @@ const getMultipletripBookings = async (req, res) => {
   }
 };
 
-
 const Limitations = async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Get page number from query params, default to 1
   const limit = parseInt(req.query.limit) || 5; // Get limit from query params, default to 5
@@ -168,7 +165,6 @@ const Limitations = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 module.exports = {
   createTaxiBooking,

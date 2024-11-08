@@ -22,6 +22,7 @@ const Header = (props) => {
         localStorage.removeItem("Username");
         localStorage.removeItem("tokenExpiration");
         setAdmin(null);
+        window.location.reload();
       }
     }catch(err){
       console.log(err);

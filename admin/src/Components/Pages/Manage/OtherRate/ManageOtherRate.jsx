@@ -472,7 +472,7 @@ const ManageOtherRate = () => {
                   helperText={error.comment}
                   onKeyDown={(e) => {
                   
-                    if (rate.length === 0 && e.key === " ") {
+                    if (comment.length === 0 && e.key === " ") {
                       e.preventDefault();
                       return;
                     }

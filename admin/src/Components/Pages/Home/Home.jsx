@@ -33,8 +33,8 @@ const Home = () => {
       setTrafficCount(traffic.data.Traffiname.length || 0);
       setOneWayCount(oneway.data.length || 0);
       setRoundWayCount(roundway.data.length || 0);
-      setRecentBookings(bookings.data.slice(0, 5));
-      setUsers(contacts.data.slice(0, 5));
+      setRecentBookings(bookings.data.slice(-5));
+      setUsers(contacts.data.slice(-5));
     } catch (err) {
       toast.error("Failed to fetch data");
     }
@@ -177,7 +177,7 @@ const Home = () => {
   >
     <CardContent sx={{ position: 'relative', zIndex: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <DirectionsCarIcon sx={{ fontSize: 40, color: '#fbc02d' }} />
-      <Typography variant="h6" align="center">Total Traffic</Typography>
+      <Typography variant="h6" align="center">Total City</Typography>
       <Typography variant="h4" align="center">{trafficCount}</Typography>
     </CardContent>
   </Card>
@@ -192,7 +192,7 @@ const Home = () => {
             <Table>
               <TableHead>
                 <TableRow sx={{ backgroundColor: '#333' }}>
-                  {['Name', 'Trip Type', 'Phone', 'Pickup Location','Drop Location','Total Distance','Total Fare', 'Pickup Date', 'Pickup Time', 'Return Date', 'Return Time'].map(header => (
+                  {['Name', 'Trip Type', 'Phone', 'Pickup Location','Drop Location','Total Distance','Total Fare', 'Pickup Date', 'Pickup Time', 'Return Date'].map(header => (
                     <TableCell key={header} sx={{ color: '#FFD700' }}>{header}</TableCell>
                   ))}
                 </TableRow>
@@ -215,7 +215,7 @@ const Home = () => {
                       <TableCell>{new Date(booking.pickupDate).toLocaleDateString()}</TableCell>
                       <TableCell>{booking.pickupTime}</TableCell>
                       <TableCell>{booking.returnDate ? new Date(booking.returnDate).toLocaleDateString() : '-'}</TableCell>
-                      <TableCell>{booking.returnDate ? booking.returnTime : '-'}</TableCell>
+                     
                     </TableRow>
                   ))
                 )}

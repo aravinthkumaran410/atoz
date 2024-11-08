@@ -43,14 +43,7 @@ const taxibookingSchema = new mongoose.Schema({
       return this.tripType === "round-trip";
     },
   },
-  returnTime: {
-    // Optional for round-trip
-    type: String,
-    required: function () {
-      return this.tripType === "round-trip";
-    },
-
-  },
+ 
   distance: {
     type: Number,
     required: true,
