@@ -47,7 +47,7 @@ const CustomSelectForChooseCar = ({ options, value, onChange, label }) => {
 
   useEffect(() => {
     if (isOpen) {
-      setHighlightedIndex(-1); // Reset highlighted index when dropdown opens
+      setHighlightedIndex(-1); 
     }
   }, [isOpen]);
 

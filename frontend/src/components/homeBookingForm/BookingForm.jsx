@@ -155,6 +155,50 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
     return timeDiff / (1000 * 3600 * 24);
   };
 
+  function getCurrentISTTime() {
+    const now = new Date();
+
+    // Get current hours and minutes in local time (IST)
+    let hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, "0"); // Ensure minutes are two digits
+
+    // Determine if it's AM or PM
+    const period = hours >= 12 ? "PM" : "AM";
+
+    // Convert to 12-hour format
+    hours = hours % 12;
+    hours = hours ? hours : 12; // If hours is 0 (midnight), set it to 12
+
+    // Return time in the format "hh:mm AM/PM"
+    return `${String(hours).padStart(2, "0")}:${minutes} ${period}`;
+  }
+
+  // function getCurrentISTTime() {
+  //   const now = new Date();
+  //   console.log(now);
+  //   const istOffset = 5.5 * 60;
+  //   console.log(istOffset);
+
+  //   // Get the current time in UTC (hours and minutes)
+  //   const utcHours = now.getUTCHours();
+  //   const utcMinutes = now.getUTCMinutes();
+
+  //   // Apply the IST offset to the UTC time
+  //   const istTime = new Date(now.getTime() + istOffset * 60000); // 60000 ms = 1 minute
+
+  //   // Format hours and minutes in 12-hour format
+  //   let hours = istTime.getHours();
+  //   const minutes = String(istTime.getMinutes()).padStart(2, "0");
+  //   const period = hours >= 12 ? "PM" : "AM";
+
+  //   // Convert to 12-hour format
+  //   hours = hours % 12;
+  //   hours = hours ? hours : 12; // Handle the 12:00 edge case
+
+  //   // Return time in the desired format: "hh:mm AM/PM"
+  //   return `${String(hours).padStart(2, "0")}:${minutes} ${period}`;
+  // }
+
   const formik = useFormik({
     initialValues: {
       fullName: "",
@@ -162,9 +206,9 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
       pickupLocation: "",
       dropLocation: "",
       pickupDate: new Date().toISOString().split("T")[0],
-      pickupTime: "",
-      returnDate: new Date().toISOString().split("T")[0],
-      returnTime: "",
+      pickupTime: getCurrentISTTime(),
+      returnDate: isRoundTrip && new Date().toISOString().split("T")[0],
+      // returnTime: "",
       selectedCar: { label: "Select a car", value: "" },
     },
     validationSchema: Yup.object({
@@ -207,9 +251,9 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
             .required("Required")
             .min(new Date(), "Return date must be in the future")
         : Yup.string(),
-      returnTime: isRoundTrip
-        ? Yup.string().required("Required")
-        : Yup.string(),
+      // returnTime: isRoundTrip
+      //   ? Yup.string().required("Required")
+      //   : Yup.string(),
       selectedCar: Yup.object()
         .shape({
           value: Yup.string().required("Required"),
@@ -479,7 +523,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
             ? `
         Trip: Round Trip
         Return Date: ${data.returnDate}
-        Return Time: ${data.returnTime}`
+        `
             : "Trip: One Trip"
         }
         Car Type: ${data.selectedCar.label}
@@ -601,9 +645,9 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                       <p>
                         <strong>Return Date:</strong> {submittedData.returnDate}
                       </p>
-                      <p>
+                      {/* <p>
                         <strong>Return Time:</strong> {submittedData.returnTime}
-                      </p>
+                      </p> */}
                     </>
                   ) : (
                     <p>
@@ -659,7 +703,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                   Confirm Booking
                 </button>
                 <button
-                  className="btn btn-primary ms-5"
+                  className="btn btn-primary ms-5 form-back-btn"
                   onClick={() => setSubmittedData(null)}
                   disabled={isButtonDisabled}
                 >
@@ -696,7 +740,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                     onChange={() => {
                       setIsRoundTrip(false);
                       formik.setFieldValue("returnDate", "");
-                      formik.setFieldValue("returnTime", "");
+                      // formik.setFieldValue("returnTime", "");
                     }}
                     id="oneWay"
                   />
@@ -865,8 +909,8 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                   </div>
                 </div>
 
-                {isRoundTrip && (
-                  <div className="form-group row">
+                <div className="form-group row">
+                  {isRoundTrip && (
                     <div className="col-md-6">
                       <label>Return Date:</label>
                       <input
@@ -881,8 +925,10 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                           </div>
                         )}
                     </div>
-                    <div className="col-md-6">
-                      <CustomSelect
+                  )}
+                  {/* return time  */}
+                  {/* <div className="col-md-6">
+                    <CustomSelect
                         options={generateTimeOptions()}
                         value={formik.values.returnTime}
                         onChange={(value) =>
@@ -896,11 +942,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                             {formik.errors.returnTime}
                           </div>
                         )}
-                    </div>
-                  </div>
-                )}
-
-                <div className="form-group row">
+                  </div> */}
                   <div className="col-md-6">
                     <CustomSelectForChooseCar
                       options={options}
@@ -942,6 +984,9 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                       )}
                   </div>
                 </div>
+                {/* <div className="form-group row">
+                 
+                </div> */}
 
                 <button type="submit" className="btn btn-primary">
                   Get Estimate
