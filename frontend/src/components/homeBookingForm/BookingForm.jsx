@@ -173,32 +173,6 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
     return `${String(hours).padStart(2, "0")}:${minutes} ${period}`;
   }
 
-  // function getCurrentISTTime() {
-  //   const now = new Date();
-  //   console.log(now);
-  //   const istOffset = 5.5 * 60;
-  //   console.log(istOffset);
-
-  //   // Get the current time in UTC (hours and minutes)
-  //   const utcHours = now.getUTCHours();
-  //   const utcMinutes = now.getUTCMinutes();
-
-  //   // Apply the IST offset to the UTC time
-  //   const istTime = new Date(now.getTime() + istOffset * 60000); // 60000 ms = 1 minute
-
-  //   // Format hours and minutes in 12-hour format
-  //   let hours = istTime.getHours();
-  //   const minutes = String(istTime.getMinutes()).padStart(2, "0");
-  //   const period = hours >= 12 ? "PM" : "AM";
-
-  //   // Convert to 12-hour format
-  //   hours = hours % 12;
-  //   hours = hours ? hours : 12; // Handle the 12:00 edge case
-
-  //   // Return time in the desired format: "hh:mm AM/PM"
-  //   return `${String(hours).padStart(2, "0")}:${minutes} ${period}`;
-  // }
-
   const formik = useFormik({
     initialValues: {
       fullName: "",
@@ -206,8 +180,8 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
       pickupLocation: "",
       dropLocation: "",
       pickupDate: new Date().toISOString().split("T")[0],
-      pickupTime: getCurrentISTTime(),
-      returnDate: isRoundTrip && new Date().toISOString().split("T")[0],
+      pickupTime: "Now",
+      returnDate: new Date().toISOString().split("T")[0],
       // returnTime: "",
       selectedCar: { label: "Select a car", value: "" },
     },
@@ -308,6 +282,10 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
           });
           return;
         }
+      }
+
+      if (values.pickupTime == "Now") {
+        values.pickupTime = getCurrentISTTime();
       }
 
       setSubmittedData(values);
@@ -438,7 +416,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
   };
 
   const generateTimeOptions = () => {
-    const options = [];
+    const options = ["Now"];
     for (let hour = 0; hour < 24; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
         const time = new Date();
@@ -520,10 +498,8 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
         Pickup Time: ${data.pickupTime}
         ${
           isRoundTrip
-            ? `
-        Trip: Round Trip
-        Return Date: ${data.returnDate}
-        `
+            ? `Trip: Round Trip
+        Return Date: ${data.returnDate}`
             : "Trip: One Trip"
         }
         Car Type: ${data.selectedCar.label}
@@ -703,7 +679,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                   Confirm Booking
                 </button>
                 <button
-                  className="btn btn-primary ms-5 form-back-btn"
+                  className="btn btn-primary ms-5 book-form-back-btn"
                   onClick={() => setSubmittedData(null)}
                   disabled={isButtonDisabled}
                 >
@@ -984,8 +960,48 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                       )}
                   </div>
                 </div>
+
                 {/* <div className="form-group row">
-                 
+                  <div className="col-md-6">
+                    <CustomSelectForChooseCar
+                      options={options}
+                      value={formik.values.selectedCar}
+                      onChange={(selectedOption) => {
+                        const selectedCar = isRoundTrip
+                          ? roundTripCars.find(
+                              (car) => car.carname === selectedOption.value
+                            )
+                          : oneWayCars.find(
+                              (car) => car.carname === selectedOption.value
+                            );
+
+                        setVehFromCard({
+                          name: selectedCar.carname,
+                          rate: isRoundTrip
+                            ? selectedCar.roundWayRate || selectedCar.twoWayRate
+                            : selectedCar.oneWayRate,
+                        });
+
+                        // Update Formik's state for selectedCar
+                        formik.setFieldValue("selectedCar", {
+                          label: selectedOption.label,
+                          value: selectedOption.value,
+                        });
+
+                        // Mark field as touched to trigger validation
+                        formik.setFieldTouched("selectedCar", true, true);
+                      }}
+                      label="Choose a car"
+                    />
+
+                    {formik.touched.selectedCar &&
+                      formik.errors.selectedCar && (
+                        <div className="text-danger">
+                          {formik.errors.selectedCar.value ||
+                            formik.errors.selectedCar.label}
+                        </div>
+                      )}
+                  </div>
                 </div> */}
 
                 <button type="submit" className="btn btn-primary">

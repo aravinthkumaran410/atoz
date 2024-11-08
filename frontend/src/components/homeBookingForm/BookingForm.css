@@ -35,9 +35,22 @@
   max-height: 200px;
   overflow-y: auto;
   z-index: 1000;
-  width: 400px;
+  width: 30%;
   margin-top: 5px;
   padding: 0;
+}
+.suggestion-list::-webkit-scrollbar {
+  width: 3px;
+}
+
+.suggestion-list::-webkit-scrollbar-thumb {
+  background: var(--main-color);
+  border-radius: 10px;
+}
+@media (max-width: 768px) {
+  .suggestion-list {
+    width: 70% !important;
+  }
 }
 
 .suggestion-item {
@@ -63,7 +76,7 @@
 }
 
 .home-booking-form-container .home-booking-left-container {
-  width: 30%;
+  width: 50%;
   background: linear-gradient(rgb(249, 168, 38, 0.9), rgb(249, 168, 38, 0.9)),
     url("../../assets//heroCarousel/slider-1.jpg");
   background-position: center;
@@ -251,7 +264,8 @@
   .home-booking-right-container .image-container {
     display: none;
   }
-  .form-back-btn {
+
+  .book-form-back-btn {
     margin-top: 10px;
   }
 }
