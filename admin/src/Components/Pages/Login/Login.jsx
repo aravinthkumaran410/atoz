@@ -7,23 +7,21 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import { IconButton } from "@mui/material";
-import { MdLockOutline  } from "react-icons/md";
+import { MdLockOutline } from "react-icons/md";
 import { useState } from "react";
 import { Fragment } from "react";
 import "./Login.css";
 import client from "../../Common/Client/Client";
 import { useNavigate } from "react-router-dom";
-import logo from '../../../Assets/Images/back.png'
-
+import logo from "../../../Assets/Images/back.png";
 
 const Login = (porps) => {
-const {setAdmin}=porps
+  const { setAdmin } = porps;
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState({ username: "", password: "" });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate=useNavigate()
-
+  const navigate = useNavigate();
 
   const errorMessage = (fieldName, fieldValue) => {
     let message;
@@ -96,121 +94,142 @@ const {setAdmin}=porps
       setUsername("");
       setPassword("");
     } else {
-     login()
+      login();
     }
   };
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const login= async()=>{
+  const login = async () => {
     try {
-      const response=await client.post('/admin/login',{username,password},{
-        withCredentials: true,
-      });
-      if(response.status===200){
-        const user=response.data.user.username
-        const token =response.data.token;
+      const response = await client.post(
+        "/admin/login",
+        { username, password },
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        const user = response.data.user.username;
+        const token = response.data.token;
         const expirationTime = Date.now() + 30 * 60 * 1000;
-          localStorage.setItem("token", token);
-          localStorage.setItem("Username",user);
-          localStorage.setItem("tokenExpiration", expirationTime); 
-          setAdmin(token);
+        localStorage.setItem("token", token);
+        localStorage.setItem("Username", user);
+        localStorage.setItem("tokenExpiration", expirationTime);
+        setAdmin(token);
+        navigate("/");
+        setUsername("");
+        setPassword("");
+        setTimeout(() => {
+          console.log("session time out");
+          localStorage.removeItem("token");
+          localStorage.removeItem("tokenExpiration");
+          localStorage.removeItem("Username");
+          setAdmin(null);
           navigate("/");
-          setUsername("");
-          setPassword("");
-          setTimeout(() => {
-            console.log("session time out")
-            localStorage.removeItem("token");
-            localStorage.removeItem("tokenExpiration");
-            localStorage.removeItem("Username")
-            setAdmin(null);
-            navigate("/"); 
-          }, 30 * 60 * 1000);
+        }, 30 * 60 * 1000);
       }
-    }catch(err){
+    } catch (err) {
       setError((prevError) => ({
-                ...prevError,
-                username: "username is not valid",
-                password: "password is not valid",
-              }));
-              setUsername("");
-              setPassword("");
+        ...prevError,
+        username: "username is not valid",
+        password: "password is not valid",
+      }));
+      setUsername("");
+      setPassword("");
     }
-  }
+  };
 
   return (
     <Fragment>
       <div className="container-fluid full-height-background d-flex justify-content-center align-items-center">
-          <div className="overlay" ></div>
-          <div className="login-form p-4">
-            <div style={{
-              marginTop:"10px",
-              textAlign:"center            "
-            }}>
-                <p style={{
+        <div className="overlay"></div>
+        <div className="login-form p-4">
+          <div
+            style={{
+              marginTop: "10px",
+              textAlign: "center            ",
+            }}
+          >
+            <p
+              style={{
                 fontSize: "27px",
                 color: "rgb(230 49 50)",
-                margin:"0px",
-                textTransform:"uppercase",
-                fontWeight:"bold"
-
-
-              }} className="mb-3">Weclome Admin Panel</p>
-              <p style={{
+                margin: "0px",
+                textTransform: "uppercase",
+                fontWeight: "bold",
+              }}
+              className="mb-3"
+            >
+              Weclome Admin Panel
+            </p>
+            <p
+              style={{
                 fontSize: "27px",
                 color: "#000",
-                margin:"0px"
-              }}><img src={logo} alt="logo" width="130px" height="70px" className="mb-2"/></p>
-            
-           
-
-            </div>
-            <div>
-              <Box
-                component="form"
-                sx={{
-                  "& > :not(style)": { m: 2 },
-                }}
-                noValidate
-                autoComplete="off"
-              >
-              
-                  <TextField
-                    id="standard-basic"
-              className="form"
-              slotProps={{
-                htmlInput: {
-                  maxLength: 20,
-                },
+                margin: "0px",
               }}
-                    label="Username"
-                    variant="standard"
-                    name="username"
-                    value={username}
-                    onChange={handleChange}
-                    required
-                    onBlur={handleBlur}
-                    helperText={error.username ? error.username : ""}
-                    error={!!error.username}
-                    onKeyDown={(e)=>{
-                      const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
-                      const allowedCharPattern = /^[0-9A-Za-z_]$/;
-                  
-                      // Check if the pressed key is not allowed
-                      if (!allowedKeys.includes(e.key) && !allowedCharPattern.test(e.key)) {
-                        e.preventDefault(); // Prevent the default action of the disallowed key
-                      }
-                    }}
-                    
-                  />
-                
-                  <TextField
-                    id="standard-basic"
+            >
+              <img
+                src={logo}
+                alt="logo"
+                width="130px"
+                height="70px"
+                className="mb-2"
+              />
+            </p>
+          </div>
+          <div>
+            <Box
+              component="form"
+              sx={{
+                "& > :not(style)": { m: 2 },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                className="form"
+                slotProps={{
+                  htmlInput: {
+                    maxLength: 20,
+                  },
+                }}
+                label="Username"
+                variant="standard"
+                name="username"
+                value={username}
+                onChange={handleChange}
+                required
+                onBlur={handleBlur}
+                helperText={error.username ? error.username : ""}
+                error={!!error.username}
+                onKeyDown={(e) => {
+                  const allowedKeys = [
+                    "Backspace",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "Delete",
+                    "Tab",
+                  ];
+                  const allowedCharPattern = /^[0-9A-Za-z_]$/;
+
+                  // Check if the pressed key is not allowed
+                  if (
+                    !allowedKeys.includes(e.key) &&
+                    !allowedCharPattern.test(e.key)
+                  ) {
+                    e.preventDefault(); // Prevent the default action of the disallowed key
+                  }
+                }}
+              />
+
+              <TextField
                 className="form"
                 slotProps={{
                   htmlInput: {
                     maxLength: 12,
                   },
-                  input:{
+                  input: {
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton onClick={handleClickShowPassword}>
@@ -218,45 +237,43 @@ const {setAdmin}=porps
                         </IconButton>
                       </InputAdornment>
                     ),
-
+                  },
+                }}
+                label="Password"
+                variant="standard"
+                value={password}
+                required
+                type={showPassword ? "text" : "password"}
+                name="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                helperText={error.password ? error.password : ""}
+                error={!!error.password}
+                onKeyDown={(e) => {
+                  if (e.key === " ") {
+                    e.preventDefault();
                   }
                 }}
-                    label="Password"
-                    variant="standard"
-                    value={password}
-                    required
+              />
 
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    helperText={error.password ? error.password : ""}
-                    error={!!error.password}
-                    onKeyDown={
-                      (e)=>{
-                        if (e.key === ' ') {
-                          e.preventDefault()
-                        }
-                      }
-                    }
-                   
-                   
-                  />
-              
-                <div className="form-button">
-                  <Stack spacing={2} direction="row">
-                    <Button variant="contained" onClick={handleSubmit} style={{
-                      backgroundColor:"#f1bc00",
-                      color:"black"
-                    }}>
-                      Login
-                    </Button>
-                  </Stack>
-                </div>
-              </Box>
+              <div className="form-button">
+                <Stack spacing={2} direction="row">
+                  <Button
+                    variant="contained"
+                    onClick={handleSubmit}
+                    style={{
+                      backgroundColor: "#f1bc00",
+                      color: "black",
+                    }}
+                  >
+                    Login
+                  </Button>
+                </Stack>
               </div>
-            </div>
+            </Box>
           </div>
+        </div>
+      </div>
     </Fragment>
   );
 };
