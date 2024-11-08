@@ -61,6 +61,7 @@ const VehicleCard = ({ setSelVeh, bookingFormRef }) => {
                       className="vehicle-img"
                       src={eachVehicle.image}
                       alt="vehicles"
+                       loading="lazy"
                     />
                   </div>
                   <div className="vehicle-name-wrapper">
@@ -68,7 +69,7 @@ const VehicleCard = ({ setSelVeh, bookingFormRef }) => {
                   </div>
                   <div className="vehicle-fare-details-card">
                     <div className="rate-icon">
-                      <img src="assets/image/taxi.png" alt="Rate Icon" />
+                      <img src="assets/image/taxi.png" alt="Rate Icon"  loading="lazy"/>
                     </div>
                     <div className="vehicle-fare-details">
                       <div className="d-flex justify-content-between">

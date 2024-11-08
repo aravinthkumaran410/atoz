@@ -45,7 +45,7 @@ const Homefeatures = () => {
               >
                 <div className="feature-item">
                   <div className="feature-icon">
-                    <img src={safetyImage} alt="Safety Guarantee" />
+                    <img src={safetyImage} alt="Safety Guarantee"  loading="lazy"/>
                   </div>
                   <div className="feature-content">
                     <h4>Safety First</h4>
@@ -64,7 +64,7 @@ const Homefeatures = () => {
               >
                 <div className="feature-item mt-lg-5">
                   <div className="feature-icon">
-                    <img src={fastPickUp} alt="Fast Pickup" />
+                    <img src={fastPickUp} alt="Fast Pickup"  loading="lazy" />
                   </div>
                   <div className="feature-content">
                     <h4>Quick Pickup</h4>
@@ -83,7 +83,7 @@ const Homefeatures = () => {
               >
                 <div className="feature-item">
                   <div className="feature-icon">
-                    <img src={rateImage} alt="Affordable Rates" />
+                    <img src={rateImage} alt="Affordable Rates"  loading="lazy"/>
                   </div>
                   <div className="feature-content">
                     <h4>Affordable Rates</h4>
@@ -102,7 +102,7 @@ const Homefeatures = () => {
               >
                 <div className="feature-item mt-lg-5">
                   <div className="feature-icon">
-                    <img src={supportImage} alt="24/7 Support" />
+                    <img src={supportImage} alt="24/7 Support"  loading="lazy"/>
                   </div>
                   <div className="feature-content">
                     <h4>24/7 Customer Support</h4>

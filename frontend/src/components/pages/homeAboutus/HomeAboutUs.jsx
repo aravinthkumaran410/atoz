@@ -1,6 +1,6 @@
 import React from "react";
 import "./HomeAboutUs.css";
-import homeAboutImage from "../../../assets/about/01.png";
+import homeAboutImage from "../../../assets/about/01.webp";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import { motion } from "framer-motion";
 
@@ -14,7 +14,14 @@ const HomeAboutUs = ({ bgColor }) => {
           whileInView={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.3 }}
         >
-          <img src={homeAboutImage} alt="About Us" className="img-fluid" />
+          <img
+            src={homeAboutImage}
+            alt="About Us"
+            className="img-fluid"
+            width="600"
+            height="400"
+            loading="lazy"
+          />
         </motion.div>
         <div className="HomeAboutUsRightContainer">
           <div className="HomeAboutHeaderContainer">

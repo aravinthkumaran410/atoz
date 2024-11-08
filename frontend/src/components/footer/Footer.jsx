@@ -138,22 +138,22 @@ const Footer = () => {
               <div className="footer-project">
                 <h3>Our Gallery</h3>
                 <a href>
-                  <img src={image_1} alt="Image" />
+                  <img src={image_1} alt="Image" loading="lazy" />
                 </a>
                 <a href>
-                  <img src={image_2} alt="Image" />
+                  <img src={image_2} alt="Image"  loading="lazy"/>
                 </a>
                 <a href>
-                  <img src={image_3} alt="Image" />
+                  <img src={image_3} alt="Image"  loading="lazy"/>
                 </a>
                 <a href>
-                  <img src={image_4} alt="Image" />
+                  <img src={image_4} alt="Image" loading="lazy" />
                 </a>
                 <a href>
-                  <img src={image_5} alt="Image" />
+                  <img src={image_5} alt="Image" loading="lazy" />
                 </a>
                 <a href>
-                  <img src={image_6} alt="Image" />
+                  <img src={image_6} alt="Image"  loading="lazy" />
                 </a>
               </div>
             </div>

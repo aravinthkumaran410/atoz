@@ -54,7 +54,7 @@ const WhyChoose = () => {
                   whileInView={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.4, delay: 0.3 }}
                 >
-                  <img src={taxiCarImage} alt="car" style={{ width: "100%" }} />
+                  <img src={taxiCarImage} alt="car" style={{ width: "100%" }}  loading="lazy"/>
                 </motion.div>
               </div>
             </div>
@@ -71,7 +71,7 @@ const WhyChoose = () => {
                 >
                   <span className="choose-count">01</span>
                   <div className="choose-item-icon">
-                    <img src={taxiPng} alt="taxi" />
+                    <img src={taxiPng} alt="taxi"  loading="lazy" />
                   </div>
                   <div className="choose-item-info">
                     <h3>Best Quality Taxi</h3>
@@ -89,7 +89,7 @@ const WhyChoose = () => {
                 >
                   <span className="choose-count">02</span>
                   <div className="choose-item-icon">
-                    <img src={driverImage} alt="driver" />
+                    <img src={driverImage} alt="driver"  loading="lazy"/>
                   </div>
                   <div className="choose-item-info">
                     <h3>Expert Drivers</h3>
@@ -107,7 +107,7 @@ const WhyChoose = () => {
                 >
                   <span className="choose-count">03</span>
                   <div className="choose-item-icon">
-                    <img src={taxiLocation} alt="taxi location" />
+                    <img src={taxiLocation} alt="taxi location"  loading="lazy" />
                   </div>
                   <div className="choose-item-info">
                     <h3>Many Locations</h3>
