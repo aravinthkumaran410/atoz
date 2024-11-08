@@ -192,12 +192,13 @@ const Login = (porps) => {
                 slotProps={{
                   htmlInput: {
                     maxLength: 20,
+                    autoComplete: "username",
                   },
                 }}
                 label="Username"
                 variant="standard"
                 name="username"
-                value={username}
+              
                 onChange={handleChange}
                 required
                 onBlur={handleBlur}
@@ -228,6 +229,7 @@ const Login = (porps) => {
                 slotProps={{
                   htmlInput: {
                     maxLength: 12,
+                    autoComplete: "current-password",
                   },
                   input: {
                     endAdornment: (
@@ -241,7 +243,7 @@ const Login = (porps) => {
                 }}
                 label="Password"
                 variant="standard"
-                value={password}
+                
                 required
                 type={showPassword ? "text" : "password"}
                 name="password"
