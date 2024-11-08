@@ -36,6 +36,8 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+  const [RoundTripReturnDate, setRoundTripReturnDate] = useState(null);
+
   //split selected place
   const splitSeletedPlace = selectedPlace && selectedPlace.split("-");
   // console.log(splitSeletedPlace && splitSeletedPlace[0]);
@@ -43,6 +45,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
   const [vehFromCard, setVehFromCard] = useState();
 
   useEffect(() => {
+    console.log(selVeh);
     if (selVeh) {
       const selectedVehicle = isRoundTrip
         ? selVeh.twoWayRate
@@ -51,11 +54,13 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
       setVehFromCard({
         name: selVeh.carname,
         rate: selectedVehicle,
+        acType: selVeh.acType,
+        passenger: selVeh.passenger,
       });
 
       // Ensure Formik is also updated
       formik.setFieldValue("selectedCar", {
-        label: `${selVeh.carname} - ${selectedVehicle}/km`,
+        label: `${selVeh.carname} - ${selVeh.acType} - (${selVeh.passenger} psg + 1  )- ${selectedVehicle}/km`,
         value: selVeh.carname,
       });
     }
@@ -68,11 +73,15 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
         label: `${car.carname} - ${car.roundWayRate}/km`,
         value: car.carname,
         rate: car.roundWayRate,
+        acType: car.acType,
+        passenger: car.passenger,
       }))
     : oneWayCars.map((car) => ({
-        label: ` ${car.carname} -  ${car.oneWayRate}/km`,
+        label: ` ${car.carname} - ${car.oneWayRate}/km`,
         value: car.carname,
         rate: car.oneWayRate,
+        acType: car.acType,
+        passenger: car.passenger,
       }));
 
   const success = () => {
@@ -113,6 +122,8 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
         if (selectedCar) {
           setVehFromCard({
             name: selectedCar.carname,
+            acType: selectedCar.acType,
+            passenger: selectedCar.passenger,
             rate: isRoundTrip
               ? selectedCar.roundWayRate || selectedCar.twoWayRate
               : selectedCar.oneWayRate,
@@ -136,15 +147,23 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
     fetchCarTypes();
   }, [selVeh, isRoundTrip]);
 
+  const calculateDaysDifference = (startDate, endDate) => {
+    console.log("Start Date:", startDate, "End Date:", endDate);
+
+    const timeDiff = endDate.getTime() - startDate.getTime();
+
+    return timeDiff / (1000 * 3600 * 24);
+  };
+
   const formik = useFormik({
     initialValues: {
       fullName: "",
       phone: "",
       pickupLocation: "",
       dropLocation: "",
-      pickupDate: "",
+      pickupDate: new Date().toISOString().split("T")[0],
       pickupTime: "",
-      returnDate: "",
+      returnDate: new Date().toISOString().split("T")[0],
       returnTime: "",
       selectedCar: { label: "Select a car", value: "" },
     },
@@ -228,6 +247,14 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
         setErrors({ pickupDate: "Pickup date must be today or in the future" });
         return;
       }
+      // console.log();
+      // console.log();
+      const tripeDriverFare = isRoundTrip
+        ? calculateDaysDifference(
+            new Date(values.pickupDate),
+            new Date(values.returnDate)
+          )
+        : 1;
 
       if (values.isRoundTrip) {
         const selectedReturnDate = new Date(values.returnDate);
@@ -245,7 +272,12 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
         : oneWayCars.find((car) => car.carname === values.selectedCar.value);
 
       setRate(selectedCar.oneWayRate || selectedCar.roundWayRate);
-      setdriverFare(selectedCar.driverfare);
+      setdriverFare(selectedCar.driverfare * tripeDriverFare);
+      setRoundTripReturnDate(
+        `${selectedCar.driverfare}/per day * ${tripeDriverFare} = ${
+          selectedCar.driverfare * tripeDriverFare
+        }`
+      );
 
       // resetForm();
 
@@ -386,6 +418,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
     setDropCoords({});
     setPickupSuggestions([]);
     setDropSuggestions([]);
+    formik.resetForm();
   };
   const totalCalc = isRoundTrip ? 250 : 130;
 
@@ -405,10 +438,10 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
         tripType,
         totalFare,
       });
-      // alert("Booking confirmed successfully!");
-      success();
 
-      // Show alert with booking details
+      success();
+      handleReset();
+
       // alert(`
       //   Booking Confirmed!
       //   Full Name: ${data.fullName}
@@ -476,7 +509,8 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
       // alert("Failed to confirm booking.");
       error();
     } finally {
-      setIsButtonDisabled(false); // Re-enable the button
+      setIsButtonDisabled(false);
+      handleReset();
     }
   };
 
@@ -501,6 +535,16 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
   //   }
   // };
 
+  const calculateFare = (distance, totalCalc, rate, driverFare) => {
+    const calculatedDistance = Number(
+      distance < totalCalc ? totalCalc : distance
+    );
+    const totalFare = calculatedDistance * Number(rate);
+    const TotalTripRate = isRoundTrip
+      ? totalFare * 2 + Number(driverFare)
+      : totalFare + Number(driverFare);
+    return TotalTripRate.toFixed(2);
+  };
   return (
     <section className="container" id="booking-form">
       {contextHolder}
@@ -529,12 +573,8 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                   <p className="h5">
                     <strong>Total:</strong>
                     <span className="fs-4 text-success ms-2">
-                      Rs{" "}
-                      {(
-                        Number(distance < totalCalc ? totalCalc : distance) *
-                          Number(rate) +
-                        Number(driverFare)
-                      ).toFixed(2)}
+                      Rs :{" "}
+                      {calculateFare(distance, totalCalc, rate, driverFare)}
                     </span>
                   </p>
                 )}
@@ -603,6 +643,12 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                   <p>
                     <strong>Driver Fare:</strong> Rs {driverFare}
                   </p>
+
+                  {isRoundTrip && (
+                    <p className="text-danger">
+                      (Total driver Fare :{RoundTripReturnDate} )
+                    </p>
+                  )}
                 </div>
 
                 <button
@@ -858,7 +904,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                   <div className="col-md-6">
                     <CustomSelectForChooseCar
                       options={options}
-                      value={formik.values.selectedCar} // Ensure this points to Formik's state
+                      value={formik.values.selectedCar}
                       onChange={(selectedOption) => {
                         const selectedCar = isRoundTrip
                           ? roundTripCars.find(
