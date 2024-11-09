@@ -23,17 +23,23 @@ const Home = () => {
 
   const fetchData = async () => {
     try {
-      const [traffic, oneway, roundway, bookings, contacts] = await Promise.all([
+      const [traffic, bookings, contacts] = await Promise.all([
         client.get('/traffic/gettraffic'),
-        client.get("/onewaytrip/get-one-way-trip"),
-        client.get("/roundtrip/get-round-way-trip"),
         client.get("/taxibook/getbookings", { withCredentials: true }),
         client.get("/usercontact/get-user-contact", { withCredentials: true })
       ]);
+
+
+      const bookingData = bookings.data;
+
+      // Filter one-way and round-way trip bookings
+      const oneWayBookings = bookingData.filter((booking) => booking.tripType === "one-way");
+      const roundWayBookings = bookingData.filter((booking) => booking.tripType === "round-trip");
+
+      setOneWayCount(oneWayBookings.length);
+      setRoundWayCount(roundWayBookings.length);
       setTrafficCount(traffic.data.Traffiname.length || 0);
-      setOneWayCount(oneway.data.length || 0);
-      setRoundWayCount(roundway.data.length || 0);
-      setRecentBookings(bookings.data.slice(-5));
+      setRecentBookings(bookings.data);
       setUsers(contacts.data.slice(-5));
     } catch (err) {
       toast.error("Failed to fetch data");
@@ -94,7 +100,7 @@ const Home = () => {
             >
               <CardContent sx={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', color: '#fff' }}>
                 <TrendingUpIcon sx={{ fontSize: 40, color: '#fbc02d' }} />
-                <Typography variant="h6" align="center">One-Way Trip</Typography>
+                <Typography variant="h6" align="center">One-Way Trip Booking</Typography>
                 <Typography variant="h4" align="center">{oneWayCount}</Typography>
               </CardContent>
             </Card>
@@ -131,7 +137,7 @@ const Home = () => {
             >
               <CardContent sx={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <SwapCallsIcon sx={{ fontSize: 40, color: '#fbc02d' }} />
-                <Typography variant="h6" align="center" sx = {{color: "#fff"}}>Round-Way Trip</Typography>
+                <Typography variant="h6" align="center" sx = {{color: "#fff"}}>Round-Way Trip Booking</Typography>
                 <Typography variant="h4" align="center" sx = {{color: "#fff"}}>{roundWayCount}</Typography>
               </CardContent>
             </Card>
@@ -203,7 +209,7 @@ const Home = () => {
                     <TableCell colSpan={8} align="center">Currently No bookings available</TableCell>
                   </TableRow>
                 ) : (
-                  recentBookings.map((booking, index) => (
+                  recentBookings.slice(-5).map((booking, index) => (
                     <TableRow key={index} hover sx={{ '&:hover': { backgroundColor: '#fbc02d', transition: 'background-color 0.3s', color: '#333' } }}>
                       <TableCell>{booking.name}</TableCell>
                       <TableCell>{booking.tripType}</TableCell>
