@@ -157,13 +157,12 @@ function TaxiBooking() {
         <Button
           variant="contained"
           sx={{
-            bgcolor: "#fbc02d",
-            color: "Black",
+            bgcolor: tripType === "all" ? "black" : "#fbc02d",
+      color: tripType === "all" ? "#fbc02d" : "Black",
             borderRadius: "10px",
             boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
             "&:hover": {
-              bgcolor: "black",
-              color: "#fbc02d",
+             
               boxShadow: "0 5px 10px rgba(0,0,0,0.3)",
               transition: "background-color 0.3s, box-shadow 0.3s",
             },
@@ -177,13 +176,12 @@ function TaxiBooking() {
         <Button
           variant="contained"
           sx={{
-            bgcolor: "#fbc02d",
-            color: "Black",
+            bgcolor: tripType === "one-way" ? "black" : "#fbc02d",
+            color: tripType === "one-way" ? "#fbc02d" : "Black",
             borderRadius: "10px",
             boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
             "&:hover": {
-              bgcolor: "black",
-              color: "#fbc02d",
+              
               boxShadow: "0 5px 10px rgba(0, 0, 0, 0.3)",
               transition: "background-color 0.3s, box-shadow 0.3s",
             },
@@ -197,13 +195,12 @@ function TaxiBooking() {
         <Button
           variant="contained"
           sx={{
-            bgcolor: "#fbc02d",
-            color: "Black",
+            bgcolor: tripType === "round-trip" ? "black" : "#fbc02d",
+            color: tripType === "round-trip" ? "#fbc02d" : "Black",
             borderRadius: "10px",
             boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
             "&:hover": {
-              bgcolor: "black",
-              color: "#fbc02d",
+             
               boxShadow: "0 5px 10px rgba(0, 0, 0, 0.3)",
               transition: "background-color 0.3s, box-shadow 0.3s",
             },

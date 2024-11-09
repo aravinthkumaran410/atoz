@@ -37,9 +37,7 @@
     margin: 5px;
   }
   
-  .booking-button:hover {
-    background-color: #f9c20c; /* Darker yellow on hover */
-  }
+
   
   /* Snackbar styles */
   .MuiAlert-root {
