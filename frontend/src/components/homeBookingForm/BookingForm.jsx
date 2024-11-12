@@ -447,11 +447,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
   const handleConfirmBooking = async (data) => {
     setIsButtonDisabled(true);
     const tripType = isRoundTrip ? "round-trip" : "one-way";
-    const totalFare = (
-      Number(distance < totalCalc ? totalCalc : distance) * Number(rate) +
-      Number(driverFare)
-    ).toFixed(2);
-
+    const totalFare = calculateFare(distance, totalCalc, rate, driverFare);
     try {
       // Send the booking data to the server
       const response = await AxiosInstance.post("/taxibook/createbookings", {
