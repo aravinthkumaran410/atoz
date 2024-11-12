@@ -13,8 +13,8 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { Modal } from "antd"; // Import Modal from Ant Design
-import "./TaxiBooking.css"; // Import CSS for styling
+import { Modal } from "antd"; 
+import "./TaxiBooking.css"; 
 import toast from "react-hot-toast";
 import client from "../../../Common/Client/Client";
 
