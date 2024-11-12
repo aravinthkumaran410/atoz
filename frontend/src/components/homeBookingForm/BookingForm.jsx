@@ -45,7 +45,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
   const [vehFromCard, setVehFromCard] = useState();
 
   useEffect(() => {
-    console.log(selVeh);
+    // console.log(selVeh);
     if (selVeh) {
       const selectedVehicle = isRoundTrip
         ? selVeh.twoWayRate
@@ -148,7 +148,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
   }, [selVeh, isRoundTrip]);
 
   const calculateDaysDifference = (startDate, endDate) => {
-    console.log("Start Date:", startDate, "End Date:", endDate);
+    // console.log("Start Date:", startDate, "End Date:", endDate);
 
     const timeDiff = endDate.getTime() - startDate.getTime();
 
@@ -158,18 +158,14 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
   function getCurrentISTTime() {
     const now = new Date();
 
-    // Get current hours and minutes in local time (IST)
     let hours = now.getHours();
-    const minutes = String(now.getMinutes()).padStart(2, "0"); // Ensure minutes are two digits
+    const minutes = String(now.getMinutes()).padStart(2, "0");
 
-    // Determine if it's AM or PM
     const period = hours >= 12 ? "PM" : "AM";
 
-    // Convert to 12-hour format
     hours = hours % 12;
-    hours = hours ? hours : 12; // If hours is 0 (midnight), set it to 12
+    hours = hours ? hours : 12;
 
-    // Return time in the format "hh:mm AM/PM"
     return `${String(hours).padStart(2, "0")}:${minutes} ${period}`;
   }
 
@@ -246,7 +242,10 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
         checkDropLocation.includes("india") &&
         !checkDropLocation.includes("indiana");
 
-      // console.log(PickLocationresult, DropLocationresult);
+      const time =
+        values.pickupTime === "Now" ? getCurrentISTTime() : values.pickupTime;
+
+      // console.log("pickup time is ", time);
 
       if (!PickLocationresult) {
         setErrors({ pickupLocation: "Pickup location must include 'India'" });
@@ -261,12 +260,21 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
       today.setHours(0, 0, 0, 0);
 
       const selectedPickupDate = new Date(values.pickupDate);
-      if (selectedPickupDate < today) {
+      const selectedPickupTime = new Date(
+        `${values.pickupDate} ${values.pickupTime}`
+      );
+      const currentDateTime = new Date();
+
+      if (selectedPickupDate.toDateString() === today.toDateString()) {
+        if (selectedPickupTime < currentDateTime) {
+          setErrors({ pickupTime: "Pickup time must be in the future" });
+          return;
+        }
+      } else if (selectedPickupDate < today) {
         setErrors({ pickupDate: "Pickup date must be today or in the future" });
         return;
       }
-      // console.log();
-      // console.log();
+
       const tripeDriverFare = isRoundTrip
         ? calculateDaysDifference(
             new Date(values.pickupDate),
@@ -294,10 +302,14 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
         : oneWayCars.find((car) => car.carname === values.selectedCar.value);
 
       setRate(selectedCar.oneWayRate || selectedCar.roundWayRate);
-      setdriverFare(selectedCar.driverfare * tripeDriverFare);
+      setdriverFare(
+        selectedCar.driverfare * (tripeDriverFare === 0 ? 1 : tripeDriverFare)
+      );
       setRoundTripReturnDate(
-        `${selectedCar.driverfare}/per day * ${tripeDriverFare} = ${
-          selectedCar.driverfare * tripeDriverFare
+        `${selectedCar.driverfare}/per day * ${
+          tripeDriverFare === 0 ? 1 : tripeDriverFare
+        } = ${
+          selectedCar.driverfare * (tripeDriverFare === 0 ? 1 : tripeDriverFare)
         }`
       );
 
@@ -612,7 +624,7 @@ const BookingForm = ({ selVeh, selectedPlace }) => {
                   {isRoundTrip ? (
                     <>
                       <p>
-                        <strong>Trip</strong>Round Trip
+                        <strong>Trip :</strong>Round Trip
                       </p>
                       <p>
                         <strong>Return Date:</strong> {submittedData.returnDate}
