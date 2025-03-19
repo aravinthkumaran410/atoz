@@ -23,8 +23,8 @@ const corsOptions = {
   origin: [
     "http://localhost:3001",
     "http://localhost:3000",
-    "https://ato-z-drop-taxi.vercel.app",
-    "https://ato-z-drop-taxi-admin.vercel.app",
+    "https://atoz-inky.vercel.app",
+    "https://atoz-admin.vercel.app",
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
